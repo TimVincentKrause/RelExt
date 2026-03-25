@@ -33,12 +33,18 @@ class DataReader {
     std::string get_name_of(const std::string name);
     VecString get_slist_of(const std::string name);
     VecString get_full_line(const std::string line);
+    // Idknow what this is exactly but in vevyRelExt
+    MatString get_operation_slist();
     std::unordered_map<std::string, double> get_best_bins();
     std::vector<double *> assignHeaders(std::map<std::string, double *> pars);
     void read_parameter(const size_t row);
+    // modeldependent, currently only for CPintheDark
+    // (could be exported to BSMPT already)
+    size_t get_mHc_pos();
     MatString get_generation_slist();
     void save_data(std::vector<std::string> yourheader,
                    std::vector<double> yourlist);
+    void read_column(std::vector<double> &vector, std::string header,const double npow=0,const double eps = 1e-4);
     ~DataReader();
 };
 }  // namespace DT

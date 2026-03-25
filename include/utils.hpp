@@ -33,7 +33,10 @@ double kaellen(const double x, const double y, const double z);
 
 double flux(const double &s, const double &m1, const double &m2,
             const double &m3, const double &m4);
-
+// Add possible negative mass-Squared into flux-function
+double signedflux(const double &s, const double &m1, const double &m2,
+            const double &m3, const double &m4, const double &sgnm3,
+            const double &sgnm4);
 // Bessel functions
 
 double besselK2(const double &x);

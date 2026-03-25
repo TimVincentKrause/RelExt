@@ -6,6 +6,8 @@ aEWM1          |0.00775795190|EW coupling constant at the Z pole                
 Gf             |0.0000116637 |Fermi constant                                                            |
 aS             |0.1172       |Strong coupling constant at the Z pole.                                   |
 mHsm           |125.09       |SM-like Higgs boson mass                                                  |
+mG0            |91.1876      |SM-like Higgs boson mass                                                  |
+mGch           |79.947       |SM-like Higgs boson mass                                                  |
 mHc            |200.         |Charged scalar mass                                                       |
 alph1          |-0.1         |Dark-Scalar mixing angle                                                  |
 alph2          |-0.1         |Dark-Scalar mixing angle                                                  |
@@ -14,9 +16,22 @@ mH1            |100.         |first BSM scalar mass                             
 mH2            |200.         |second BSM scalar mass                                                    |
 m22sq          |100          |Inert doublet mass parameter                                              |
 mssq           |100          |Inert singlet mass parameter                                              |
+L1             |1            |SM-like Higgs self coupling                                               |
 L2             |0.1          |Inert Doublet self coupling                                               |
+L3             |1            |L3                                                                        |
+L4             |1            |L4                                                                        |
+L5             |1            |L5                                                                        |
 L6             |0.1          |Inert singlet self coupling                                               |
+L7             |1            |L7                                                                        |
 L8             |0.1          |Inert sector quartic mixing                                               |
+Treal          |1            |Treal                                                                     |
+Timag          |1            |Timag                                                                     |
+ME             |0            |neglectable electron mass                                                 |
+MM             |0.1057       |muon mass                                                                 |
+MTA            |1.777        |tauon mass                                                                |
+MU             |0            |neglectable up mass                                                       |
+MD             |0            |neglectable down mass                                                     |
+MS             |0            |neglectable strange mass                                                  |
 MC             |1.2          |c mass at mc, MSbar                                                       |
 MB             |4.23         |b mass at mb, MSbar                                                       |
 MT             |172.5        |t pole mass                                                               |
@@ -24,12 +39,6 @@ GG             |1.21358091448|Strong coupling constant   This value will be igno
 Mnue           |0.           |Mass of ve.                                                               |
 Mnum           |0.           |Mass of vm.                                                               |
 Mnut           |0.           |Mass of vt.                                                               |
-Me             |0.           |Mass of e.                                                                |
-MM             |0.1057       |Mass of m.                                                                |
-MTA            |1.777        |Mass of ta.                                                               |
-MU             |0.           |Mass of u.                                                                |
-MD             |0.           |Mass of d.                                                                |
-MS             |0.           |Mass of s.                                                                |
 %WT            |2.           |Width of t.                                                               |
 %WZ            |2.4952       |Width of Z.                                                               |
 %WW            |2.085        |Width of W.                                                               |

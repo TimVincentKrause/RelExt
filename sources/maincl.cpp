@@ -2,11 +2,13 @@
 
 namespace DT {
 Main::Main(char *argv[], const int modee, double beps, const double xtoday,
-           const bool fast, const bool calcwidths, const bool savecontribs)
-    : AA(*new AnnihilationAmps(calc_widths)),
+           const bool fast, const bool calcwidths, const bool thermcontr, const bool savecontribs)
+    : AA(*new AnnihilationAmps(calc_widths,thermcontr)),
       mode(modee),
-      output_file(std::string(argv[2])),
+      output_file(std::string(argv[3])),
+      tvev_input_file(std::string(argv[2])),
       calc_widths(calcwidths),
+      therm_contr(thermcontr),
       save_contribs(savecontribs),
       FO(AA, fast) {
     srand((unsigned)time(NULL));
@@ -26,6 +28,7 @@ Main::Main(char *argv[], const int modee, double beps, const double xtoday,
                 break;
             case 3:
                 load_read_file();
+                AA.read_thermal_parameters(tvev_input_file);
                 break;
 
             default:
@@ -58,6 +61,91 @@ void Main::load_read_file() {
     size_t N_par_points = rdr->datalines();
     rdr->scanpars = rdr->assignHeaders(AA.parmap);
 }
+
+
+void Main::load_read_tvev_file(std::string input, AnnihilationAmps &AA) {
+    std::ifstream f;
+    f.open(input);
+
+    // Check if the file is| beim enlesen: alles was kleiner ist als ein value: auf 0 setzen
+    // successfully opened
+    if (!f.is_open()) {
+        std::cerr << "Error opening the vev file!\n";
+    }
+
+    //clear f
+    f.clear();
+    f.seekg(0);
+
+    // read the headers of the file and push them on a vector
+    std::vector<std::string> headers;
+    std::string line;
+    if (getline(f, line)) {
+        std::stringstream ss(line);
+        std::string header;
+        while (getline(ss, header, '\t') || getline(ss, header, ',') ||
+               getline(ss, header, ' ')) {
+            headers.push_back(header);
+        }
+    }
+
+    // this will get us the index of the columns we are interested in
+    // we are interested in the columns with the header of pars
+    std::array<std::string,2> pars = {"Temp","omega_1"};
+    std::vector<size_t> indexpars;
+
+    for (size_t i = 0; i < headers.size(); i++) {
+            if (*std::find(pars.begin(),pars.end(), headers[i])==headers[i] ){  //headers[i] == std_) {
+                //std::cout << i<< std::endl;
+                indexpars.push_back(i);
+            }
+        }
+
+    // clear file
+    f.clear();
+    f.seekg(0);
+
+    // Read each line of the file, store
+    // it in string s and print it to the
+    // standard output stream
+    size_t row = 0;
+
+
+    // goes through each row
+    while (getline(f, line)){
+        //std::cout << line << std::endl;
+        std::istringstream ss(line);
+        std::string value;
+
+        if (row > 0){
+            size_t col = 0;
+            // goes through each column
+            while (getline(ss, value, '\t') || getline(ss, value, ',') ||
+                    getline(ss, value, ' ')) {
+                // creates new pointers to the values, so we dont get segmentation faults
+                double* temp_value = new double(std::stod(value));
+                double* zero = new double(0);
+
+                //saves what kind of value depending on indexpars. This could probably be easier with maps
+                if (col == indexpars[0]){AA.temp.push_back(temp_value);}
+                if (col == indexpars[1]){
+                    //if the value is too small -> just set the vev to 0
+                    if (*temp_value < 1e-7) {
+                        AA.vev.push_back(zero);
+                        } else {AA.vev.push_back(temp_value);}
+                    }
+                col++;
+            }
+        }
+        row++;
+    }
+
+    f.close();
+
+}
+
+
+
 
 void Main::PrintParticles() { AA.print_prtcls(); }
 
@@ -95,6 +183,7 @@ void Main::LoadParameters(const size_t i) {
                 break;
         }
     } while (!AA.load_everything());
+    AA.save_parameters();
 }
 
 double Main::GetParameter(const std::string &par) {
@@ -176,8 +265,9 @@ void Main::ChangeThermalBath(const VecString &args) {
 }
 
 void Main::CalcXsec(double sqsmin, double sqsmax, const size_t points,
-                    const std::string outfile, VecString channels) {
-    AnnihilationAmps AA(calc_widths);
+                    const std::string outfile, VecString channels, const double x) {
+    //AnnihilationAmps AA(calc_widths);
+    if (channels.size() == 0) channels = AA.get_all_channels();
     for (auto &it : channels)
         ASSERT(AA.check_channel_existence(it),
                "Error in NEGLECTCHANNELS: " << it << " is not a valid channel.")
@@ -196,6 +286,7 @@ void Main::CalcXsec(double sqsmin, double sqsmax, const size_t points,
     double res;
     VecString prs;
     double dof1, dof2;
+    if (x>=0){AA.load_parameters(x);}
     for (double sqs = sqsmin; sqs <= sqsmax; sqs += step) {
         res = 0;
         for (auto it : channels) {
@@ -227,9 +318,11 @@ void Main::CalcTac(double xmin, double xmax, const size_t points,
     if(xmin == xmax) step = 1.;
     double res;
     double beps_save = beps_eps;
+    AA.load_parameters(1e7);
     beps_eps = log(1e-100);
     tac.sort_inimasses(channels);
     for (double i = xmin; i <= xmax; i += step) {
+        AA.load_parameters(i);
         res = tac(i);
         TAR->save_data({"x", "tac"}, {i, res});
     }
@@ -266,6 +359,7 @@ double Main::CalcRelic(const int mechanism) {
     switch (mechanism) {
         case 0:
             omega = FO(bath_procs);
+            xf = FO.get_xf();
             break;
         default:
             std::cout << "This mechanism ID is not valid. Please set the "
@@ -340,6 +434,7 @@ void Main::SaveData(const VecString &save_pars) {
 
     if (outfile.tellp() == 0) {
         outfile << "Omega";
+        outfile << "\t" <<"xf";
 
         for (auto it : save_pars) {
             AA.check_par_existence(it);
@@ -353,6 +448,7 @@ void Main::SaveData(const VecString &save_pars) {
         outfile << "\n";
     }
     outfile << omega;
+    outfile << "\t" << xf;
     for (auto it : save_pars) {
         outfile << "\t" << *AA.parmap[it];
     }

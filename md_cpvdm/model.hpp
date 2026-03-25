@@ -5,13 +5,20 @@
 
 #include <cmath>
 
+#include <string>
+
+#include <vector>
+
 namespace DT{
 namespace PAR{
+	// external parameters
 	extern double MZ;
 	extern double aEWM1;
 	extern double Gf;
 	extern double aS;
 	extern double mHsm;
+	extern double mG0;
+	extern double mGch;
 	extern double mHc;
 	extern double alph1;
 	extern double alph2;
@@ -20,9 +27,22 @@ namespace PAR{
 	extern double mH2;
 	extern double m22sq;
 	extern double mssq;
+	extern double L1;
 	extern double L2;
+	extern double L3;
+	extern double L4;
+	extern double L5;
 	extern double L6;
+	extern double L7;
 	extern double L8;
+	extern double Treal;
+	extern double Timag;
+	extern double ME;
+	extern double MM;
+	extern double MTA;
+	extern double MU;
+	extern double MD;
+	extern double MS;
 	extern double MC;
 	extern double MB;
 	extern double MT;
@@ -30,12 +50,6 @@ namespace PAR{
 	extern double Mnue;
 	extern double Mnum;
 	extern double Mnut;
-	extern double Me;
-	extern double MM;
-	extern double MTA;
-	extern double MU;
-	extern double MD;
-	extern double MS;
 	extern double WT;
 	extern double WZ;
 	extern double WW;
@@ -46,6 +60,7 @@ namespace PAR{
 	extern double WHc;
 	extern double E;
 	extern double Pi;
+	// internal parameters
 	extern double MW;
 	extern double EE;
 	extern double CW2;
@@ -66,13 +81,6 @@ namespace PAR{
 	extern double RR3x3;
 	extern double mH3;
 	extern double m11sq;
-	extern double L1;
-	extern double L3;
-	extern double L4;
-	extern double L5;
-	extern double L7;
-	extern double Treal;
-	extern double Timag;
 	extern double CKM1x1;
 	extern double CKM1x2;
 	extern double CKM1x3;
@@ -82,6 +90,194 @@ namespace PAR{
 	extern double CKM3x1;
 	extern double CKM3x2;
 	extern double CKM3x3;
+	extern double yu1;
+	extern double yu2;
+	extern double yu3;
+	extern double yd1;
+	extern double yd2;
+	extern double yd3;
+	extern double yl1;
+	extern double yl2;
+	extern double yl3;
+	extern double I1a1;
+	extern double I1a2;
+	extern double I1a3;
+	extern double I2a1;
+	extern double I2a2;
+	extern double I2a3;
+	extern double I3a1;
+	extern double I3a2;
+	extern double I3a3;
+	extern double I4a1;
+	extern double I4a2;
+	extern double I4a3;
+	extern double I5a1;
+	extern double I5a2;
+	extern double I5a3;
+	extern double I6a1;
+	extern double I6a2;
+	extern double I6a3;
+	extern double I7a1;
+	extern double I7a2;
+	extern double I7a3;
+	extern double Me;
+
+	// thermal parameters
+	extern std::vector<double> temp_therm;
+	extern std::vector<double> Mnue_therm;
+	extern std::vector<double> Mnum_therm;
+	extern std::vector<double> Mnut_therm;
+	extern std::vector<double> Me_therm;
+	extern std::vector<double> MM_therm;
+	extern std::vector<double> MTA_therm;
+	extern std::vector<double> MU_therm;
+	extern std::vector<double> MC_therm;
+	extern std::vector<double> MT_therm;
+	extern std::vector<double> MD_therm;
+	extern std::vector<double> MS_therm;
+	extern std::vector<double> MB_therm;
+	extern std::vector<double> MZ_therm;
+	extern std::vector<double> MW_therm;
+	extern std::vector<double> mHsmsq_therm;
+	extern std::vector<double> mG0sq_therm;
+	extern std::vector<double> mGchsq_therm;
+	extern std::vector<double> mH1_therm;
+	extern std::vector<double> mH2_therm;
+	extern std::vector<double> mH3_therm;
+	extern std::vector<double> mHc_therm;
+	extern std::vector<double> v_therm;
+
+	// hand stuff
+
+
+	extern double mHsm0;
+	extern double MW0;
+	extern double MZ0;
+	extern double v0;
+
+
+	// Custom R's
+	extern std::vector<double> M00_therm;
+	extern std::vector<double> M01_therm;
+	extern std::vector<double> M02_therm;
+	extern std::vector<double> M03_therm;
+	extern std::vector<double> M04_therm;
+	extern std::vector<double> M05_therm;
+	extern std::vector<double> M06_therm;
+	extern std::vector<double> M07_therm;
+	extern std::vector<double> M08_therm;
+
+	extern std::vector<double> M10_therm;
+	extern std::vector<double> M11_therm;
+	extern std::vector<double> M12_therm;
+	extern std::vector<double> M13_therm;
+	extern std::vector<double> M14_therm;
+	extern std::vector<double> M15_therm;
+	extern std::vector<double> M16_therm;
+	extern std::vector<double> M17_therm;
+	extern std::vector<double> M18_therm;
+
+
+	extern std::vector<double> M20_therm;
+	extern std::vector<double> M21_therm;
+	extern std::vector<double> M22_therm;
+	extern std::vector<double> M23_therm;
+	extern std::vector<double> M24_therm;
+	extern std::vector<double> M25_therm;
+	extern std::vector<double> M26_therm;
+	extern std::vector<double> M27_therm;
+	extern std::vector<double> M28_therm;
+
+	extern std::vector<double> M30_therm;
+	extern std::vector<double> M31_therm;
+	extern std::vector<double> M32_therm;
+	extern std::vector<double> M33_therm;
+	extern std::vector<double> M34_therm;
+	extern std::vector<double> M35_therm;
+	extern std::vector<double> M36_therm;
+	extern std::vector<double> M37_therm;
+	extern std::vector<double> M38_therm;
+
+	extern std::vector<double> M40_therm;
+	extern std::vector<double> M41_therm;
+	extern std::vector<double> M42_therm;
+	extern std::vector<double> M43_therm;
+	extern std::vector<double> M44_therm;
+	extern std::vector<double> M45_therm;
+	extern std::vector<double> M46_therm;
+	extern std::vector<double> M47_therm;
+	extern std::vector<double> M48_therm;
+
+	extern std::vector<double> M50_therm;
+	extern std::vector<double> M51_therm;
+	extern std::vector<double> M52_therm;
+	extern std::vector<double> M53_therm;
+	extern std::vector<double> M54_therm;
+	extern std::vector<double> M55_therm;
+	extern std::vector<double> M56_therm;
+	extern std::vector<double> M57_therm;
+	extern std::vector<double> M58_therm;
+
+	extern std::vector<double> M60_therm;
+	extern std::vector<double> M61_therm;
+	extern std::vector<double> M62_therm;
+	extern std::vector<double> M63_therm;
+	extern std::vector<double> M64_therm;
+	extern std::vector<double> M65_therm;
+	extern std::vector<double> M66_therm;
+	extern std::vector<double> M67_therm;
+	extern std::vector<double> M68_therm;
+
+	extern std::vector<double> M70_therm;
+	extern std::vector<double> M71_therm;
+	extern std::vector<double> M72_therm;
+	extern std::vector<double> M73_therm;
+	extern std::vector<double> M74_therm;
+	extern std::vector<double> M75_therm;
+	extern std::vector<double> M76_therm;
+	extern std::vector<double> M77_therm;
+	extern std::vector<double> M78_therm;
+
+	extern std::vector<double> M80_therm;
+	extern std::vector<double> M81_therm;
+	extern std::vector<double> M82_therm;
+	extern std::vector<double> M83_therm;
+	extern std::vector<double> M84_therm;
+	extern std::vector<double> M85_therm;
+	extern std::vector<double> M86_therm;
+	extern std::vector<double> M87_therm;
+	extern std::vector<double> M88_therm;
+
+	// custom Thermal masses / Thermal self-energies
+	extern double THMZ;
+	extern double THMW;
+	extern double THmHsm;
+	extern double THmG0;
+	extern double THmGch;
+	extern double THmH1;
+	extern double THmH2;
+	extern double THmH3;
+	extern double THmHc;
+
+	// negative mass -> sign of Higgs and goldstones
+	extern double sign_mHsmsq;
+	extern double sign_mG0sq;
+	extern double sign_mGchsq;
+
+	extern std::vector<double> THMZ_therm;
+	extern std::vector<double> THMW_therm;
+	extern std::vector<double> THmHsm_therm;
+	extern std::vector<double> THmG0_therm;
+	extern std::vector<double> THmGch_therm;
+	extern std::vector<double> THmH1_therm;
+	extern std::vector<double> THmH2_therm;
+	extern std::vector<double> THmH3_therm;
+	extern std::vector<double> THmHc_therm;
+
+
+
+
+	// tokens
 	extern double token1;
 	extern double token2;
 	extern double token3;
@@ -180,6 +376,38 @@ namespace PAR{
 	extern double token96;
 	extern double token97;
 	extern double token98;
+	extern double token99;
+	extern double token100;
+	extern double token101;
+	extern double token102;
+	extern double token103;
+	extern double token104;
+	extern double token105;
+	extern double token106;
+	extern double token107;
+	extern double token108;
+	extern double token109;
+	extern double token110;
+	extern double token111;
+	extern double token112;
+	extern double token113;
+	extern double token114;
+	extern double token115;
+	extern double token116;
+	extern double token117;
+	extern double token118;
+	extern double token119;
+	extern double token120;
+	extern double token121;
+	extern double token122;
+	extern double token123;
+	extern double token124;
+	extern double token125;
+	extern double token126;
+	extern double token127;
+	extern double token128;
+	extern double token129;
+	// default variables
 	extern double EL;
 	extern double ee;
 	extern double gs;
@@ -187,7 +415,13 @@ namespace PAR{
 	extern double FAGS;
 }
 	double H1H1hh(const double &cos_t, const double &s);
+	double H1H1hG0(const double &cos_t, const double &s);
+	double H1H1G0G0(const double &cos_t, const double &s);
+	double H1H1GCHGch(const double &cos_t, const double &s);
 	double H1H1hZ(const double &cos_t, const double &s);
+	double H1H1G0Z(const double &cos_t, const double &s);
+	double H1H1GCHW(const double &cos_t, const double &s);
+	double H1H1Gchw(const double &cos_t, const double &s);
 	double H1H1ZZ(const double &cos_t, const double &s);
 	double H1H1wW(const double &cos_t, const double &s);
 	double H1H1Ee(const double &cos_t, const double &s);
@@ -200,7 +434,13 @@ namespace PAR{
 	double H1H1Ss(const double &cos_t, const double &s);
 	double H1H1Bb(const double &cos_t, const double &s);
 	double H1H2hh(const double &cos_t, const double &s);
+	double H1H2hG0(const double &cos_t, const double &s);
+	double H1H2G0G0(const double &cos_t, const double &s);
+	double H1H2GCHGch(const double &cos_t, const double &s);
 	double H1H2hZ(const double &cos_t, const double &s);
+	double H1H2G0Z(const double &cos_t, const double &s);
+	double H1H2GCHW(const double &cos_t, const double &s);
+	double H1H2Gchw(const double &cos_t, const double &s);
 	double H1H2ZZ(const double &cos_t, const double &s);
 	double H1H2wW(const double &cos_t, const double &s);
 	double H1H2VEve(const double &cos_t, const double &s);
@@ -216,7 +456,13 @@ namespace PAR{
 	double H1H2Ss(const double &cos_t, const double &s);
 	double H1H2Bb(const double &cos_t, const double &s);
 	double H1H3hh(const double &cos_t, const double &s);
+	double H1H3hG0(const double &cos_t, const double &s);
+	double H1H3G0G0(const double &cos_t, const double &s);
+	double H1H3GCHGch(const double &cos_t, const double &s);
 	double H1H3hZ(const double &cos_t, const double &s);
+	double H1H3G0Z(const double &cos_t, const double &s);
+	double H1H3GCHW(const double &cos_t, const double &s);
+	double H1H3Gchw(const double &cos_t, const double &s);
 	double H1H3ZZ(const double &cos_t, const double &s);
 	double H1H3wW(const double &cos_t, const double &s);
 	double H1H3VEve(const double &cos_t, const double &s);
@@ -231,7 +477,12 @@ namespace PAR{
 	double H1H3Dd(const double &cos_t, const double &s);
 	double H1H3Ss(const double &cos_t, const double &s);
 	double H1H3Bb(const double &cos_t, const double &s);
+	double H1HchGch(const double &cos_t, const double &s);
+	double H1HcG0Gch(const double &cos_t, const double &s);
 	double H1HchW(const double &cos_t, const double &s);
+	double H1HcG0W(const double &cos_t, const double &s);
+	double H1HcGchA(const double &cos_t, const double &s);
+	double H1HcGchZ(const double &cos_t, const double &s);
 	double H1HcAW(const double &cos_t, const double &s);
 	double H1HcZW(const double &cos_t, const double &s);
 	double H1HcveE(const double &cos_t, const double &s);
@@ -247,7 +498,13 @@ namespace PAR{
 	double H1HctS(const double &cos_t, const double &s);
 	double H1HctB(const double &cos_t, const double &s);
 	double H2H2hh(const double &cos_t, const double &s);
+	double H2H2hG0(const double &cos_t, const double &s);
+	double H2H2G0G0(const double &cos_t, const double &s);
+	double H2H2GCHGch(const double &cos_t, const double &s);
 	double H2H2hZ(const double &cos_t, const double &s);
+	double H2H2G0Z(const double &cos_t, const double &s);
+	double H2H2GCHW(const double &cos_t, const double &s);
+	double H2H2Gchw(const double &cos_t, const double &s);
 	double H2H2ZZ(const double &cos_t, const double &s);
 	double H2H2wW(const double &cos_t, const double &s);
 	double H2H2Ee(const double &cos_t, const double &s);
@@ -260,7 +517,13 @@ namespace PAR{
 	double H2H2Ss(const double &cos_t, const double &s);
 	double H2H2Bb(const double &cos_t, const double &s);
 	double H2H3hh(const double &cos_t, const double &s);
+	double H2H3hG0(const double &cos_t, const double &s);
+	double H2H3G0G0(const double &cos_t, const double &s);
+	double H2H3GCHGch(const double &cos_t, const double &s);
 	double H2H3hZ(const double &cos_t, const double &s);
+	double H2H3G0Z(const double &cos_t, const double &s);
+	double H2H3GCHW(const double &cos_t, const double &s);
+	double H2H3Gchw(const double &cos_t, const double &s);
 	double H2H3ZZ(const double &cos_t, const double &s);
 	double H2H3wW(const double &cos_t, const double &s);
 	double H2H3VEve(const double &cos_t, const double &s);
@@ -275,7 +538,12 @@ namespace PAR{
 	double H2H3Dd(const double &cos_t, const double &s);
 	double H2H3Ss(const double &cos_t, const double &s);
 	double H2H3Bb(const double &cos_t, const double &s);
+	double H2HchGch(const double &cos_t, const double &s);
+	double H2HcG0Gch(const double &cos_t, const double &s);
 	double H2HchW(const double &cos_t, const double &s);
+	double H2HcG0W(const double &cos_t, const double &s);
+	double H2HcGchA(const double &cos_t, const double &s);
+	double H2HcGchZ(const double &cos_t, const double &s);
 	double H2HcAW(const double &cos_t, const double &s);
 	double H2HcZW(const double &cos_t, const double &s);
 	double H2HcveE(const double &cos_t, const double &s);
@@ -291,7 +559,13 @@ namespace PAR{
 	double H2HctS(const double &cos_t, const double &s);
 	double H2HctB(const double &cos_t, const double &s);
 	double H3H3hh(const double &cos_t, const double &s);
+	double H3H3hG0(const double &cos_t, const double &s);
+	double H3H3G0G0(const double &cos_t, const double &s);
+	double H3H3GCHGch(const double &cos_t, const double &s);
 	double H3H3hZ(const double &cos_t, const double &s);
+	double H3H3G0Z(const double &cos_t, const double &s);
+	double H3H3GCHW(const double &cos_t, const double &s);
+	double H3H3Gchw(const double &cos_t, const double &s);
 	double H3H3ZZ(const double &cos_t, const double &s);
 	double H3H3wW(const double &cos_t, const double &s);
 	double H3H3Ee(const double &cos_t, const double &s);
@@ -303,7 +577,12 @@ namespace PAR{
 	double H3H3Dd(const double &cos_t, const double &s);
 	double H3H3Ss(const double &cos_t, const double &s);
 	double H3H3Bb(const double &cos_t, const double &s);
+	double H3HchGch(const double &cos_t, const double &s);
+	double H3HcG0Gch(const double &cos_t, const double &s);
 	double H3HchW(const double &cos_t, const double &s);
+	double H3HcG0W(const double &cos_t, const double &s);
+	double H3HcGchA(const double &cos_t, const double &s);
+	double H3HcGchZ(const double &cos_t, const double &s);
 	double H3HcAW(const double &cos_t, const double &s);
 	double H3HcZW(const double &cos_t, const double &s);
 	double H3HcveE(const double &cos_t, const double &s);
@@ -318,10 +597,18 @@ namespace PAR{
 	double H3HctD(const double &cos_t, const double &s);
 	double H3HctS(const double &cos_t, const double &s);
 	double H3HctB(const double &cos_t, const double &s);
+	double HcHcGchGch(const double &cos_t, const double &s);
+	double HcHcGchW(const double &cos_t, const double &s);
 	double HcHcWW(const double &cos_t, const double &s);
 	double HcHChh(const double &cos_t, const double &s);
+	double HcHChG0(const double &cos_t, const double &s);
+	double HcHCG0G0(const double &cos_t, const double &s);
+	double HcHCGCHGch(const double &cos_t, const double &s);
 	double HcHChA(const double &cos_t, const double &s);
 	double HcHChZ(const double &cos_t, const double &s);
+	double HcHCG0Z(const double &cos_t, const double &s);
+	double HcHCGCHW(const double &cos_t, const double &s);
+	double HcHCGchw(const double &cos_t, const double &s);
 	double HcHCAA(const double &cos_t, const double &s);
 	double HcHCAZ(const double &cos_t, const double &s);
 	double HcHCZZ(const double &cos_t, const double &s);
@@ -339,7 +626,13 @@ namespace PAR{
 	double HcHCSs(const double &cos_t, const double &s);
 	double HcHCBb(const double &cos_t, const double &s);
 	double H1H1hhfl(const double &cos_t, const double &s);
+	double H1H1hG0fl(const double &cos_t, const double &s);
+	double H1H1G0G0fl(const double &cos_t, const double &s);
+	double H1H1GCHGchfl(const double &cos_t, const double &s);
 	double H1H1hZfl(const double &cos_t, const double &s);
+	double H1H1G0Zfl(const double &cos_t, const double &s);
+	double H1H1GCHWfl(const double &cos_t, const double &s);
+	double H1H1Gchwfl(const double &cos_t, const double &s);
 	double H1H1ZZfl(const double &cos_t, const double &s);
 	double H1H1wWfl(const double &cos_t, const double &s);
 	double H1H1Eefl(const double &cos_t, const double &s);
@@ -352,7 +645,13 @@ namespace PAR{
 	double H1H1Ssfl(const double &cos_t, const double &s);
 	double H1H1Bbfl(const double &cos_t, const double &s);
 	double H1H2hhfl(const double &cos_t, const double &s);
+	double H1H2hG0fl(const double &cos_t, const double &s);
+	double H1H2G0G0fl(const double &cos_t, const double &s);
+	double H1H2GCHGchfl(const double &cos_t, const double &s);
 	double H1H2hZfl(const double &cos_t, const double &s);
+	double H1H2G0Zfl(const double &cos_t, const double &s);
+	double H1H2GCHWfl(const double &cos_t, const double &s);
+	double H1H2Gchwfl(const double &cos_t, const double &s);
 	double H1H2ZZfl(const double &cos_t, const double &s);
 	double H1H2wWfl(const double &cos_t, const double &s);
 	double H1H2VEvefl(const double &cos_t, const double &s);
@@ -368,7 +667,13 @@ namespace PAR{
 	double H1H2Ssfl(const double &cos_t, const double &s);
 	double H1H2Bbfl(const double &cos_t, const double &s);
 	double H1H3hhfl(const double &cos_t, const double &s);
+	double H1H3hG0fl(const double &cos_t, const double &s);
+	double H1H3G0G0fl(const double &cos_t, const double &s);
+	double H1H3GCHGchfl(const double &cos_t, const double &s);
 	double H1H3hZfl(const double &cos_t, const double &s);
+	double H1H3G0Zfl(const double &cos_t, const double &s);
+	double H1H3GCHWfl(const double &cos_t, const double &s);
+	double H1H3Gchwfl(const double &cos_t, const double &s);
 	double H1H3ZZfl(const double &cos_t, const double &s);
 	double H1H3wWfl(const double &cos_t, const double &s);
 	double H1H3VEvefl(const double &cos_t, const double &s);
@@ -383,7 +688,12 @@ namespace PAR{
 	double H1H3Ddfl(const double &cos_t, const double &s);
 	double H1H3Ssfl(const double &cos_t, const double &s);
 	double H1H3Bbfl(const double &cos_t, const double &s);
+	double H1HchGchfl(const double &cos_t, const double &s);
+	double H1HcG0Gchfl(const double &cos_t, const double &s);
 	double H1HchWfl(const double &cos_t, const double &s);
+	double H1HcG0Wfl(const double &cos_t, const double &s);
+	double H1HcGchAfl(const double &cos_t, const double &s);
+	double H1HcGchZfl(const double &cos_t, const double &s);
 	double H1HcAWfl(const double &cos_t, const double &s);
 	double H1HcZWfl(const double &cos_t, const double &s);
 	double H1HcveEfl(const double &cos_t, const double &s);
@@ -399,7 +709,13 @@ namespace PAR{
 	double H1HctSfl(const double &cos_t, const double &s);
 	double H1HctBfl(const double &cos_t, const double &s);
 	double H2H2hhfl(const double &cos_t, const double &s);
+	double H2H2hG0fl(const double &cos_t, const double &s);
+	double H2H2G0G0fl(const double &cos_t, const double &s);
+	double H2H2GCHGchfl(const double &cos_t, const double &s);
 	double H2H2hZfl(const double &cos_t, const double &s);
+	double H2H2G0Zfl(const double &cos_t, const double &s);
+	double H2H2GCHWfl(const double &cos_t, const double &s);
+	double H2H2Gchwfl(const double &cos_t, const double &s);
 	double H2H2ZZfl(const double &cos_t, const double &s);
 	double H2H2wWfl(const double &cos_t, const double &s);
 	double H2H2Eefl(const double &cos_t, const double &s);
@@ -412,7 +728,13 @@ namespace PAR{
 	double H2H2Ssfl(const double &cos_t, const double &s);
 	double H2H2Bbfl(const double &cos_t, const double &s);
 	double H2H3hhfl(const double &cos_t, const double &s);
+	double H2H3hG0fl(const double &cos_t, const double &s);
+	double H2H3G0G0fl(const double &cos_t, const double &s);
+	double H2H3GCHGchfl(const double &cos_t, const double &s);
 	double H2H3hZfl(const double &cos_t, const double &s);
+	double H2H3G0Zfl(const double &cos_t, const double &s);
+	double H2H3GCHWfl(const double &cos_t, const double &s);
+	double H2H3Gchwfl(const double &cos_t, const double &s);
 	double H2H3ZZfl(const double &cos_t, const double &s);
 	double H2H3wWfl(const double &cos_t, const double &s);
 	double H2H3VEvefl(const double &cos_t, const double &s);
@@ -427,7 +749,12 @@ namespace PAR{
 	double H2H3Ddfl(const double &cos_t, const double &s);
 	double H2H3Ssfl(const double &cos_t, const double &s);
 	double H2H3Bbfl(const double &cos_t, const double &s);
+	double H2HchGchfl(const double &cos_t, const double &s);
+	double H2HcG0Gchfl(const double &cos_t, const double &s);
 	double H2HchWfl(const double &cos_t, const double &s);
+	double H2HcG0Wfl(const double &cos_t, const double &s);
+	double H2HcGchAfl(const double &cos_t, const double &s);
+	double H2HcGchZfl(const double &cos_t, const double &s);
 	double H2HcAWfl(const double &cos_t, const double &s);
 	double H2HcZWfl(const double &cos_t, const double &s);
 	double H2HcveEfl(const double &cos_t, const double &s);
@@ -443,7 +770,13 @@ namespace PAR{
 	double H2HctSfl(const double &cos_t, const double &s);
 	double H2HctBfl(const double &cos_t, const double &s);
 	double H3H3hhfl(const double &cos_t, const double &s);
+	double H3H3hG0fl(const double &cos_t, const double &s);
+	double H3H3G0G0fl(const double &cos_t, const double &s);
+	double H3H3GCHGchfl(const double &cos_t, const double &s);
 	double H3H3hZfl(const double &cos_t, const double &s);
+	double H3H3G0Zfl(const double &cos_t, const double &s);
+	double H3H3GCHWfl(const double &cos_t, const double &s);
+	double H3H3Gchwfl(const double &cos_t, const double &s);
 	double H3H3ZZfl(const double &cos_t, const double &s);
 	double H3H3wWfl(const double &cos_t, const double &s);
 	double H3H3Eefl(const double &cos_t, const double &s);
@@ -455,7 +788,12 @@ namespace PAR{
 	double H3H3Ddfl(const double &cos_t, const double &s);
 	double H3H3Ssfl(const double &cos_t, const double &s);
 	double H3H3Bbfl(const double &cos_t, const double &s);
+	double H3HchGchfl(const double &cos_t, const double &s);
+	double H3HcG0Gchfl(const double &cos_t, const double &s);
 	double H3HchWfl(const double &cos_t, const double &s);
+	double H3HcG0Wfl(const double &cos_t, const double &s);
+	double H3HcGchAfl(const double &cos_t, const double &s);
+	double H3HcGchZfl(const double &cos_t, const double &s);
 	double H3HcAWfl(const double &cos_t, const double &s);
 	double H3HcZWfl(const double &cos_t, const double &s);
 	double H3HcveEfl(const double &cos_t, const double &s);
@@ -470,10 +808,18 @@ namespace PAR{
 	double H3HctDfl(const double &cos_t, const double &s);
 	double H3HctSfl(const double &cos_t, const double &s);
 	double H3HctBfl(const double &cos_t, const double &s);
+	double HcHcGchGchfl(const double &cos_t, const double &s);
+	double HcHcGchWfl(const double &cos_t, const double &s);
 	double HcHcWWfl(const double &cos_t, const double &s);
 	double HcHChhfl(const double &cos_t, const double &s);
+	double HcHChG0fl(const double &cos_t, const double &s);
+	double HcHCG0G0fl(const double &cos_t, const double &s);
+	double HcHCGCHGchfl(const double &cos_t, const double &s);
 	double HcHChAfl(const double &cos_t, const double &s);
 	double HcHChZfl(const double &cos_t, const double &s);
+	double HcHCG0Zfl(const double &cos_t, const double &s);
+	double HcHCGCHWfl(const double &cos_t, const double &s);
+	double HcHCGchwfl(const double &cos_t, const double &s);
 	double HcHCAAfl(const double &cos_t, const double &s);
 	double HcHCAZfl(const double &cos_t, const double &s);
 	double HcHCZZfl(const double &cos_t, const double &s);

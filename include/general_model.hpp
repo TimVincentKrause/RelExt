@@ -11,6 +11,7 @@
 
 #include "EffDof.hpp"
 #include "utils.hpp"
+#include "numerical/matrix_operations.hpp"
 
 namespace DT {
 #define ADDCHANNEL(name, amp, ampfl) \
@@ -39,10 +40,19 @@ struct ModelInfo {
     double ZERO = 0;
     double MDM = 0.;
 
+    // store temperature and vev(T)
+    std::vector<double*> vev;
+    std::vector<double*> temp;
+
+    // use thermal parameters
+    bool therm_contr;
+
     void init();
     void calc_widths_and_scale();
     void load_prtcls();
-    void load_parameters();
+    void load_parameters(const double x = 1e7);
+    void read_thermal_parameters(std::string tvev_input_file);
+    void save_parameters();
     void load_parameter_map();
     void load_tokens();
     bool check_conditions();
@@ -57,7 +67,7 @@ struct ModelInfo {
     void assign_bath_masses(const VecString &prtcls = {});
     void assigndm();
 
-    ModelInfo(const bool calcwidths);
+    ModelInfo(const bool calcwidths,const bool thermcontr);
 };
 
 class AnnihilationAmps : public ModelInfo {
@@ -68,7 +78,7 @@ class AnnihilationAmps : public ModelInfo {
     vamp2 cur_channel;
 
    public:
-    AnnihilationAmps(const bool calcwidths);
+    AnnihilationAmps(const bool calcwidths, const bool thermcontr);
 
     void init();
     void print_channels();

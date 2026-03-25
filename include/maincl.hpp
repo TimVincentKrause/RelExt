@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
 #include <iostream>
+#include <fstream>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -17,11 +18,15 @@ namespace DT {
 class Main {
    private:
     double omega;
+    // freezeout inverse temerature: MDM/Tf
+    double xf;
     size_t mode;
     std::string output_file;
+    std::string tvev_input_file;
     bool first_run = true;
     const bool calc_widths;
     const bool save_contribs;
+    const bool therm_contr;
     VecDoub channel_frac;
     VecString bath_procs;
     MatString generator_list;
@@ -32,11 +37,15 @@ class Main {
 
    public:
     Main(char *argv[], const int modee, double beps, const double xtoday,
-         const bool fast, const bool calcwidths, const bool savecontribs);
+         const bool fast, const bool calcwidths, const bool thermcontr,
+         const bool savecontribs);
 
     void load_generation_file();
 
     void load_read_file();
+
+    // badly written function to read the tvev file and load vev and temp
+    void load_read_tvev_file(std::string input, AnnihilationAmps &AA);
 
     void load_user_operations();
 
@@ -73,7 +82,7 @@ class Main {
 
     // args are: min sqrt(s), max sqrt(s), number of points, channel names
     void CalcXsec(double sqsmin, double sqsmax, const size_t points,
-                  const std::string outfile, VecString channels);
+                  const std::string outfile, VecString channels, const double x = -1.);
 
     // args are: min x, max x, number of points, channel names
     void CalcTac(double xmin, double xmax, const size_t points,

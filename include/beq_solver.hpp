@@ -24,6 +24,10 @@ class FO1DM {
         : BI(AnAmps), appr(apprr), foc(BI, apprr ? 1.5 : 0.1) {};
     void set_appr(const bool &apprr);
     void set_xtoday(const double &xtoday);
+    // prints out xf in private
+    void print_xf();
+    // returns calculated x_f
+    double get_xf();
     double omega(const double &yield);
     VecDoub calc_contributions(const VecString &channels);
     double operator()(const VecString &channels);

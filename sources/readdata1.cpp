@@ -117,6 +117,24 @@ VecString DataReader::get_full_line(const std::string line) {
     return res;
 }
 
+MatString DataReader::get_operation_slist() {
+    std::vector<VecString> res = {};
+    VecString temp;
+    std::string line;
+    line = get_line_at("START");
+    while (getline(datafile, line)) {
+        if (line == "END") {
+            break;
+        }
+        rmv_spaces(line);
+        if (line != "") {
+            temp = get_full_line(line);
+            res.push_back(temp);
+        }
+    }
+    return res;
+}
+
 double DataReader::datalines() {
     std::string line;
     while (getline(datafile, line)) {
@@ -198,6 +216,112 @@ void DataReader::read_parameter(const size_t row) {
         }
     }
 }
+
+
+void DataReader::read_column(std::vector<double> &vector, std::string head,const double npow, const double eps){
+    datafile.clear();
+    datafile.seekg(0);
+
+
+    // get all headers in one vector: headers
+    std::vector<std::string> headers;
+    size_t headcol = 0;
+
+    // get the column number of head
+    std::string line;
+    if (getline(datafile, line)) {
+
+        std::stringstream ss(line);
+        std::string header;
+        while (getline(ss, header, '\t') || getline(ss, header, ',') ||
+               getline(ss, header, ' ')) {
+            //std::cout << header << "\n";
+            if (header == head) {break;}
+            headcol += 1;
+        }
+    }
+
+    //go through each line
+    size_t row = 0;
+    while (getline(datafile, line)) {
+        std::istringstream ss(line);
+        std::string value;
+        //this goes through each column
+        size_t col = 0;
+        while (getline(ss, value, '\t') || getline(ss, value, ',') ||
+                getline(ss, value, ' ')) {
+            if (col == headcol) {
+                //std::cout << std::stod(value) << "\n";
+                if (std::abs(std::stod(value)) <= eps){
+                    vector.push_back(0);
+                } else {
+                    if (npow==0){
+                        vector.push_back(std::stod(value));
+                    } else{
+                        vector.push_back(pow(std::stod(value),npow));
+                    }
+                }
+            }
+            col++;
+        }
+        row++;
+    }
+    //std::cout << head << " | " << vector.size() << "\n";
+}
+
+// read just some of the headers
+size_t DataReader::get_mHc_pos(){
+    datafile.clear();
+    datafile.seekg(0);
+
+    // get all headers in one vector: headers
+    std::vector<std::string> headers;
+    size_t headcol = 0;
+
+    // get the column number of head
+    std::string line;
+    if (getline(datafile, line)) {
+
+        std::stringstream ss(line);
+        std::string header;
+        while (getline(ss, header, '\t') || getline(ss, header, ',') ||
+               getline(ss, header, ' ')) {
+            //std::cout << header << "\n";
+            if (header == "mS_5sq") {break;}
+            headcol += 1;
+        }
+    }
+
+    // position:
+    double tmp_value;
+
+    //go through each line
+    size_t row = 0;
+    while (getline(datafile, line)) {
+        std::istringstream ss(line);
+        std::string value;
+        //this goes through each column
+        size_t col = 0;
+        while (getline(ss, value, '\t') || getline(ss, value, ',') ||
+                getline(ss, value, ' ')) {
+            if (col == headcol) {
+                tmp_value = std::stod(value);
+            }
+            if (headcol < col && col < headcol+4){
+                if (tmp_value == std::stod(value)) {return col-headcol;}
+                else {tmp_value = std::stod(value);}
+            }
+
+            col++;
+        }
+        row++;
+   }
+   // if there isn't a second value;
+   return -1;
+}
+
+
+
 
 MatString DataReader::get_generation_slist() {
     MatString res = {};

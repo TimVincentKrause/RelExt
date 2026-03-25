@@ -25,6 +25,8 @@ namespace DT{
 		prtcls["W"] = &MW;
 		prtcls["G"] = &ZERO;
 		prtcls["h"] = &mHsm;
+		prtcls["G0"] = &mG0;
+		prtcls["Gch"] = &mGch;
 		prtcls["H1"] = &mH1;
 		prtcls["H2"] = &mH2;
 		prtcls["H3"] = &mH3;
@@ -43,6 +45,7 @@ namespace DT{
 		aprtcls["S"] = &MS;
 		aprtcls["B"] = &MB;
 		aprtcls["w"] = &MW;
+		aprtcls["GCH"] = &mGch;
 		aprtcls["HC"] = &mHc;
 	}
 }

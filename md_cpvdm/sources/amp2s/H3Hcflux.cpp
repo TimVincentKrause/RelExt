@@ -4,9 +4,33 @@
 #include "../../model.hpp"
 #include "utils.hpp"
 
+double DT::H3HchGchfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*2*signedflux(s, mH3,mHc,mHsm,mGch,sign_mHsmsq,sign_mGchsq)*H3HchGch
+
+     (cos_t, s);
+}
+double DT::H3HcG0Gchfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*2*signedflux(s, mH3,mHc,mG0,mGch,sign_mG0sq,sign_mGchsq)*H3HcG0Gch
+
+     (cos_t, s);
+}
 double DT::H3HchWfl(const double &cos_t, const double &s){
 	using namespace PAR;
-	return 2*2*flux(s, mH3,mHc,mHsm,MW)*H3HchW(cos_t, s);
+	return 2*2*signedflux(s, mH3,mHc,mHsm,MW,sign_mHsmsq,1)*H3HchW(cos_t, s);
+}
+double DT::H3HcG0Wfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*2*signedflux(s, mH3,mHc,mG0,MW,sign_mG0sq,1)*H3HcG0W(cos_t, s);
+}
+double DT::H3HcGchAfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*2*signedflux(s, mH3,mHc,mGch,0,sign_mGchsq,1)*H3HcGchA(cos_t, s);
+}
+double DT::H3HcGchZfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*2*signedflux(s, mH3,mHc,mGch,MZ,sign_mGchsq,1)*H3HcGchZ(cos_t, s);
 }
 double DT::H3HcAWfl(const double &cos_t, const double &s){
 	using namespace PAR;

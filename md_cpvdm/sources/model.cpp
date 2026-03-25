@@ -3,13 +3,20 @@
 
 #include <cmath>
 
+#include <string>
+
+#include <vector>
+
 namespace DT{
 namespace PAR{
+	// external parameters
 	double MZ = 91.1876;
 	double aEWM1 = 0.00775795;
 	double Gf = 0.0000116637;
 	double aS = 0.1172;
 	double mHsm = 125.09;
+	double mG0 = 91.1876;
+	double mGch = 79.947;
 	double mHc = 200.;
 	double alph1 = -0.1;
 	double alph2 = -0.1;
@@ -18,9 +25,22 @@ namespace PAR{
 	double mH2 = 200.;
 	double m22sq = 100;
 	double mssq = 100;
+	double L1 = 1;
 	double L2 = 0.1;
+	double L3 = 1;
+	double L4 = 1;
+	double L5 = 1;
 	double L6 = 0.1;
+	double L7 = 1;
 	double L8 = 0.1;
+	double Treal = 1;
+	double Timag = 1;
+	double ME = 0;
+	double MM = 0.1057;
+	double MTA = 1.777;
+	double MU = 0;
+	double MD = 0;
+	double MS = 0;
 	double MC = 1.2;
 	double MB = 4.23;
 	double MT = 172.5;
@@ -28,12 +48,6 @@ namespace PAR{
 	double Mnue = 0.;
 	double Mnum = 0.;
 	double Mnut = 0.;
-	double Me = 0.;
-	double MM = 0.1057;
-	double MTA = 1.777;
-	double MU = 0.;
-	double MD = 0.;
-	double MS = 0.;
 	double WT = 2.;
 	double WZ = 2.4952;
 	double WW = 2.085;
@@ -50,6 +64,8 @@ namespace PAR{
 	double G = 1.21358;
 	double FAGS = 1.21358;
 
+	// internal parameters
+	double Me;
 	double MW;
 	double EE;
 	double CW2;
@@ -70,13 +86,6 @@ namespace PAR{
 	double RR3x3;
 	double mH3;
 	double m11sq;
-	double L1;
-	double L3;
-	double L4;
-	double L5;
-	double L7;
-	double Treal;
-	double Timag;
 	double CKM1x1;
 	double CKM1x2;
 	double CKM1x3;
@@ -86,6 +95,190 @@ namespace PAR{
 	double CKM3x1;
 	double CKM3x2;
 	double CKM3x3;
+	double yu1;
+	double yu2;
+	double yu3;
+	double yd1;
+	double yd2;
+	double yd3;
+	double yl1;
+	double yl2;
+	double yl3;
+	double I1a1;
+	double I1a2;
+	double I1a3;
+	double I2a1;
+	double I2a2;
+	double I2a3;
+	double I3a1;
+	double I3a2;
+	double I3a3;
+	double I4a1;
+	double I4a2;
+	double I4a3;
+	double I5a1;
+	double I5a2;
+	double I5a3;
+	double I6a1;
+	double I6a2;
+	double I6a3;
+	double I7a1;
+	double I7a2;
+	double I7a3;
+	// thermal parameters
+	std::vector<double> temp_therm;
+	std::vector<double> Mnue_therm;
+	std::vector<double> Mnum_therm;
+	std::vector<double> Mnut_therm;
+	std::vector<double> Me_therm;
+	std::vector<double> MM_therm;
+	std::vector<double> MTA_therm;
+	std::vector<double> MU_therm;
+	std::vector<double> MC_therm;
+	std::vector<double> MT_therm;
+	std::vector<double> MD_therm;
+	std::vector<double> MS_therm;
+	std::vector<double> MB_therm;
+	std::vector<double> MZ_therm;
+	std::vector<double> MW_therm;
+	std::vector<double> mHsmsq_therm;
+	std::vector<double> mG0sq_therm;
+	std::vector<double> mGchsq_therm;
+	std::vector<double> mH1_therm;
+	std::vector<double> mH2_therm;
+	std::vector<double> mH3_therm;
+	std::vector<double> mHc_therm;
+	std::vector<double> v_therm;
+
+	// handstuff
+
+	double mHsm0 = 125.09;
+	double MW0;
+	double MZ0 = 91.1876;
+	double v0;
+
+
+	// Custom R's
+	std::vector<double> M00_therm;
+	std::vector<double> M01_therm;
+	std::vector<double> M02_therm;
+	std::vector<double> M03_therm;
+	std::vector<double> M04_therm;
+	std::vector<double> M05_therm;
+	std::vector<double> M06_therm;
+	std::vector<double> M07_therm;
+	std::vector<double> M08_therm;
+
+	std::vector<double> M10_therm;
+	std::vector<double> M11_therm;
+	std::vector<double> M12_therm;
+	std::vector<double> M13_therm;
+	std::vector<double> M14_therm;
+	std::vector<double> M15_therm;
+	std::vector<double> M16_therm;
+	std::vector<double> M17_therm;
+	std::vector<double> M18_therm;
+
+
+	std::vector<double> M20_therm;
+	std::vector<double> M21_therm;
+	std::vector<double> M22_therm;
+	std::vector<double> M23_therm;
+	std::vector<double> M24_therm;
+	std::vector<double> M25_therm;
+	std::vector<double> M26_therm;
+	std::vector<double> M27_therm;
+	std::vector<double> M28_therm;
+
+	std::vector<double> M30_therm;
+	std::vector<double> M31_therm;
+	std::vector<double> M32_therm;
+	std::vector<double> M33_therm;
+	std::vector<double> M34_therm;
+	std::vector<double> M35_therm;
+	std::vector<double> M36_therm;
+	std::vector<double> M37_therm;
+	std::vector<double> M38_therm;
+
+	std::vector<double> M40_therm;
+	std::vector<double> M41_therm;
+	std::vector<double> M42_therm;
+	std::vector<double> M43_therm;
+	std::vector<double> M44_therm;
+	std::vector<double> M45_therm;
+	std::vector<double> M46_therm;
+	std::vector<double> M47_therm;
+	std::vector<double> M48_therm;
+
+	std::vector<double> M50_therm;
+	std::vector<double> M51_therm;
+	std::vector<double> M52_therm;
+	std::vector<double> M53_therm;
+	std::vector<double> M54_therm;
+	std::vector<double> M55_therm;
+	std::vector<double> M56_therm;
+	std::vector<double> M57_therm;
+	std::vector<double> M58_therm;
+
+	std::vector<double> M60_therm;
+	std::vector<double> M61_therm;
+	std::vector<double> M62_therm;
+	std::vector<double> M63_therm;
+	std::vector<double> M64_therm;
+	std::vector<double> M65_therm;
+	std::vector<double> M66_therm;
+	std::vector<double> M67_therm;
+	std::vector<double> M68_therm;
+
+	std::vector<double> M70_therm;
+	std::vector<double> M71_therm;
+	std::vector<double> M72_therm;
+	std::vector<double> M73_therm;
+	std::vector<double> M74_therm;
+	std::vector<double> M75_therm;
+	std::vector<double> M76_therm;
+	std::vector<double> M77_therm;
+	std::vector<double> M78_therm;
+
+	std::vector<double> M80_therm;
+	std::vector<double> M81_therm;
+	std::vector<double> M82_therm;
+	std::vector<double> M83_therm;
+	std::vector<double> M84_therm;
+	std::vector<double> M85_therm;
+	std::vector<double> M86_therm;
+	std::vector<double> M87_therm;
+	std::vector<double> M88_therm;
+
+	// custom Thermal masses / Thermal self-energies
+	double THMZ;
+	double THMW;
+	double THmHsm;
+	double THmG0;
+	double THmGch;
+	double THmH1;
+	double THmH2;
+	double THmH3;
+	double THmHc;
+
+	// negative mass -> sign of Higgs and goldstones
+	double sign_mHsmsq;
+	double sign_mG0sq;
+	double sign_mGchsq;
+
+	std::vector<double> THMZ_therm;
+	std::vector<double> THMW_therm;
+	std::vector<double> THmHsm_therm;
+	std::vector<double> THmG0_therm;
+	std::vector<double> THmGch_therm;
+	std::vector<double> THmH1_therm;
+	std::vector<double> THmH2_therm;
+	std::vector<double> THmH3_therm;
+	std::vector<double> THmHc_therm;
+
+
+
+	// tokens
 	double token1;
 	double token2;
 	double token3;
@@ -184,5 +377,36 @@ namespace PAR{
 	double token96;
 	double token97;
 	double token98;
+	double token99;
+	double token100;
+	double token101;
+	double token102;
+	double token103;
+	double token104;
+	double token105;
+	double token106;
+	double token107;
+	double token108;
+	double token109;
+	double token110;
+	double token111;
+	double token112;
+	double token113;
+	double token114;
+	double token115;
+	double token116;
+	double token117;
+	double token118;
+	double token119;
+	double token120;
+	double token121;
+	double token122;
+	double token123;
+	double token124;
+	double token125;
+	double token126;
+	double token127;
+	double token128;
+	double token129;
 }
 }

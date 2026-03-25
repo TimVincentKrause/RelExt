@@ -71,4 +71,12 @@ VecDoub FO1DM::calc_contributions(const VecString &channels) {
     return res;
 }
 
+void FO1DM::print_xf() {
+    std::cout << "xf = " << xf << "\n";
+}
+
+double FO1DM::get_xf() {
+    return xf;
+}
+
 }  // namespace DT

@@ -6,11 +6,43 @@
 
 double DT::H1H3hhfl(const double &cos_t, const double &s){
 	using namespace PAR;
-	return 2*flux(s, mH1,mH3,mHsm,mHsm)*H1H3hh(cos_t, s);
+	return 2*signedflux(s, mH1,mH3,mHsm,mHsm,sign_mHsmsq,sign_mHsmsq)*H1H3hh
+
+     (cos_t, s);
+}
+double DT::H1H3hG0fl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*signedflux(s, mH1,mH3,mHsm,mG0,sign_mHsmsq,sign_mG0sq)*H1H3hG0
+
+     (cos_t, s);
+}
+double DT::H1H3G0G0fl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*signedflux(s, mH1,mH3,mG0,mG0,sign_mG0sq,sign_mG0sq)*H1H3G0G0
+
+     (cos_t, s);
+}
+double DT::H1H3GCHGchfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*signedflux(s, mH1,mH3,mGch,mGch,sign_mGchsq,sign_mGchsq)*H1H3GCHGch
+
+     (cos_t, s);
 }
 double DT::H1H3hZfl(const double &cos_t, const double &s){
 	using namespace PAR;
-	return 2*flux(s, mH1,mH3,mHsm,MZ)*H1H3hZ(cos_t, s);
+	return 2*signedflux(s, mH1,mH3,mHsm,MZ,sign_mHsmsq,1)*H1H3hZ(cos_t, s);
+}
+double DT::H1H3G0Zfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*signedflux(s, mH1,mH3,mG0,MZ,sign_mG0sq,1)*H1H3G0Z(cos_t, s);
+}
+double DT::H1H3GCHWfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*signedflux(s, mH1,mH3,mGch,MW,sign_mGchsq,1)*H1H3GCHW(cos_t, s);
+}
+double DT::H1H3Gchwfl(const double &cos_t, const double &s){
+	using namespace PAR;
+	return 2*signedflux(s, mH1,mH3,mGch,MW,sign_mGchsq,1)*H1H3Gchw(cos_t, s);
 }
 double DT::H1H3ZZfl(const double &cos_t, const double &s){
 	using namespace PAR;

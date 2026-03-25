@@ -27,6 +27,12 @@ double flux(const double &s, const double &m1, const double &m2,
     return sqrt((s - a * a) * (s - b * b) * (s - c * c) * (s - d * d));
 }
 
+double signedflux(const double &s, const double &m1, const double &m2,
+            const double &m3, const double &m4,const double &sgnm3,const double &sgnm4) {
+    const double a = m1 + m2, b = m1 - m2;
+    return sqrt((s - a * a) * (s - b * b) * (s*s -2*s*(sgnm3*m3*m3 + sgnm4*m4*m4) + sgnm3*m3*m3 - sgnm4*m4*m4));
+}
+
 double besselK2(const double &x) {
     static const double c0 = 1.984;
     double y = 1. / x;

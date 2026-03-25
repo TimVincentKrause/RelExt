@@ -43,12 +43,17 @@ double BeqInfo::dlogyeq(const double x) {
 }
 
 double FOCondition::operator()(const double &x) {
+    BI.AA.load_parameters(x);
     return BI.pre(x) * BI.tac(x) * BI.yeq(x) * del * (del + 2) + BI.dlogyeq(x);
 }
 
-double FOAppr::operator()(const double &x) { return -BI.pre(x) * BI.tac(x); }
+double FOAppr::operator()(const double &x) {
+    BI.AA.load_parameters(x);
+    return -BI.pre(x) * BI.tac(x);
+}
 
 void FOFull::operator()(const double &x, const double &y, double &dydx) {
+    BI.AA.load_parameters(x);
     dydx = BI.pre(x) * BI.tac(x) * (pow(BI.yeq(x), 2) - y * y);
 }
 

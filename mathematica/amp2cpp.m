@@ -1,7 +1,7 @@
 (* ::Package:: *)
 
-directory = ToString[$CommandLine[[4]]] <> "/FA_modfiles";
-(*directory = "/users/tp/jplotnikov/Documents/RelExt/md_cpvdm/FR_modfiles"<>"/FA_modfiles";*)
+(*directory = ToString[$CommandLine[[4]]] <> "/FA_modfiles";*)
+directory = "/home/kijetesantakalu/thesis/ForkRelExt/RelExt/md_cpvdm//FR_modfiles"<>"/FA_modfiles";
 Print[directory]
 
 (*start FA and FC*)
@@ -41,6 +41,7 @@ GSlist = FR$GoldstoneList;
 
 (*create list with particle identifiers, masses and names according to FA mod files*)
 particlelist = {M$ClassesDescription[[#,1]], TheMass[M$ClassesDescription[[#,1]]], ToString[TheLabel[M$ClassesDescription[[#,1]]]]}& /@Range[Length[M$ClassesDescription]];
+onlyparticleslist = particlelist;
 Do[
 (*adds antiparticles to particlelist*)
 	If[SelfConjugate/.M$ClassesDescription[[i1,2]][[1]],
@@ -53,7 +54,8 @@ Do[
 ];
 prttemp={};
 Do[
-	If[StringContainsQ[ToString[particlelist[[i1,1]]],"U"] || MemberQ[GSlist,particlelist[[i1,1]]] || MemberQ[GSlist,-particlelist[[i1,1]]],
+	(*include Goldstones*)
+	If[StringContainsQ[ToString[particlelist[[i1,1]]],"U"] (*|| MemberQ[GSlist,particlelist[[i1,1]]] || MemberQ[GSlist,-particlelist[[i1,1]]]*),
 		Continue[],
 		AppendTo[prttemp,particlelist[[i1]]]	
 	]
@@ -144,12 +146,13 @@ AppendTo[alldiags, Feynmangraph];
 , {j, Length[dslist]}, {k, j, Length[dslist]}, {i, Length[list]}]
 
 
-(*exclude goldstone and DS particles from final states*)
+(*exclude DS particles from final states*)
 Do[
-	Do[
+	(*exclude goldstone particles from final states*)
+	(*Do[
 		alldiags[[i]] = DiagramSelect[alldiags[[i]], FreeQ[#, Field[3] -> GSlist[[j]]]&]; alldiags[[i]] = DiagramSelect[alldiags[[i]], FreeQ[#, Field[4] -> GSlist[[j]]]&];
 		alldiags[[i]] = DiagramSelect[alldiags[[i]], FreeQ[#, Field[3] -> -GSlist[[j]]]&]; alldiags[[i]] = DiagramSelect[alldiags[[i]], FreeQ[#, Field[4] -> -GSlist[[j]]]&];
-	,{j,Length[GSlist]}];
+	,{j,Length[GSlist]}];*)
 
 Table[ alldiags[[i]] = DiagramSelect[alldiags[[i]], FreeQ[#/.F_[x_,{y_}]:>F[x], Field[3] -> dslist[[j]]]&] , {j, Length[dslist]}];
 Table[ alldiags[[i]] = DiagramSelect[alldiags[[i]], FreeQ[#/.F_[x_,{y_}]:>F[x], Field[4] -> dslist[[j]]]&] , {j, Length[dslist]}];
@@ -211,12 +214,15 @@ Block[{numerator,denominator,coefficient={},mandels={},temp1,temp2},
 		temp2 = 1;
 		Do[
 			If[And[Length[placeholder*numerator[[it]]]===2,Length[numerator[[it]]]>=2],
-				AppendTo[tokens,numerator[[it]]];
-				temp1*=(numerator[[it]]/.tokensubs);
-				Break[],
+				If[FreeQ[numerator[[it]],Alternatives@@{-I,I}],
+					AppendTo[tokens,numerator[[it]]];
+					temp1*=(numerator[[it]]/.tokensubs);
+					Break[];
+				],
 				
+				(*if we include golstones, have to exclude I and -I*)
 				If[FreeQ[numerator[[it,jt]],Alternatives@@{Spinor[__],Pair[__],Momentum[__],Complex[__,__],SUNFDelta[__,__],SUNDelta[__,__]
-				   , SUNTF[__,__,__], SUNFIndex[__], SUNIndex[__], List[__], SUNF[__,__,__]}], 
+				   , SUNTF[__,__,__], SUNFIndex[__], SUNIndex[__], List[__], SUNF[__,__,__],-I,I}], 
 					AppendTo[tokens,numerator[[it,jt]]];
 					temp1*=(numerator[[it,jt]]/.tokensubs),
 					temp2*=numerator[[it,jt]];
@@ -228,7 +234,7 @@ Block[{numerator,denominator,coefficient={},mandels={},temp1,temp2},
 	,{it,Length[numerator]}];
 	Do[
 		If[Length[denominator[[it]]]==0,
-			If[FreeQ[denominator[[it]],Alternatives @@ {s,t,u}],
+			If[FreeQ[denominator[[it]],Alternatives @@ {s,t,u,-I,I}],
 				AppendTo[tokens,denominator[[it]]];
 				coefficient[[it]]/=denominator[[it]],
 				mandels[[it]]/=denominator[[it]];
@@ -238,7 +244,7 @@ Block[{numerator,denominator,coefficient={},mandels={},temp1,temp2},
 			If[And[Length[placeholder*denominator[[it]]]===2,Length[denominator[[it]]]===2],
 				mandels[[it]]/=denominator[[it]];
 				Break[],
-				If[FreeQ[denominator[[it,jt]],Alternatives @@ {s,t,u}],
+				If[FreeQ[denominator[[it,jt]],Alternatives @@ {s,t,u,-I,I}],
 					AppendTo[tokens,denominator[[it,jt]]];
 					coefficient[[it]]/=(denominator[[it,jt]]/.tokensubs),
 					mandels[[it]]/=denominator[[it,jt]];
@@ -250,6 +256,21 @@ Block[{numerator,denominator,coefficient={},mandels={},temp1,temp2},
 	AppendTo[coefficientlist,coefficient];
 	AppendTo[mandellist,mandels];
 ]
+
+
+(* only Goldstone Processes*)
+gsprocs = {};
+Do[
+	Do[
+		If[
+			MemberQ[listofprocs[[i]],GSlist[[j]]] || MemberQ[listofprocs[[i]],-GSlist[[j]]],
+			AppendTo[gsprocs,listofprocs[[i]]]
+		],
+	
+	{j,Length[GSlist]}];
+	listofprocs[i],
+
+{i,Length[listofprocs]}];
 
 
 (*computation of the amplitudes for all the 2to2 processes in listofprocs*)
@@ -344,8 +365,14 @@ Block[{tokenID},
 
 (*foutlist and ampslist store the freeze-out processes and respective amplitudes*)
 calcAmps[];
+Print["1. CalcAmps - Done"];
 tokenize[];
+Print["Tokenization - Done"];
 calcAmps[];
+Print["2. CalcAmps - Done"];
+
+
+Do[Print[tokenreverse[[i]]];If[MatchQ[tokenreverse[[i]],Alternatives@@{s,t,u,I,-I}], Print["IMAG OR STU"]],{i,1,Length[tokenreverse]}]
 
 
 widthlist=widths;
@@ -380,6 +407,79 @@ Block[{den},
 Do[
 	checkdenpol[mandellist[[i2]]]
 ,{i2,Length[mandellist]}]
+
+
+(* create list with all masses and thermal masses*)
+allmasses = {};
+allthermmasses = {};
+Block[{mass},
+Do[
+	If[onlyparticleslist[[i,3]] !="G" && onlyparticleslist[[i,3]] !="A" && StringFreeQ[onlyparticleslist[[i,3]],"gh"],
+	mass = onlyparticleslist[[i,2]] /. subrule;
+	AppendTo[allmasses,mass];
+	AppendTo[allthermmasses,Symbol[StringJoin["TH",SymbolName[mass]]]];	
+	(*Print[onlyparticleslist[[i,3]], " : ",mass];*)];
+,{i,Length[onlyparticleslist]}]
+]
+(*Print[allmasses];*)
+(*Print[allthermmasses];*)
+
+
+(* functions to add a thermal mass / Pi(T) contribution to every propagator*)
+thermsublist = widths;
+thermpisub = {};
+termpisubwidths = {};
+
+
+(* function which adds the thermal mass to a Denominator / Mass-term*)
+addthermpi[den_,chan_]:=
+Block[{massterm,sub},
+	Do[
+		massterm=allmasses[[i]];
+		sub = chan-massterm^2->chan - allthermmasses[[i]]^2;
+		If[StringContainsQ[den,massterm//ToString ] && !MemberQ[thermpisub,sub],
+			AppendTo[thermpisub,sub];
+			
+			(* Width contribution to s channels *)
+			If[chan === s,
+				Do[
+					If[massterm === widths[[2*j-1]],
+						AppendTo[termpisubwidths,I*widths[[2*j]]*widths[[2*j-1]]-> I*widths[[2*j]]*allthermmasses[[i]]];
+						Break[];
+					]
+				,{j,Length[widths]/2}]
+			];
+			Break[];
+		]
+	,{i,Length[allmasses]}]
+]
+
+
+(* function goes through each amplitude and adds to thermpisub / thermsubwidth
+	a substitution rule *)
+checkdenpolmass[amp_]:= 
+Block[{den},
+	Do[
+		den = CForm[Denominator[amp[[i1]]]]//ToString;
+		If[!FreeQ[amp[[i1]], s],
+			addthermpi[den,s]
+		];
+		If[!FreeQ[amp[[i1]], t],
+			addthermpi[den,t]
+		];
+		If[!FreeQ[amp[[i1]], u],
+			addthermpi[den,u]
+		];
+	,{i1,Length[amp]}]
+	
+]
+
+Do[
+	checkdenpolmass[mandellist[[i2]]]
+,{i2,Length[mandellist]}]
+
+(*Print[thermpisub];*)
+(*Print[termpisubwidths];*)
 
 
 (*list with masses and widths of s-channel mediators*)
@@ -449,6 +549,63 @@ Select[particlelist, #[[1]]== templist2[[i, 4]]&][[1,3]],
 {i, Length[templist2]}];
 
 
+(* AMPLITUDE CALCULATION BEFORE EWSB *)
+
+
+(*
+	Computation of Amp2squared before EWSB
+	\:fe42> so everything has no mass EXCEPT the scalars
+	\:fe42> initial states will always be scalars
+*)
+calcAmp2sbEWSB:=
+Block[{subdiagrams={},prefac,tamp2},
+
+finalbEWSB = {};
+
+(*AbsoluteTiming[*)
+Do[
+	subdiagrams = {};
+	Print[ToString[processname[[i]]] ToString[i]];
+	FCClearScalarProducts[];
+	
+	(*Checks if there are outgoing scalars and sets Mandelstam accordingly*)
+	SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[foutlist[[i,1]]], TheMass[foutlist[[i,2]]], TheMass[foutlist[[i,3]]], TheMass[foutlist[[i,4]]]];
+
+	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub/. thermpisub /. termpisubwidths];
+	prefac= determinefac[foutlist[[i]], 2];
+	Do[
+		(* check if there are gauge bosons in final states and use massless polarisation then*)
+		Which[
+				MatchQ[(foutlist[[i,3]]/.{-x_:>x})[[0]],V] && !MatchQ[(foutlist[[i,4]]/.{-x_:>x})[[0]],V],
+					sub=tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
+					// DoPolarizationSums[#, p3, 0] &// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify;,
+				!MatchQ[(foutlist[[i,3]]/.{-x_:>x})[[0]],V] && MatchQ[(foutlist[[i,4]]/.{-x_:>x})[[0]],V],
+					sub=tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
+					// DoPolarizationSums[#, p4, 0] &// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify;,
+				MatchQ[(foutlist[[i,3]]/.{-x_:>x})[[0]],V] && MatchQ[(foutlist[[i,4]]/.{-x_:>x})[[0]],V],
+					sub=tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
+					// DoPolarizationSums[#, p3, 0] & // DoPolarizationSums[#, p4, 0] &// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify;,
+				!MatchQ[(foutlist[[i,3]]/.{-x_:>x})[[0]],V] && !MatchQ[(foutlist[[i,4]]/.{-x_:>x})[[0]],V],
+					sub=tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
+					// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify;
+			];
+			
+		If[FreeQ[sub,I],
+			AppendTo[subdiagrams,sub/.SUNN->3/.subrule/.Eps[___]->0//Simplify],
+			Print["imaginary"];
+			sub=sub/.SUNN->3/.subrule//Expand//FullSimplify;
+			AppendTo[subdiagrams,sub]
+		];
+	,{i1,Length[tamp2]}];
+	
+AppendTo[finalbEWSB, Plus @@ subdiagrams ];(*/.tokenreverse /. ewrlimit*)
+, {i,Length[ampslist]}]
+]
+
+
+calcAmp2sbEWSB[];
+
+
 (*computation of the amplitudes^2 for all the 2to2 processes in foutlist*)
 calcAmp2s:=
 Block[{subdiagrams={},prefac,tamp2},
@@ -457,13 +614,17 @@ final = {};
 (*AbsoluteTiming[*)
 Do[
 	subdiagrams = {};
-	Print[ToString[processname[[i]]]];
+	Print[ToString[processname[[i]]] ToString[i]];
 	FCClearScalarProducts[];
 	SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[foutlist[[i,1]]], TheMass[foutlist[[i,2]]], TheMass[foutlist[[i,3]]], TheMass[foutlist[[i,4]]]];
-	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub];
+	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub/. thermpisub /. termpisubwidths];
 	prefac= determinefac[foutlist[[i]], 2];
 	Do[
 		Which[
+			(*sort out any Goldstone sub-diagrams*)
+			!FreeQ[GSlist,foutlist[[i,3]]/.{-x_:>x}] || !FreeQ[GSlist,foutlist[[i,4]]/.{-x_:>x}],
+			sub=0,		
+		
 			TheMass[foutlist[[i,3]]] === 0 && !PossibleZeroQ[TheMass[foutlist[[i,4]]]],
 			sub=tamp2[[i1]]/prefac// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
 			// DoPolarizationSums[#, p1]& // DoPolarizationSums[#, p2] &// DoPolarizationSums[#, p3, 0] & // DoPolarizationSums[#, p4] & 
@@ -501,6 +662,9 @@ AppendTo[final, Plus @@ subdiagrams];
 calcAmp2s[];
 
 
+final[[5]]
+
+
 (*****************)
 (***WIDTHS PART***)
 (*****************)
@@ -509,7 +673,7 @@ calcAmp2s[];
 (*lists with widths and FA identifiers of the relevant s-channel mediators for freeze-out*)
 relevantWsfields = {};
 relevantWidth = {};
-Do[
+Do[ (*goldstones?*)
 	If[relevantWs[[i]]==(particlelist[[j,2]]/.subrule) && StringPart[ToString[particlelist[[j,1]]],1]!="-" && StringPart[ToString[particlelist[[j,1]]],1]!="U" 
 	&& ToString[particlelist[[j,1]]]!=ToString[GSlist[[1]]] && ToString[particlelist[[j,1]]]!=ToString[GSlist[[2]]] && IDtoPDG[particlelist[[j,1]]]!="23" && 
 	IDtoPDG[particlelist[[j,1]]]!="24",
@@ -535,7 +699,7 @@ AppendTo[alldiagsDecay, decays];
 alldiagsDecay;
 
 
-(*exclude goldstone from final states*)
+(*exclude goldstone from final states*) (*with widths no golstones in final decays*)
 Do[
 	Do[
 		alldiagsDecay[[i]] = DiagramSelect[alldiagsDecay[[i]], FreeQ[#, Field[2] -> GSlist[[j]]]&]; alldiagsDecay[[i]] = DiagramSelect[alldiagsDecay[[i]], FreeQ[#, Field[3] -> GSlist[[j]]]&];
@@ -767,7 +931,7 @@ finalDecaysWidth = Table[pfinalDecays[[i]]/(32*Pi^2*TheMass[foutlistDecays[[i,1]
 
 
 (*************************)
-(*MATHEMATICA TO CPP PART*)
+(*MATHEMATICA TO CPP PART*)       (* CAREFUL! THIS DOCUMENT CAN OVERWRITE IMPORTANT STUFF, ONLY EXECUTE WITH CARE! SOME THINGS HAVE TO BE COPIED BY HAND*)
 (*************************)
 
 
@@ -823,6 +987,28 @@ Do[
 neutraldsmasses;
 
 
+(*Create list of all Parameters-names as a string which are dependent on the temperature*)
+thermparams = {};
+(* append the masses *)
+Do[
+m = allmasses[[i]];
+If[
+	m==0,,,AppendTo[thermparams,ToString[m]];
+	]
+,{i,Length[allmasses]}];
+
+
+(* append all vevs (internal params that have "vev" in description) *)
+Do[
+	len = Length[funcfile[[i]]];
+	If[
+		len >=3,
+		dscription = funcfile[[i,3]];
+		If[!StringFreeQ[dscription,"VEV"],AppendTo[thermparams,StringDelete[funcfile[[i,1]],WhitespaceCharacter]];];
+		],
+{i,Length[funcfile]}];
+
+
 (*list with all 1to2 decays process names*)
 templist2Decays = foutlistDecays/.F_[x_,{y_}]:>F[x];
 processnameDecays = Table[
@@ -859,28 +1045,54 @@ Do[
 ,{i1,Length[possibleiniDecays]}];
 
 
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+  (*    STOP HERE IF YOU DONT WANT TO RUIN STUFF    *)
+
+
 (*declarations file hpp*)
 sfile=OpenWrite[directory<>"model.hpp",FormatType->StandardForm, TotalWidth->Infinity, PageWidth->Infinity];
 
 Write[sfile, mathlabel];
 Write[sfile, "#pragma once\n"];
 Write[sfile, "#include <cmath>\n"]
+Write[sfile, "#include <string>\n"]
+Write[sfile, "#include <vector>\n"]
 Write[sfile, "namespace DT{"];
 Write[sfile, "namespace PAR{"];
 (*external and internal declarations*)
+(*external and internal declarations*)
+Write[sfile, "\t// external parameters"]
 Do[
 	Write[sfile, "\textern double", " ", external[[i,1]] ,";"]
 ,{i,Length[external]}]
+Write[sfile, "\t// internal parameters"]
 Do[
 	Write[sfile, "\textern double", " ", internal[[i,1]] ,";"]
 ,{i,Length[internal]}]
 
+Write[sfile, "\t// thermal parameters"]
+(*thermal parameters*)
+Write[sfile, "\textern std::vector<double> temp_therm;"];
+Do[
+	Write[sfile, "\textern std::vector<double>", " ", thermparams[[i]],"_therm;"];
+,{i,Length[thermparams]}]
+
+
 (*tokens*)
+Write[sfile, "\t// tokens"]
 Do[
 	Write[sfile, "\textern double", " ", ToString[tokenreverse[[i,1]]] , ";"]
 ,{i,Length[tokenreverse]}];
 
 (*default variables used by FR, FA/FC, CH*)
+Write[sfile, "\t// default variables"]
 Write[sfile, "\textern double EL;"];
 Write[sfile, "\textern double ee;"];
 Write[sfile, "\textern double gs;"];
@@ -912,9 +1124,12 @@ sfile=OpenWrite[directory<>"sources/model.cpp",FormatType->StandardForm, TotalWi
 
 Write[sfile, mathlabel];
 Write[sfile, "#include <cmath>\n"]
+Write[sfile, "#include <string>\n"]
+Write[sfile, "#include <vector>\n"]
 Write[sfile, "namespace DT{"];
 Write[sfile, "namespace PAR{"];
 (*external declarations*)
+Write[sfile, "\t// external parameters"]
 Do[
 	Write[sfile, "\tdouble ", external[[i,1]] ," = ", external[[i,2]],";"]
 ,{i,Length[external]}]
@@ -927,11 +1142,20 @@ Write[sfile, "\tdouble G = 1.21358;"];
 Write[sfile, "\tdouble FAGS = 1.21358;\n"];
 
 (*internal declarations*)
+Write[sfile, "\t// internal parameters"]
 Do[
 	Write[sfile, "\tdouble", " ", internal[[i,1]] ,";"]
 ,{i,Length[internal]}]
 
+(*thermal parameters*)
+Write[sfile, "\t// thermal parameters"]
+Write[sfile, "\tstd::vector<double> temp_therm;"];
+Do[
+	Write[sfile, "\tstd::vector<double>", " ", thermparams[[i]],"_therm;"]
+,{i,Length[thermparams]}]
+
 (*tokens*)
+Write[sfile, "\t// tokens"]
 Do[
 	Write[sfile, "\tdouble", " ", ToString[tokenreverse[[i,1]]] , ";"]
 ,{i,Length[tokenreverse]}];
@@ -1031,6 +1255,14 @@ Write[sfile,"\t\tusing namespace PAR;"];
 Do[
 	Write[sfile, "\t\tparmap[\"", external[[i,1]] ,"\"] = &", external[[i,1]],";"]
 ,{i,Length[external]}]
+
+Write[sfile,""];
+(*thermal parameters*)
+Write[sfile,"\t\ttherm_par[\"temp\"] = &temp_therm;"];
+Do[
+	Write[sfile,"\t\ttherm_par[\"",thermparams[[i]],"\"] = &",thermparams[[i]],"_therm;"]; (*here is a space between & and thermparams, maybe it works now?*)
+,{i,Length[thermparams]}]
+
 Write[sfile, "\t}"];
 Write[sfile, "}"];
 Close[sfile];
@@ -1047,22 +1279,66 @@ Write[sfile, "#include \"general_model.hpp\""]
 Write[sfile, "#include \"../model.hpp\""]
 Write[sfile, "namespace DT{"]
 
-Write[sfile, "\tvoid ModelInfo::load_parameters(){"]
+Write[sfile, "\tvoid ModelInfo::load_parameters(const double x){"]
 Write[sfile,"\t\tusing namespace PAR;"];
-Write[sfile, "\t\tFAGS = sqrt(4*M_PI*aS); gs = FAGS; G = FAGS;"];
+Write[sfile,"\t\tif (THERMALPARS == false){"];
+
+Write[sfile, "\t\t\tFAGS = sqrt(4*M_PI*aS); gs = FAGS; G = FAGS;"];
 If[ContainsAll[external[[All,1]], {"yms", "ymb", "ymt", "ymc"}],
-	Write[sfile, "\t\tyms = ", ToString[runMasses[[1]]], ";"];
-	Write[sfile, "\t\tymc = ", ToString[runMasses[[2]]], ";"];
-	Write[sfile, "\t\tymb = ", ToString[runMasses[[3]]], ";"];
-	Write[sfile, "\t\tymt = ", ToString[runMasses[[4]]], ";"];
+	Write[sfile, "\t\t\tyms = ", ToString[runMasses[[1]]], ";"];
+	Write[sfile, "\t\t\tymc = ", ToString[runMasses[[2]]], ";"];
+	Write[sfile, "\t\t\tymb = ", ToString[runMasses[[3]]], ";"];
+	Write[sfile, "\t\t\tymt = ", ToString[runMasses[[4]]], ";"];
 ];
 Do[
-	Write[sfile, "\t\t", internal[[i,1]] ," = ", internal[[i,2]],";"]
+	Write[sfile, "\t\t\t", internal[[i,1]] ," = ", internal[[i,2]],";"]
 ,{i,Length[internal]}];
-Write[sfile, "\t\tEL = EE;"];
+Write[sfile, "\t\t\tEL = EE;"];
+Write[sfile, "\t\t}"];
+Write[sfile, "\telse{"];
 
+
+(*thermal parameters*)
+Write[sfile, "\t// thermal parameters"]
+Write[sfile, "\tstd::vector<double> temp_therm;"];
+Do[
+	Write[sfile, "\tstd::vector<double>", " ", thermparams[[i]],"_therm;"]
+,{i,Length[thermparams]}]
+
+(*here is temp dependend stuff*)
+Write[sfile, "\t\tif (vev.size() == 0){"];
+Write[sfile, "\t\t\tstd::cerr << \"Error empty vev string!\\n\";"];
+Write[sfile, "\t\t} else {"];
+Write[sfile, "\t\t\tif (x <= MDM/ temp_therm[0]){"];
+(*colder than coldest entry*)
+Write[sfile, "\t\t\t\tv = v_therm[0];"];
+Do[
+	Write[sfile, "\t\t\t\t", thermparams[[i]], " = ", thermparams[[i]],"_therm[0];"];
+,{i,Length[thermparams]}]
+
+Write[sfile, "\t\t\t} else if (x >= MDM/ temp_therm[temp_therm.size()-2]){"];
+(*hotter than hottest entry*)
+Write[sfile, "\t\t\t\tv = v_therm[v_therm.size()-1];"];
+Do[
+	Write[sfile, "\t\t\t\t", thermparams[[i]], " = ", thermparams[[i]],"_therm[v_therm.size()-1];"];
+,{i,Length[thermparams]}]
+Write[sfile, "\t\t\t\t} else {"];
+Write[sfile, "\t\t\t\t\tfor (size_t i = 1; i < temp_therm.size(); i++){"];
+Write[sfile, "\t\t\t\t\t\tif (MDM / temp_therm[i] >= x){"];
+(*the middle ground*)
+Write[sfile, "\t\t\t\t\t\t\tv =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], v_therm[i-1] , v_therm[i]);"];
+Do[
+	Write[sfile, "\t\t\t\t\t\t\t", thermparams[[i]], " = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], ", thermparams[[i]],"_therm[i-1],", thermparams[[i]],"_therm[i]);"];
+,{i,Length[thermparams]}]
+Write[sfile, "\t\t\t\t\t\t\tbreak;"];
+Write[sfile, "\t\t\t\t\t\t}"];
+Write[sfile, "\t\t\t\t\t}"];
+Write[sfile, "\t\t\t\t}"];
+Write[sfile, "\t\t\t}"];
+Write[sfile, "\t\t}"];
 Write[sfile, "\t}"];
 Write[sfile, "}"];
+
 Close[sfile];
 
 
@@ -1115,6 +1391,22 @@ Write[sfile, "}"];
 Close[sfile];
 
 
+(*function to compute amplitude squared*)
+getsqsign[str_]:=
+Block[{},
+	Which[
+		str === "mHsm",Return["sign_mHsmsq"],
+		str === "mG0",Return["sign_mG0sq"],
+		str === "mGch",Return["sign_mGchsq"],
+		True,Return["1"];
+	];
+];
+
+
+(* If mHsm^2 is negative -> keep info of sign bc/ it only appears in squares *)
+masssqsign ={"mHsm*mHsm"->"sign_mHsmsq*mHsm*mHsm", "mG0*mG0"->"sign_mG0sq*mG0*mG0", "mGch*mGch"->"sign_mGchsq*mGch*mGch"};
+
+
 (*Amplitudes and fluxes files*)
 
 (*Definitions taken from https://pdg.lbl.gov/2020/reviews/contents_sports.html, kinematics Eq.(48.35)-Eq.(48.37)*)
@@ -1132,10 +1424,20 @@ Do[
 	Write[sfile, "#include \"../../model.hpp\"\n"];
 	Do[
 		subsamp2=Replace[inifunc[i][[j,10]]/.subrule,defer,All];
+		subamp2at0 = Replace[inifunc[i][[j,10]]/.subrule,defer,All];
+		
 		bool=!FreeQ[subsamp2,t];
 		boolu=!FreeQ[subsamp2,u];
-		subsamp2=ToString[ToString[CForm[subsamp2],StandardForm]];
+		boolbEWSB = !FreeQ[subamp2at0,t];
+		boolbEWSBu = !FreeQ[subamp2at0,u];
+		
+		subsamp2=ToString[ToString[CForm[subsamp2],StandardForm]]; 
 		subsamp2=StringReplace[subsamp2,{"Sqrt"-> "sqrt","Defer"->" ","Cos("->"cos( ","Sin"->"sin", "Tan"->"tan"}];
+		subsamp2=StringReplace[subsamp2,masssqsign];
+		subamp2at0=ToString[ToString[CForm[subamp2at0],StandardForm]];
+		subamp2at0=StringReplace[subamp2at0,{"Sqrt"-> "sqrt","Defer"->" ","Cos("->"cos( ","Sin"->"sin", "Tan"->"tan"}];
+		subamp2at0=StringReplace[subamp2at0,masssqsign];
+		
 		tsub="";
 		Write[sfile, "double DT::" , ToString[inifunc[i][[j,1]]] , "(const double &cos_t, const double &s){"];
 		Write[sfile,"\tusing namespace PAR;"];
@@ -1143,12 +1445,21 @@ Do[
 			tsub=Replace[ttoct[inifunc[i][[j,2]],inifunc[i][[j,3]],inifunc[i][[j,4]],inifunc[i][[j,5]]]/.subrule,defer,All];
 			tsub=ToString[ToString[CForm[tsub],StandardForm]];
 			tsub=StringReplace[tsub,{"Sqrt"-> "sqrt","Defer"->" ","cost"->"cos_t"}];
+			tsub=StringReplace[tsub,masssqsign];
 			Write[sfile, "\tdouble t = " , tsub , ";"];
-			Write[sfile, "\tdouble u = -s - t + " , ToString[inifunc[i][[j,2]]] , "*" , ToString[inifunc[i][[j,2]]] ," + ", ToString[inifunc[i][[j,3]]] , "*" , ToString[inifunc[i][[j,3]]] ," + "
+			usub=StringJoin["\tdouble u = -s - t + " , ToString[inifunc[i][[j,2]]] , "*" , ToString[inifunc[i][[j,2]]] ," + ", ToString[inifunc[i][[j,3]]] , "*" , ToString[inifunc[i][[j,3]]] ," + "
 			, ToString[inifunc[i][[j,4]]] , "*" , ToString[inifunc[i][[j,4]]] ," + ", ToString[inifunc[i][[j,5]]] , "*" , ToString[inifunc[i][[j,5]]] , ";"];
+			usub=StringReplace[usub,masssqsign];
+			Write[sfile, usub];
 		];
 		symfac="";
 		If[inifunc[i][[j,8]]===inifunc[i][[j,9]],symfac="0.5*"];
+		(*here it prints the amplitude for v == 0*)
+
+		Write[sfile, "\tif (v==0) {"];
+		Write[sfile, "\t\treturn ", symfac , "(" , subamp2at0 , ");"];
+		Write[sfile,"\t}"];
+
 		Write[sfile, "\treturn ", symfac , "(" , subsamp2 , ");"];
 		Write[sfile, "}"]
 	,{j,Length[inifunc[i]]}];
@@ -1177,13 +1488,34 @@ Do[
 		];
 		Write[sfile, "double DT::" , ToString[inifunc[i][[j,1]]] , "fl(const double &cos_t, const double &s){"];
 		Write[sfile,"\tusing namespace PAR;"];
-		Write[sfile, "\treturn " , symfac , "flux(s, " , ToString[inifunc[i][[j,2]]] , "," , ToString[inifunc[i][[j,3]]] , "," , ToString[inifunc[i][[j,4]]] , "," , ToString[inifunc[i][[j,5]]] , ")*",
+		
+		m3 = ToString[inifunc[i][[j,4]]];
+		m4 = ToString[inifunc[i][[j,5]]];
+		
+		If[MemberQ[{"mHsm","mG0","mGch"},m3] || MemberQ[{"mHsm","mG0","mGch"},m4],
+		Write[sfile, "\treturn " , symfac , "signedflux(s, " , ToString[inifunc[i][[j,2]]] , "," , ToString[inifunc[i][[j,3]]] , "," , m3 , "," , m4 ,",",getsqsign[m3],",",getsqsign[m4], ")*",
+					 inifunc[i][[j,1]] , "(cos_t, s);"];,
+		Write[sfile, "\treturn " , symfac , "flux(s, " , ToString[inifunc[i][[j,2]]] , "," , ToString[inifunc[i][[j,3]]] , "," , m3 , "," , m4 , ")*",
 					 inifunc[i][[j,1]] , "(cos_t, s);"];
+		];
 		Write[sfile, "}"]
 	,{j,Length[inifunc[i]]}];
 	
 	Close[sfile];
 ,{i,Length[possibleini]}]
+
+
+(* if opened to many files *)
+(*Do[
+	ofile=directory<>"sources/amp2s/all"<> ToString[possibleini[[i]]] <> ".cpp";
+	(*sfile=OpenWrite[ofile,FormatType->StandardForm, TotalWidth->Infinity, PageWidth->Infinity];*)
+	Close[ofile];
+	
+	ofile=directory<>"sources/amp2s/"<> ToString[possibleini[[i]]] <> "flux.cpp";
+	(*sfile=OpenWrite[ofile,FormatType->StandardForm];*)
+	Close[ofile];
+	
+,{i,Length[possibleini]}]*)
 
 
 (*decays functions files*)
