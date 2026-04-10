@@ -22,7 +22,7 @@ static constexpr double XTODAY = 1e6;
 static constexpr bool FAST = false;
 static constexpr bool CALCWIDTHS = false;
 static constexpr bool SAVECONTRIBS = false;
-static constexpr bool THERMALCONTRIBS = true;
+static constexpr bool THERMALCONTRIBS = false;
 /*
  ***********************************************
  Until here */
