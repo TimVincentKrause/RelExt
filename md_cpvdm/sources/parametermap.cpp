@@ -30,8 +30,8 @@ namespace DT{
 		parmap["L6"] = &L6;
 		parmap["L7"] = &L7;
 		parmap["L8"] = &L8;
-		parmap["Treal"] = &Treal;
-		parmap["Timag"] = &Timag;
+		parmap["Tr"] = &Treal;
+		parmap["Ti"] = &Timag;
 		parmap["ME"] = &ME;
 		parmap["MM"] = &MM;
 		parmap["MTA"] = &MTA;

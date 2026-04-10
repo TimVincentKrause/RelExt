@@ -44,7 +44,7 @@ class DataReader {
     MatString get_generation_slist();
     void save_data(std::vector<std::string> yourheader,
                    std::vector<double> yourlist);
-    void read_column(std::vector<double> &vector, std::string header,const double npow=0,const double eps = 1e-4);
+    void read_column(std::vector<double> &vector, std::string header,const double npow=0,const double eps = -1);
     ~DataReader();
 };
 }  // namespace DT

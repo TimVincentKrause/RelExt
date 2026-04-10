@@ -22,7 +22,7 @@ static constexpr double XTODAY = 1e6;
 static constexpr bool FAST = false;
 static constexpr bool CALCWIDTHS = false;
 static constexpr bool SAVECONTRIBS = false;
-static constexpr bool THERMALCONTRIBS = false;
+static constexpr bool THERMALCONTRIBS = true;
 /*
  ***********************************************
  Until here */
@@ -42,6 +42,7 @@ std::string outpath = "cpvdm/datapoint_" + std::to_string(datapoint) + "/";
     /*      NEW CODE STUFF
                     ./cpvdm cpvdm/cpvdm_vals_5415.tsv cpvdm/cpvdm_5_5415_thmasses_1.tsv cpvdm/datapoint_5415/cpvdm_vals_res.dat
                     ./cpvdm cpvdm/cpvdm_1To2TeV_4712prime_input_1.tsv cpvdm/cpvdm_1To2TeV_4712prime_thmasses_1.tsv cpvdm/datapoint_4712prime/output.tsv
+                    ./cpvdm cpvdm_DEBUGThermMasses_L12_m26to8_ms6dif200_A10_1_1.tsv cpvdm_DEBUGThermMasses_L12_m26to8_ms6dif200_A10_1_out.tsv
     */
 
 
@@ -193,6 +194,10 @@ int main (int argc, char **argv) {
     //M.PrintChannels();
 
 
+    //M.CalcTac(5,40,1e2, "calcTac_test_all.tsv",{});
+    //double low_s = 3692+4514;
+    //M.CalcXsec(low_s,low_s+100,100,"calcXSec_test_all.tsv",{},5);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
+
    /*
         //Calculate the cross sections
 
@@ -230,7 +235,7 @@ int main (int argc, char **argv) {
 
     //args are Main, firstline, lastline, xmin, xmax, points
     //CalcAllTac(M,val,val,0.1,30,1e2);
-    //M.CalcTac(3,200,1e2, outpath+"calcTac_thm_Ry_1to2TeVo1_4752_all.tsv",{});
+    //M.CalcTac(20,40,20, "calcTac_test_all.tsv",{});
     //M.CalcTac(3,200,1e2,outpath + "tac/calcTac_thm_" + "all" + ".tsv",{"H2,Hc,h,W"});
     //M.CalcTac(3,200,2e2,"cpvdm/datapoint_4712prime/calcTac_thm_all.tsv",{}); //"H2,H3,T,t"
     //M.CalcXsec(1850,2500,5e2,"cpvdm/datapoint_4712prime/calcXsec_thm_all.tsv",{},9);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
@@ -245,7 +250,7 @@ int main (int argc, char **argv) {
     //CalcStepTac(M, 0, 212, 5, 200,  1e2);
     //CalcStepTac_backwards(M, 0, 212, 5, 200,  1e2);
 
-    //M.CalcRelic();
+    M.CalcRelic();
 
     M.SaveData(SAVEPARS);
     std::cout << "Computation time: \n"

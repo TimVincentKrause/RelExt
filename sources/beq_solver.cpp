@@ -21,6 +21,9 @@ double FO1DM::operator()(const VecString &channels) {
     double x1 = 50., x2 = 50.;
     double y1, y2 = foc(x2);
     for (x1 = 48.; x1 > 3.; x1 -= 2.) {
+        // Because the inimasses are changing -> reoder them
+        // BI.tac.clear_state(true);
+        // BI.tac.sort_inimasses(channels);
         y1 = foc(x1);
         if (y1 * y2 < 0) {
             x1 = bisec_to_x(foc, x1, x2, secant_eps);

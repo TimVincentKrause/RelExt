@@ -53,6 +53,7 @@ class Tac {
     VecDoub boundaries;
     std::map<double, VecString> inimap;
     std::map<double, VecString>::iterator ini_it;
+    VecString bathprocesses;
 
    public:
     SigvInt sigv;

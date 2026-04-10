@@ -5,8 +5,8 @@ Main::Main(char *argv[], const int modee, double beps, const double xtoday,
            const bool fast, const bool calcwidths, const bool thermcontr, const bool savecontribs)
     : AA(*new AnnihilationAmps(calc_widths,thermcontr)),
       mode(modee),
-      output_file(std::string(argv[3])),
-      tvev_input_file(std::string(argv[2])),
+      output_file(std::string(argv[2])),
+      tvev_input_file(std::string(argv[1])),
       calc_widths(calcwidths),
       therm_contr(thermcontr),
       save_contribs(savecontribs),
@@ -322,6 +322,7 @@ void Main::CalcTac(double xmin, double xmax, const size_t points,
     beps_eps = log(1e-100);
     tac.sort_inimasses(channels);
     for (double i = xmin; i <= xmax; i += step) {
+        std::cout << "x = " << i << std::endl;
         AA.load_parameters(i);
         res = tac(i);
         TAR->save_data({"x", "tac"}, {i, res});

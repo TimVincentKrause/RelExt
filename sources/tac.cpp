@@ -114,6 +114,7 @@ Tac::Tac(AnnihilationAmps &AnAmps)
     : AA(AnAmps), sigv(AA), boundaries(3 * AA.N_widths) {}
 
 bool Tac::sort_inimasses(const VecString &ch_str) {
+    bathprocesses = ch_str;
     double temp;
     sigv.polK2s.resize(AA.bath_masses.size());
     for (auto it : ch_str) {
@@ -274,6 +275,10 @@ void Tac::integrate_s(const double &x, double &res, double &estimate) {
 double Tac::operator()(const double &x) {
     double res = 0.;
     double estimate = 0.;
+    AA.load_parameters(x);
+    clear_state(true);
+    sort_inimasses(bathprocesses);
+
     sigv.set_x(x);
     sigv.calc_polK2();
     for (auto &it : inimap) {
@@ -282,6 +287,9 @@ double Tac::operator()(const double &x) {
         sigv.set_lower_bound(m1 + m2);
         if (beps(x)) {
             set_boundaries(x);
+            // for(auto &jt : it.second)
+            //     std::cout << jt << "\t";
+            // std::cout << "\n";
             estimate_integrate_s(x, res, estimate);
         }
     }

@@ -7,25 +7,25 @@
 double DT::H1H2hhfl(const double &cos_t, const double &s){
 	using namespace PAR;
 	return 2*signedflux(s, mH1,mH2,mHsm,mHsm,sign_mHsmsq,sign_mHsmsq)*H1H2hh
-
+ 
      (cos_t, s);
 }
 double DT::H1H2hG0fl(const double &cos_t, const double &s){
 	using namespace PAR;
 	return 2*signedflux(s, mH1,mH2,mHsm,mG0,sign_mHsmsq,sign_mG0sq)*H1H2hG0
-
+ 
      (cos_t, s);
 }
 double DT::H1H2G0G0fl(const double &cos_t, const double &s){
 	using namespace PAR;
 	return 2*signedflux(s, mH1,mH2,mG0,mG0,sign_mG0sq,sign_mG0sq)*H1H2G0G0
-
+ 
      (cos_t, s);
 }
 double DT::H1H2GCHGchfl(const double &cos_t, const double &s){
 	using namespace PAR;
 	return 2*signedflux(s, mH1,mH2,mGch,mGch,sign_mGchsq,sign_mGchsq)*H1H2GCHGch
-
+ 
      (cos_t, s);
 }
 double DT::H1H2hZfl(const double &cos_t, const double &s){

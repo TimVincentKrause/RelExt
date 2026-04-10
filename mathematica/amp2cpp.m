@@ -1,7 +1,7 @@
 (* ::Package:: *)
 
 (*directory = ToString[$CommandLine[[4]]] <> "/FA_modfiles";*)
-directory = "/home/kijetesantakalu/thesis/ForkRelExt/RelExt/md_cpvdm//FR_modfiles"<>"/FA_modfiles";
+directory = "/home/kijetesantakalu/thesis/forquilha/RelExt/md_cpvdm//FR_modfiles"<>"/FA_modfiles";
 Print[directory]
 
 (*start FA and FC*)
@@ -214,7 +214,7 @@ Block[{numerator,denominator,coefficient={},mandels={},temp1,temp2},
 		temp2 = 1;
 		Do[
 			If[And[Length[placeholder*numerator[[it]]]===2,Length[numerator[[it]]]>=2],
-				If[FreeQ[numerator[[it]],Alternatives@@{-I,I}],
+				If[FreeQ[numerator[[it]],Alternatives@@{s,t,u,-I,I}],
 					AppendTo[tokens,numerator[[it]]];
 					temp1*=(numerator[[it]]/.tokensubs);
 					Break[];
@@ -222,7 +222,7 @@ Block[{numerator,denominator,coefficient={},mandels={},temp1,temp2},
 				
 				(*if we include golstones, have to exclude I and -I*)
 				If[FreeQ[numerator[[it,jt]],Alternatives@@{Spinor[__],Pair[__],Momentum[__],Complex[__,__],SUNFDelta[__,__],SUNDelta[__,__]
-				   , SUNTF[__,__,__], SUNFIndex[__], SUNIndex[__], List[__], SUNF[__,__,__],-I,I}], 
+				   , SUNTF[__,__,__], SUNFIndex[__], SUNIndex[__], List[__], SUNF[__,__,__],s,t,u,-I,I}], 
 					AppendTo[tokens,numerator[[it,jt]]];
 					temp1*=(numerator[[it,jt]]/.tokensubs),
 					temp2*=numerator[[it,jt]];
@@ -379,7 +379,7 @@ widthlist=widths;
 widthsub={pat : HoldPattern[Spinor[___,___]]:> pat,t-m_^2:>t-m^2-I*m^2/1000,u-m_^2:>u-m^2-I*m^2/1000};
 
 
-(*functions to check for s-channels, change denominator by including the width and save it*)
+	(*functions to check for s-channels, change denominator by including the width and save it*)
 addwidthsub[den_]:=
 Block[{massterm},
 	Do[
@@ -412,17 +412,22 @@ Do[
 (* create list with all masses and thermal masses*)
 allmasses = {};
 allthermmasses = {};
+massexchange = {};
 Block[{mass},
 Do[
-	If[onlyparticleslist[[i,3]] !="G" && onlyparticleslist[[i,3]] !="A" && StringFreeQ[onlyparticleslist[[i,3]],"gh"],
+	If[onlyparticleslist[[i,3]] !="G" && onlyparticleslist[[i,3]] !="A" && StringFreeQ[onlyparticleslist[[i,3]],"gh"]&& !MatchQ[(onlyparticleslist[[i,1]]/.{-x_:>x})[[0]],F],
 	mass = onlyparticleslist[[i,2]] /. subrule;
 	AppendTo[allmasses,mass];
-	AppendTo[allthermmasses,Symbol[StringJoin["TH",SymbolName[mass]]]];	
+	AppendTo[allthermmasses,Symbol[StringJoin["TH",SymbolName[mass]]]];
+	AppendTo[massexchange,mass :> Evaluate[Symbol[StringJoin["TH",SymbolName[mass]]]]];	
 	(*Print[onlyparticleslist[[i,3]], " : ",mass];*)];
 ,{i,Length[onlyparticleslist]}]
 ]
 (*Print[allmasses];*)
 (*Print[allthermmasses];*)
+
+
+massexchange
 
 
 (* functions to add a thermal mass / Pi(T) contribution to every propagator*)
@@ -433,20 +438,29 @@ termpisubwidths = {};
 
 (* function which adds the thermal mass to a Denominator / Mass-term*)
 addthermpi[den_,chan_]:=
-Block[{massterm,sub},
+Block[{massterm,sub,subi,tmp,tmp2},
 	Do[
 		massterm=allmasses[[i]];
 		sub = chan-massterm^2->chan - allthermmasses[[i]]^2;
-		If[StringContainsQ[den,massterm//ToString ] && !MemberQ[thermpisub,sub],
-			AppendTo[thermpisub,sub];
+		subi = chan - massterm^2-I*massterm^2/1000->chan - allthermmasses[[i]]^2-I*allthermmasses[[i]]^2/1000;
+		If[StringContainsQ[den,massterm//ToString ] && !MemberQ[thermpisub,sub]&& !MemberQ[thermpisub,subi],
+			(*AppendTo[thermpisub,sub];*)
+			
+			(* t and u channels *)
+			If[(chan === u || chan === t),
+				AppendTo[thermpisub,subi];
+			];
 			
 			(* Width contribution to s channels *)
 			If[chan === s,
+				AppendTo[thermpisub,sub];
 				Do[
 					If[massterm === widths[[2*j-1]],
-						AppendTo[termpisubwidths,I*widths[[2*j]]*widths[[2*j-1]]-> I*widths[[2*j]]*allthermmasses[[i]]];
+						tmp = I*widths[[2*j]]*widths[[2*j-1]];
+						tmp2 = I*widths[[2*j]]*allthermmasses[[i]];
+						AppendTo[termpisubwidths,tmp:>Evaluate[tmp2]];
 						Break[];
-					]
+					];
 				,{j,Length[widths]/2}]
 			];
 			Break[];
@@ -552,6 +566,9 @@ Select[particlelist, #[[1]]== templist2[[i, 4]]&][[1,3]],
 (* AMPLITUDE CALCULATION BEFORE EWSB *)
 
 
+massexchange
+
+
 (*
 	Computation of Amp2squared before EWSB
 	\:fe42> so everything has no mass EXCEPT the scalars
@@ -571,7 +588,7 @@ Do[
 	(*Checks if there are outgoing scalars and sets Mandelstam accordingly*)
 	SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[foutlist[[i,1]]], TheMass[foutlist[[i,2]]], TheMass[foutlist[[i,3]]], TheMass[foutlist[[i,4]]]];
 
-	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub/. thermpisub /. termpisubwidths];
+	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub/. massexchange];
 	prefac= determinefac[foutlist[[i]], 2];
 	Do[
 		(* check if there are gauge bosons in final states and use massless polarisation then*)
@@ -606,6 +623,14 @@ AppendTo[finalbEWSB, Plus @@ subdiagrams ];(*/.tokenreverse /. ewrlimit*)
 calcAmp2sbEWSB[];
 
 
+finalbEWSB[[5]] /. tokenreverse /.{RR1x1->0,RR1x2->0,RR1x3->-1}
+
+
+i = 5;
+Print[ToString[processname[[i]]] ToString[i]];
+finalbEWSB[[i]] /. tokenreverse /.{v:>0,RR1x3->0,RR2x3->0,MZ->0}
+
+
 (*computation of the amplitudes^2 for all the 2to2 processes in foutlist*)
 calcAmp2s:=
 Block[{subdiagrams={},prefac,tamp2},
@@ -617,7 +642,7 @@ Do[
 	Print[ToString[processname[[i]]] ToString[i]];
 	FCClearScalarProducts[];
 	SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[foutlist[[i,1]]], TheMass[foutlist[[i,2]]], TheMass[foutlist[[i,3]]], TheMass[foutlist[[i,4]]]];
-	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub/. thermpisub /. termpisubwidths];
+	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub/. massexchange];
 	prefac= determinefac[foutlist[[i]], 2];
 	Do[
 		Which[
@@ -660,9 +685,6 @@ AppendTo[final, Plus @@ subdiagrams];
 
 
 calcAmp2s[];
-
-
-final[[5]]
 
 
 (*****************)
@@ -953,7 +975,7 @@ Do[
 Do[inifunc[i]={},{i,Length[possiblemasses]}]
 Do[
 	pos=Position[possiblemasses,mi[[i]]*mj[[i]]][[1,1]];
-	AppendTo[inifunc[pos],{processname[[i]],mi[[i]],mj[[i]],mk[[i]],ml[[i]],templist2[[i,1]],templist2[[i,2]],templist2[[i,3]],templist2[[i,4]],final[[i]]}/.subrule]
+	AppendTo[inifunc[pos],{processname[[i]],mi[[i]],mj[[i]],mk[[i]],ml[[i]],templist2[[i,1]],templist2[[i,2]],templist2[[i,3]],templist2[[i,4]],final[[i]],finalbEWSB[[i]]}/.subrule]
 ,{i,Length[processname]}]
 
 
@@ -1424,7 +1446,7 @@ Do[
 	Write[sfile, "#include \"../../model.hpp\"\n"];
 	Do[
 		subsamp2=Replace[inifunc[i][[j,10]]/.subrule,defer,All];
-		subamp2at0 = Replace[inifunc[i][[j,10]]/.subrule,defer,All];
+		subamp2at0 = Replace[inifunc[i][[j,11]]/.subrule,defer,All];
 		
 		bool=!FreeQ[subsamp2,t];
 		boolu=!FreeQ[subsamp2,u];
@@ -1441,7 +1463,7 @@ Do[
 		tsub="";
 		Write[sfile, "double DT::" , ToString[inifunc[i][[j,1]]] , "(const double &cos_t, const double &s){"];
 		Write[sfile,"\tusing namespace PAR;"];
-		If[bool || boolu,
+		If[bool || boolu || boolbEWSB || boolbEWSBu,
 			tsub=Replace[ttoct[inifunc[i][[j,2]],inifunc[i][[j,3]],inifunc[i][[j,4]],inifunc[i][[j,5]]]/.subrule,defer,All];
 			tsub=ToString[ToString[CForm[tsub],StandardForm]];
 			tsub=StringReplace[tsub,{"Sqrt"-> "sqrt","Defer"->" ","cost"->"cos_t"}];

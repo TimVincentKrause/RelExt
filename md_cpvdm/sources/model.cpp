@@ -159,96 +159,17 @@ namespace PAR{
 
 
 	// Custom R's
-	std::vector<double> M00_therm;
-	std::vector<double> M01_therm;
-	std::vector<double> M02_therm;
-	std::vector<double> M03_therm;
-	std::vector<double> M04_therm;
-	std::vector<double> M05_therm;
-	std::vector<double> M06_therm;
-	std::vector<double> M07_therm;
-	std::vector<double> M08_therm;
-
-	std::vector<double> M10_therm;
-	std::vector<double> M11_therm;
-	std::vector<double> M12_therm;
-	std::vector<double> M13_therm;
-	std::vector<double> M14_therm;
-	std::vector<double> M15_therm;
-	std::vector<double> M16_therm;
-	std::vector<double> M17_therm;
-	std::vector<double> M18_therm;
+	std::vector<double> R00_therm;
+	std::vector<double> R01_therm;
+	std::vector<double> R02_therm;
+	std::vector<double> R10_therm;
+	std::vector<double> R11_therm;
+	std::vector<double> R12_therm;
+	std::vector<double> R20_therm;
+	std::vector<double> R21_therm;
+	std::vector<double> R22_therm;
 
 
-	std::vector<double> M20_therm;
-	std::vector<double> M21_therm;
-	std::vector<double> M22_therm;
-	std::vector<double> M23_therm;
-	std::vector<double> M24_therm;
-	std::vector<double> M25_therm;
-	std::vector<double> M26_therm;
-	std::vector<double> M27_therm;
-	std::vector<double> M28_therm;
-
-	std::vector<double> M30_therm;
-	std::vector<double> M31_therm;
-	std::vector<double> M32_therm;
-	std::vector<double> M33_therm;
-	std::vector<double> M34_therm;
-	std::vector<double> M35_therm;
-	std::vector<double> M36_therm;
-	std::vector<double> M37_therm;
-	std::vector<double> M38_therm;
-
-	std::vector<double> M40_therm;
-	std::vector<double> M41_therm;
-	std::vector<double> M42_therm;
-	std::vector<double> M43_therm;
-	std::vector<double> M44_therm;
-	std::vector<double> M45_therm;
-	std::vector<double> M46_therm;
-	std::vector<double> M47_therm;
-	std::vector<double> M48_therm;
-
-	std::vector<double> M50_therm;
-	std::vector<double> M51_therm;
-	std::vector<double> M52_therm;
-	std::vector<double> M53_therm;
-	std::vector<double> M54_therm;
-	std::vector<double> M55_therm;
-	std::vector<double> M56_therm;
-	std::vector<double> M57_therm;
-	std::vector<double> M58_therm;
-
-	std::vector<double> M60_therm;
-	std::vector<double> M61_therm;
-	std::vector<double> M62_therm;
-	std::vector<double> M63_therm;
-	std::vector<double> M64_therm;
-	std::vector<double> M65_therm;
-	std::vector<double> M66_therm;
-	std::vector<double> M67_therm;
-	std::vector<double> M68_therm;
-
-	std::vector<double> M70_therm;
-	std::vector<double> M71_therm;
-	std::vector<double> M72_therm;
-	std::vector<double> M73_therm;
-	std::vector<double> M74_therm;
-	std::vector<double> M75_therm;
-	std::vector<double> M76_therm;
-	std::vector<double> M77_therm;
-	std::vector<double> M78_therm;
-
-	std::vector<double> M80_therm;
-	std::vector<double> M81_therm;
-	std::vector<double> M82_therm;
-	std::vector<double> M83_therm;
-	std::vector<double> M84_therm;
-	std::vector<double> M85_therm;
-	std::vector<double> M86_therm;
-	std::vector<double> M87_therm;
-	std::vector<double> M88_therm;
 
 	// custom Thermal masses / Thermal self-energies
 	double THMZ;
@@ -275,6 +196,15 @@ namespace PAR{
 	std::vector<double> THmH2_therm;
 	std::vector<double> THmH3_therm;
 	std::vector<double> THmHc_therm;
+
+
+	std::vector<double> mG0sq_pot_therm;
+	std::vector<double> mGchsq_pot_therm;
+	std::vector<double> mHsmsq_pot_therm;
+	std::vector<double> mH1_pot_therm;
+	std::vector<double> mH2_pot_therm;
+	std::vector<double> mH3_pot_therm;
+	std::vector<double> mHc_pot_therm;
 
 
 

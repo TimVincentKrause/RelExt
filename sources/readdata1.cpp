@@ -252,13 +252,24 @@ void DataReader::read_column(std::vector<double> &vector, std::string head,const
                 getline(ss, value, ' ')) {
             if (col == headcol) {
                 //std::cout << std::stod(value) << "\n";
-                if (std::abs(std::stod(value)) <= eps){
-                    vector.push_back(0);
-                } else {
+                if (eps < 0)
+                {
                     if (npow==0){
                         vector.push_back(std::stod(value));
                     } else{
                         vector.push_back(pow(std::stod(value),npow));
+                    }
+                }
+                else
+                {
+                    if (std::abs(std::stod(value)) <= eps){
+                        vector.push_back(0);
+                    } else {
+                        if (npow==0){
+                            vector.push_back(std::stod(value));
+                        } else{
+                            vector.push_back(pow(std::stod(value),npow));
+                        }
                     }
                 }
             }
