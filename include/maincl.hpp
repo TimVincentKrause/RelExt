@@ -27,6 +27,7 @@ class Main {
     const bool calc_widths;
     const bool save_contribs;
     const bool therm_contr;
+    const bool scal_therm_prop;
     VecDoub channel_frac;
     VecString bath_procs;
     MatString generator_list;
@@ -38,7 +39,7 @@ class Main {
    public:
     Main(char *argv[], const int modee, double beps, const double xtoday,
          const bool fast, const bool calcwidths, const bool thermcontr,
-         const bool savecontribs);
+         const bool scalthermprop, const bool savecontribs);
 
     void load_generation_file();
 

@@ -43,16 +43,6 @@ namespace DT{
 				mH3 = mH3_pot_therm[0];
 				mHc = mHc_pot_therm[0];
 
-				THMZ =   MZ;//THMZ_therm[0];
-				THMW =   MW;//THMW_therm[0];
-				THmHsm = THmHsm_therm[0];
-				THmG0 =  THmG0_therm[0];
-				THmGch = THmGch_therm[0];
-				THmH1 =  THmH1_therm[0];
-				THmH2 =  THmH2_therm[0];
-				THmH3 =  THmH3_therm[0];
-				THmHc =  THmHc_therm[0];
-
 				// can get negative
 				mHsm = pow(std::abs(mHsmsq_pot_therm[0]),0.5);
 				//mG0 = pow(std::abs(mG0sq_therm[0] + g2*g2 * v*v /4),0.5);
@@ -69,6 +59,31 @@ namespace DT{
 				if (mGchsq_pot_therm[0] < 0){
 					sign_mGchsq = -1.;
 				} else {sign_mGchsq = 1.;}
+
+
+				THMZ =   MZ;//THMZ_therm[0];
+				THMW =   MW;//THMW_therm[0];
+
+				if (scal_therm_prop == true)
+				{
+    				THmHsm = THmHsm_therm[0];
+    				THmG0 =  THmG0_therm[0];
+    				THmGch = THmGch_therm[0];
+    				THmH1 =  THmH1_therm[0];
+    				THmH2 =  THmH2_therm[0];
+    				THmH3 =  THmH3_therm[0];
+    				THmHc =  THmHc_therm[0];
+				}
+				else
+				{
+				    THmHsm = mHsm;
+    				THmG0 =  mG0;
+    				THmGch = mGch;
+    				THmH1 =  mH1;
+    				THmH2 =  mH2;
+    				THmH3 =  mH3;
+    				THmHc =  mHc;
+				}
 
 				// Rotation Matrix
 				RR1x1 = R00_therm[0];
@@ -104,16 +119,6 @@ namespace DT{
 				mH3 = mH3_pot_therm[v_therm.size()-1];
 				mHc = mHc_pot_therm[v_therm.size()-1];
 
-				THMZ =   MZ;//THMZ_therm[v_therm.size()-1];
-				THMW =   MW;//THMW_therm[v_therm.size()-1];
-				THmHsm = THmHsm_therm[v_therm.size()-1];
-				THmG0 =  THmG0_therm[v_therm.size()-1];
-				THmGch = THmGch_therm[v_therm.size()-1];
-				THmH1 =  THmH1_therm[v_therm.size()-1];
-				THmH2 =  THmH2_therm[v_therm.size()-1];
-				THmH3 =  THmH3_therm[v_therm.size()-1];
-				THmHc =  THmHc_therm[v_therm.size()-1];
-
 				// can get negative
 				mHsm = pow(std::abs(mHsmsq_pot_therm[v_therm.size()-1]),0.5);
 				// mG0 = pow(std::abs(mG0sq_therm[v_therm.size()-1] + g2*g2 * v*v /4),0.5);
@@ -129,6 +134,30 @@ namespace DT{
 				if (mGchsq_pot_therm[v_therm.size()-1] < 0){
 					sign_mGchsq = -1.;
 				} else {sign_mGchsq = 1.;}
+
+				THMZ =   MZ;//THMZ_therm[v_therm.size()-1];
+				THMW =   MW;//THMW_therm[v_therm.size()-1];
+
+				if (scal_therm_prop == true)
+				{
+    				THmHsm = THmHsm_therm[v_therm.size()-1];
+    				THmG0 =  THmG0_therm[v_therm.size()-1];
+    				THmGch = THmGch_therm[v_therm.size()-1];
+    				THmH1 =  THmH1_therm[v_therm.size()-1];
+    				THmH2 =  THmH2_therm[v_therm.size()-1];
+    				THmH3 =  THmH3_therm[v_therm.size()-1];
+    				THmHc =  THmHc_therm[v_therm.size()-1];
+				}
+				else
+				{
+				    THmHsm = mHsm;
+    				THmG0 =  mG0;
+    				THmGch = mGch;
+    				THmH1 =  mH1;
+    				THmH2 =  mH2;
+    				THmH3 =  mH3;
+    				THmHc =  mHc;
+				}
 
 
 				// Rotation Matrix
@@ -169,16 +198,6 @@ namespace DT{
 						mH3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH3_pot_therm[i-1],mH3_pot_therm[i]);
 						mHc = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHc_pot_therm[i-1],mHc_pot_therm[i]);
 
-						THMZ =   MZ;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
-						THMW =   MW;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
-						THmHsm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHsm_therm[i-1], THmHsm_therm[i]);
-						THmG0 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmG0_therm[i-1], THmG0_therm[i]);
-						THmGch = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmGch_therm[i-1], THmGch_therm[i]);
-						THmH1 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH1_therm[i-1], THmH1_therm[i]);
-						THmH2 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH2_therm[i-1], THmH2_therm[i]);
-						THmH3 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH3_therm[i-1], THmH3_therm[i]);
-						THmHc =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHc_therm[i-1], THmHc_therm[i]);
-
 						// can get negative
 						double mHsmsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHsmsq_pot_therm[i-1],mHsmsq_pot_therm[i]);
 						// double mG0sq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mG0sq_therm[i-1],mG0sq_therm[i]) + g2*g2 * v*v /4;
@@ -199,6 +218,31 @@ namespace DT{
 							sign_mGchsq = -1.;
 						} else {sign_mGchsq = 1.;}
 
+						THMZ =   MZ;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
+						THMW =   MW;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
+
+						if (scal_therm_prop == true)
+						{
+    						THmHsm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHsm_therm[i-1], THmHsm_therm[i]);
+    						THmG0 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmG0_therm[i-1], THmG0_therm[i]);
+    						THmGch = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmGch_therm[i-1], THmGch_therm[i]);
+    						THmH1 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH1_therm[i-1], THmH1_therm[i]);
+    						THmH2 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH2_therm[i-1], THmH2_therm[i]);
+    						THmH3 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH3_therm[i-1], THmH3_therm[i]);
+    						THmHc =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHc_therm[i-1], THmHc_therm[i]);
+						}
+						else
+						{
+						    THmHsm = mHsm;
+            				THmG0 =  mG0;
+            				THmGch = mGch;
+            				THmH1 =  mH1;
+            				THmH2 =  mH2;
+            				THmH3 =  mH3;
+            				THmHc =  mHc;
+						}
+
+
 						RR1x1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R00_therm[i-1],R00_therm[i]);
 						RR1x2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R01_therm[i-1],R01_therm[i]);
 						RR1x3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R02_therm[i-1],R02_therm[i]);
@@ -209,51 +253,10 @@ namespace DT{
 						RR3x2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R21_therm[i-1],R21_therm[i]);
 						RR3x3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R22_therm[i-1],R22_therm[i]);
 
-						// Mass Matrix
-						// mass_matrix[0][0] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M00_therm[i-1],M00_therm[i]);
-						// mass_matrix[1][0] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M01_therm[i-1],M01_therm[i]);
-						// mass_matrix[2][0] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M02_therm[i-1],M02_therm[i]);
-
-						// mass_matrix[0][1] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M10_therm[i-1],M10_therm[i]);
-						// mass_matrix[1][1] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M11_therm[i-1],M11_therm[i]);
-						// mass_matrix[2][1] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M12_therm[i-1],M12_therm[i]);
-
-						// mass_matrix[0][2] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M20_therm[i-1],M20_therm[i]);
-						// mass_matrix[1][2] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M21_therm[i-1],M21_therm[i]);
-						// mass_matrix[2][2] = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], M22_therm[i-1],M22_therm[i]);
-
-
-
 						break;
 					}
 				}
 			}
-
-			// Jacobi eigensys(mass_matrix);
-
-
-			// // std::cout << "EV0 = " << sqrt(eigensys.d[0])<< "\n";
-			// // std::cout << "EV1 = " << sqrt(eigensys.d[1])<< "\n";
-			// // std::cout << "EV2 = " << sqrt(eigensys.d[2])<< "\n";
-
-			// RR1x1 = eigensys.v[0][0];
-			// RR2x1 = eigensys.v[0][1];
-			// RR3x1 = eigensys.v[0][2];
-			// RR1x2 = eigensys.v[1][0];
-			// RR2x2 = eigensys.v[1][1];
-			// RR3x2 = eigensys.v[1][2];
-			// RR1x3 = eigensys.v[2][0];
-			// RR2x3 = eigensys.v[2][1];
-			// RR3x3 = eigensys.v[2][2];
-
-
-
-			// std::cout << std::setw(9) << RR1x1 << ",\t" << RR1x2 << ",\t" << RR1x3 <<",\n";
-			// std::cout << std::setw(9) << RR2x1 << ",\t" << RR2x2 << ",\t" << RR2x3 <<",\n";
-			// std::cout << std::setw(9) << RR3x1 << ",\t" << RR3x2 << ",\t" << RR3x3 <<",\n";
-			//std::cout << std::setw(9) << M00_therm[idx] << ",\t" << M01_therm[idx] << ",\t" << M02_therm[idx] <<",\n";
-			//std::cout << std::setw(9) << M10_therm[idx] << ",\t" << M11_therm[idx] << ",\t" << M12_therm[idx] <<",\n";
-			//std::cout << std::setw(9) << M20_therm[idx] << ",\t" << M21_therm[idx] << ",\t" << M22_therm[idx] <<",\n";
 
 			//to get the same Matrix as Scanner S we do some reordering
 			// if R11 <0: multyply row 1 with (-1)  (field redefinition h1 -> -h1)

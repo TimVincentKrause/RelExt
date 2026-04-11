@@ -2,7 +2,8 @@
 
 namespace DT {
 
-ModelInfo::ModelInfo(const bool calcwidths,const bool thermcontr) : calc_widths(calcwidths), therm_contr(thermcontr) {
+ModelInfo::ModelInfo(const bool calcwidths,const bool thermcontr, const bool scalthermprop)
+        : calc_widths(calcwidths), therm_contr(thermcontr), scal_therm_prop(scalthermprop) {
     ModelInfo::init();
     load_prtcls();
     load_parameter_map();
@@ -83,8 +84,8 @@ void ModelInfo::assigndm() {
         if (MDM > *DSmasses[it]) MDM = *DSmasses[it];
 }
 
-AnnihilationAmps::AnnihilationAmps(const bool calc_widths,const bool thermcontr)
-    : ModelInfo(calc_widths,thermcontr) {
+AnnihilationAmps::AnnihilationAmps(const bool calc_widths,const bool thermcontr, const bool scalthermprop)
+    : ModelInfo(calc_widths,thermcontr,scalthermprop) {
     AnnihilationAmps::init();
 }
 

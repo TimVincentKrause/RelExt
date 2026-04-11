@@ -2,13 +2,14 @@
 
 namespace DT {
 Main::Main(char *argv[], const int modee, double beps, const double xtoday,
-           const bool fast, const bool calcwidths, const bool thermcontr, const bool savecontribs)
-    : AA(*new AnnihilationAmps(calc_widths,thermcontr)),
+           const bool fast, const bool calcwidths, const bool thermcontr,const bool scalthermprop, const bool savecontribs)
+    : AA(*new AnnihilationAmps(calc_widths,thermcontr,scalthermprop)),
       mode(modee),
       output_file(std::string(argv[2])),
       tvev_input_file(std::string(argv[1])),
       calc_widths(calcwidths),
       therm_contr(thermcontr),
+      scal_therm_prop(scalthermprop),
       save_contribs(savecontribs),
       FO(AA, fast) {
     srand((unsigned)time(NULL));
