@@ -4,22 +4,22 @@ namespace DT {
 DataReader::DataReader(const std::string file, const size_t mode) {
     switch (mode) {
         case 1:
-            filename = "../dataInput/" + file;
+            filename = /*"../dataInput/" +*/ file;
             datafile.open(filename);
             if (!datafile) {
                 std::cerr << "Unable to open file " << filename
                           << ". Check if the name of the file is correct and "
-                             "if it is stored in the dataInput directory.\n";
+                             "if it is stored in the -dataInput- correct directory.\n";
                 exit(1);
             }
             break;
         case 2:
-            filename = "../dataOutput/" + file;
+            filename = /*"../dataOutput/" +*/ file;
             outfile.open(filename);
             if (!outfile) {
                 std::cerr << "Unable to open file " << filename
                           << ". Check if the name of the file is correct and "
-                             "if it is stored in the dataOutput directory.\n";
+                             "if it is stored in the -dataOutput- correct directory.\n";
                 exit(1);
             }
             break;
