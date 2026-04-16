@@ -427,29 +427,45 @@ namespace DT{
 		rdr_therm->read_column(MZ_therm, "mG_3sq",0.5);
 		rdr_therm->read_column(THMZ_therm, "mG_3sq_T",0.5);
 
+		// next part assumes that dark matter particles don't change their place
+		// (they can do, so I should change this in BSMPT!)
 		//Goldstone-masses can be negative -> add eps
-		rdr_therm->read_column(mG0sq_therm, "mG0sq", 0,0.5);
-		rdr_therm->read_column(THmG0_therm, "mG0sq_T",0.5,0.5);
-		rdr_therm->read_column(mGchsq_therm, "mGmsq",0,0.5);
-		rdr_therm->read_column(THmGch_therm, "mGmsq_T",0.5,0.5);
-		rdr_therm->read_column(mHsmsq_therm, "mHSMsq");
-		rdr_therm->read_column(THmHsm_therm, "mHSMsq_T",0.5);
+		rdr_therm->read_column(mGchsq_therm, "mS_0sq", 0,0.5);
+		rdr_therm->read_column(THmGch_therm, "mS_0sq_T",0.5,0.5);
+		rdr_therm->read_column(mG0sq_therm, "mS_2sq",0,0.5);
+		rdr_therm->read_column(THmG0_therm, "mS_2sq_T",0.5,0.5);
+		rdr_therm->read_column(mHsmsq_therm, "mS_3sq");
+		rdr_therm->read_column(THmHsm_therm, "mS_3sq_T",0.5);
 
+		rdr_therm->read_column(mH1_therm, "mS_4sq",0.5);
+		rdr_therm->read_column(THmH1_therm, "mS_4sq_T",0.5);
 
-		rdr_therm->read_column(mH1_therm, "mH1sq",0.5);
-		rdr_therm->read_column(THmH1_therm, "mH1sq_T",0.5);
-		rdr_therm->read_column(mH2_therm, "mH2sq",0.5);
-		rdr_therm->read_column(THmH2_therm, "mH2sq_T",0.5);
-		rdr_therm->read_column(mH3_therm, "mH3sq",0.5);
-		rdr_therm->read_column(THmH3_therm, "mH3sq_T",0.5);
-		rdr_therm->read_column(mHc_therm, "mHpsq",0.5);
-		rdr_therm->read_column(THmHc_therm, "mHpsq_T",0.5);
+		size_t posmHc = rdr_therm->get_mHc_pos();
 
+		// 130 is position in file, this is modeldependent and could change.
+		if (posmHc == 1){
+			rdr_therm->read_column(mHc_therm, "mS_5sq",0.5);
+			rdr_therm->read_column(THmHc_therm, "mS_5sq_T",0.5);
+			rdr_therm->read_column(mH2_therm, "mS_7sq",0.5);
+			rdr_therm->read_column(THmH2_therm, "mS_7sq_T",0.5);
+			rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
+			rdr_therm->read_column(THmH3_therm, "mS_8sq_T",0.5);
+		} else if (posmHc == 2){
+			rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
+			rdr_therm->read_column(THmH2_therm, "mS_5sq_T",0.5);
+			rdr_therm->read_column(mHc_therm, "mS_6sq",0.5);
+			rdr_therm->read_column(THmHc_therm, "mS_6sq_T",0.5);
+			rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
+			rdr_therm->read_column(THmH3_therm, "mS_8sq_T",0.5);
+		} else if (posmHc == 3){
+			rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
+			rdr_therm->read_column(THmH2_therm, "mS_5sq_T",0.5);
+			rdr_therm->read_column(mH3_therm, "mS_6sq",0.5);
+			rdr_therm->read_column(THmH3_therm, "mS_6sq_T",0.5);
+			rdr_therm->read_column(mHc_therm, "mS_8sq",0.5);
+			rdr_therm->read_column(THmHc_therm, "mS_8sq_T",0.5);
+		}
 
-		std::cout << "mH1 = " << mH1_therm[0] << std::endl;
-		std::cout << "mH2 = " << mH2_therm[0] << std::endl;
-		std::cout << "mH3 = " << mH3_therm[0] << std::endl;
-		std::cout << "mHc = " << mHc_therm[0] << std::endl;
 		//size_t posmHc = rdr_therm->get_mHc_pos();
 
 		// // 130 is position in file, this is modeldependent and could change.
@@ -476,26 +492,26 @@ namespace DT{
 		// 	rdr_therm->read_column(THmHc_therm, "mS_8sq_T",0.5);
 		// }
 
-		rdr_therm->read_column(R00_therm, "MS_00");
-		rdr_therm->read_column(R01_therm, "MS_01");
-		rdr_therm->read_column(R02_therm, "MS_02");
+		rdr_therm->read_column(R00_therm, "R00_T");
+		rdr_therm->read_column(R01_therm, "R01_T");
+		rdr_therm->read_column(R02_therm, "R02_T");
 
-		rdr_therm->read_column(R10_therm, "MS_10");
-		rdr_therm->read_column(R11_therm, "MS_11");
-		rdr_therm->read_column(R12_therm, "MS_12");
+		rdr_therm->read_column(R10_therm, "R10_T");
+		rdr_therm->read_column(R11_therm, "R11_T");
+		rdr_therm->read_column(R12_therm, "R12_T");
 
-		rdr_therm->read_column(R20_therm, "MS_20");
-		rdr_therm->read_column(R21_therm, "MS_21");
-		rdr_therm->read_column(R22_therm, "MS_22");
+		rdr_therm->read_column(R20_therm, "R20_T");
+		rdr_therm->read_column(R21_therm, "R21_T");
+		rdr_therm->read_column(R22_therm, "R22_T");
 
 		// Potential Masses
-		rdr_therm->read_column(mG0sq_pot_therm, "mG0sq_pot",0,0.5);
-		rdr_therm->read_column(mGchsq_pot_therm, "mGmsq_pot",0,0.5);
-		rdr_therm->read_column(mHsmsq_pot_therm, "mHSMsq_pot");
-		rdr_therm->read_column(mH1_pot_therm, "mH1sq_pot",0.5);
-		rdr_therm->read_column(mH2_pot_therm, "mH2sq_pot",0.5);
-		rdr_therm->read_column(mH3_pot_therm, "mH3sq_pot",0.5);
-		rdr_therm->read_column(mHc_pot_therm, "mHpsq_pot",0.5);
+		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,2);
+		rdr_therm->read_column(mGchsq_pot_therm, "m_pot_Gmsq",0,2);
+		rdr_therm->read_column(mHsmsq_pot_therm, "m_pot_Hsmsq",0,2);
+		rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5);
+		rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5);
+		rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5);
+		rdr_therm->read_column(mHc_pot_therm, "m_pot_Hmsq",0.5);
 
 
 		// // change state of the stream
