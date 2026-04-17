@@ -5,6 +5,7 @@ DataReader::DataReader(const std::string file, const size_t mode) {
     switch (mode) {
         case 1:
             filename = /*"../dataInput/" +*/ file;
+            std::cout << "file = " << filename << std::endl;
             datafile.open(filename);
             if (!datafile) {
                 std::cerr << "Unable to open file " << filename
