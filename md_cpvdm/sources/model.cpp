@@ -18,6 +18,7 @@ namespace PAR{
 	double mG0 = 91.1876;
 	double mGch = 79.947;
 	double mHc = 200.;
+	double mHm = 200.;
 	double alph1 = -0.1;
 	double alph2 = -0.1;
 	double alph3 = 0.1;
@@ -156,7 +157,8 @@ namespace PAR{
 	double MW0;
 	double MZ0 = 91.1876;
 	double v0;
-
+	bool do_goldstone_channels = false;
+	double Tcrit;
 
 	// Custom R's
 	std::vector<double> R00_therm;
@@ -200,6 +202,7 @@ namespace PAR{
 
 	std::vector<double> mG0sq_pot_therm;
 	std::vector<double> mGchsq_pot_therm;
+	std::vector<double> mHm_pot_therm;
 	std::vector<double> mHsmsq_pot_therm;
 	std::vector<double> mH1_pot_therm;
 	std::vector<double> mH2_pot_therm;

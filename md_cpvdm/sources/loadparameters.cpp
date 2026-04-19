@@ -9,6 +9,12 @@ namespace DT{
 	void ModelInfo::load_parameters(const double x){
 		using namespace PAR;
 		double xinv = 1/x;
+
+		if ( MDM * xinv > Tcrit)
+		    do_goldstone_channels = true;
+		else
+		    do_goldstone_channels = false;
+
 		if (therm_contr == false){xinv = 0;}
 
 		if (v_therm.size() == 0){
@@ -42,13 +48,14 @@ namespace DT{
 				mH2 = mH2_pot_therm[0];
 				mH3 = mH3_pot_therm[0];
 				mHc = mHc_pot_therm[0];
+				mHm = mHm_pot_therm[0];
 
 				// can get negative
 				mHsm = pow(std::abs(mHsmsq_pot_therm[0]),0.5);
 				//mG0 = pow(std::abs(mG0sq_therm[0] + g2*g2 * v*v /4),0.5);
 				//mGch = pow(std::abs(mGchsq_therm[0] + g2*g2 * v*v /4),0.5);
-				mG0 = pow(std::abs(mG0sq_pot_therm[0]),0.5);
-				mGch = pow(std::abs(mGchsq_pot_therm[0]),0.5);
+				mG0 = pow(std::abs(mG0sq_pot_therm[0]),0.5) + MZ;
+				mGch = pow(std::abs(mGchsq_pot_therm[0]),0.5) + MW;
 
 				if (mHsmsq_pot_therm[0] < 0){
 					sign_mHsmsq = -1.;
@@ -118,13 +125,14 @@ namespace DT{
 				mH2 = mH2_pot_therm[v_therm.size()-1];
 				mH3 = mH3_pot_therm[v_therm.size()-1];
 				mHc = mHc_pot_therm[v_therm.size()-1];
+				mHm = mHm_pot_therm[v_therm.size()-1];
 
 				// can get negative
 				mHsm = pow(std::abs(mHsmsq_pot_therm[v_therm.size()-1]),0.5);
 				// mG0 = pow(std::abs(mG0sq_therm[v_therm.size()-1] + g2*g2 * v*v /4),0.5);
 				// mGch = pow(std::abs(mGchsq_therm[v_therm.size()-1] + g2*g2 * v*v /4),0.5);
-				mG0 = pow(std::abs(mG0sq_pot_therm[v_therm.size()-1]),0.5);
-				mGch = pow(std::abs(mGchsq_pot_therm[v_therm.size()-1]),0.5);
+				mG0 = pow(std::abs(mG0sq_pot_therm[v_therm.size()-1]),0.5) + MZ;
+				mGch = pow(std::abs(mGchsq_pot_therm[v_therm.size()-1]),0.5) + MW;
 				if (mHsmsq_pot_therm[v_therm.size()-1] < 0){
 					sign_mHsmsq = -1.;
 				} else {sign_mHsmsq = 1.;}
@@ -197,7 +205,11 @@ namespace DT{
 						mH2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH2_pot_therm[i-1],mH2_pot_therm[i]);
 						mH3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH3_pot_therm[i-1],mH3_pot_therm[i]);
 						mHc = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHc_pot_therm[i-1],mHc_pot_therm[i]);
+						mHm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHm_pot_therm[i-1],mHm_pot_therm[i]);
 
+
+						if (std::abs(MC) <1e-5) {MC = 0;}
+						if (std::abs(MZ) <1e-5) {MZ = 0;}
 						// can get negative
 						double mHsmsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHsmsq_pot_therm[i-1],mHsmsq_pot_therm[i]);
 						// double mG0sq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mG0sq_therm[i-1],mG0sq_therm[i]) + g2*g2 * v*v /4;
@@ -206,8 +218,8 @@ namespace DT{
 						double mGchsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mGchsq_pot_therm[i-1],mGchsq_pot_therm[i]);
 
 						mHsm = pow(std::abs(mHsmsq),0.5);
-						mG0 = pow(std::abs(mG0sq),0.5);
-						mGch = pow(std::abs(mGchsq),0.5);
+						mG0 = pow(std::abs(mG0sq),0.5) + MZ;
+						mGch = pow(std::abs(mGchsq),0.5) + MW;
 						if (mHsmsq < 0){
 							sign_mHsmsq = -1.;
 						} else {sign_mHsmsq = 1.;}
@@ -257,6 +269,10 @@ namespace DT{
 					}
 				}
 			}
+
+			// because of differnet Gauge
+			THmG0 =  std::sqrt(THmG0 + MZ*MZ);
+			THmGch = std::sqrt(THmGch + MW*MW);
 
 			//to get the same Matrix as Scanner S we do some reordering
 			// if R11 <0: multyply row 1 with (-1)  (field redefinition h1 -> -h1)
@@ -408,24 +424,24 @@ namespace DT{
 		rdr_therm->read_column(temp_therm, "Temp");
 		rdr_therm->read_column(v_therm, "omega_1",0,1e-3);
 
-		rdr_therm->read_column(Mnue_therm, "mL_0sq",0.5);
-		rdr_therm->read_column(Mnum_therm, "mL_1sq",0.5);
-		rdr_therm->read_column(Mnut_therm, "mL_2sq",0.5);
-		rdr_therm->read_column(Me_therm, "mL_3sq",0.5);
-		rdr_therm->read_column(MM_therm, "mL_5sq",0.5);
-		rdr_therm->read_column(MTA_therm, "mL_7sq",0.5);
+		rdr_therm->read_column(Mnue_therm, "mL_0sq",0.5,1e-3);
+		rdr_therm->read_column(Mnum_therm, "mL_1sq",0.5,1e-3);
+		rdr_therm->read_column(Mnut_therm, "mL_2sq",0.5,1e-3);
+		rdr_therm->read_column(Me_therm, "mL_3sq",0.5,1e-3);
+		rdr_therm->read_column(MM_therm, "mL_5sq",0.5,1e-3);
+		rdr_therm->read_column(MTA_therm, "mL_7sq",0.5,1e-3);
 
-		rdr_therm->read_column(MU_therm, "mQ_0sq",0.5);
-		rdr_therm->read_column(MD_therm, "mQ_2sq",0.5);
-		rdr_therm->read_column(MS_therm, "mQ_4sq",0.5);
-		rdr_therm->read_column(MC_therm, "mQ_6sq",0.5);
-		rdr_therm->read_column(MB_therm, "mQ_8sq",0.5);
-		rdr_therm->read_column(MT_therm, "mQ_10sq",0.5);
+		rdr_therm->read_column(MU_therm, "mQ_0sq",0.5,1e-3);
+		rdr_therm->read_column(MD_therm, "mQ_2sq",0.5,1e-3);
+		rdr_therm->read_column(MS_therm, "mQ_4sq",0.5,1e-3);
+		rdr_therm->read_column(MC_therm, "mQ_6sq",0.5,1e-3);
+		rdr_therm->read_column(MB_therm, "mQ_8sq",0.5,1e-3);
+		rdr_therm->read_column(MT_therm, "mQ_10sq",0.5,1e-3);
 
-		rdr_therm->read_column(MW_therm, "mG_1sq",0.5);
-		rdr_therm->read_column(THMW_therm, "mG_1sq_T",0.5);
-		rdr_therm->read_column(MZ_therm, "mG_3sq",0.5);
-		rdr_therm->read_column(THMZ_therm, "mG_3sq_T",0.5);
+		rdr_therm->read_column(MW_therm, "mG_1sq",0.5,1e-3);
+		rdr_therm->read_column(THMW_therm, "mG_1sq_T",0.5,1e-3);
+		rdr_therm->read_column(MZ_therm, "mG_3sq",0.5,1e-3);
+		rdr_therm->read_column(THMZ_therm, "mG_3sq_T",0.5,1e-3);
 
 		// next part assumes that dark matter particles don't change their place
 		// (they can do, so I should change this in BSMPT!)
@@ -434,11 +450,11 @@ namespace DT{
 		rdr_therm->read_column(THmGch_therm, "mS_0sq_T",0.5,0.5);
 		rdr_therm->read_column(mG0sq_therm, "mS_2sq",0,0.5);
 		rdr_therm->read_column(THmG0_therm, "mS_2sq_T",0.5,0.5);
-		rdr_therm->read_column(mHsmsq_therm, "mS_3sq");
-		rdr_therm->read_column(THmHsm_therm, "mS_3sq_T",0.5);
+		rdr_therm->read_column(mHsmsq_therm, "mS_3sq",0.5);
+		rdr_therm->read_column(THmHsm_therm, "mS_3sq_T",0.5,0.5);
 
-		rdr_therm->read_column(mH1_therm, "mS_4sq",0.5);
-		rdr_therm->read_column(THmH1_therm, "mS_4sq_T",0.5);
+		rdr_therm->read_column(mH1_therm, "mS_4sq",0.5,0.5);
+		rdr_therm->read_column(THmH1_therm, "mS_4sq_T",0.5,0.5);
 
 		size_t posmHc = rdr_therm->get_mHc_pos();
 
@@ -492,28 +508,105 @@ namespace DT{
 		// 	rdr_therm->read_column(THmHc_therm, "mS_8sq_T",0.5);
 		// }
 
-		rdr_therm->read_column(R00_therm, "R00_T");
-		rdr_therm->read_column(R01_therm, "R01_T");
-		rdr_therm->read_column(R02_therm, "R02_T");
+		rdr_therm->read_column(R00_therm, "R00_T",0,1e-5);
+		rdr_therm->read_column(R01_therm, "R01_T",0,1e-5);
+		rdr_therm->read_column(R02_therm, "R02_T",0,1e-5);
 
-		rdr_therm->read_column(R10_therm, "R10_T");
-		rdr_therm->read_column(R11_therm, "R11_T");
-		rdr_therm->read_column(R12_therm, "R12_T");
+		rdr_therm->read_column(R10_therm, "R10_T",0,1e-5);
+		rdr_therm->read_column(R11_therm, "R11_T",0,1e-5);
+		rdr_therm->read_column(R12_therm, "R12_T",0,1e-5);
 
-		rdr_therm->read_column(R20_therm, "R20_T");
-		rdr_therm->read_column(R21_therm, "R21_T");
-		rdr_therm->read_column(R22_therm, "R22_T");
+		rdr_therm->read_column(R20_therm, "R20_T",0,1e-5);
+		rdr_therm->read_column(R21_therm, "R21_T",0,1e-5);
+		rdr_therm->read_column(R22_therm, "R22_T",0,1e-5);
 
 		// Potential Masses
 		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,2);
 		rdr_therm->read_column(mGchsq_pot_therm, "m_pot_Gmsq",0,2);
 		rdr_therm->read_column(mHsmsq_pot_therm, "m_pot_Hsmsq",0,2);
-		rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5);
-		rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5);
-		rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5);
-		rdr_therm->read_column(mHc_pot_therm, "m_pot_Hmsq",0.5);
+		// rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5);
+		// rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5);
+		// rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5);
+		// rdr_therm->read_column(mHc_pot_therm, "m_pot_Hpsq",0.5);
+		// rdr_therm->read_column(mHm_pot_therm, "m_pot_Hmsq",0.5);
+		rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5,2);
+		rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5,2);
+		rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5,2);
+		rdr_therm->read_column(mHc_pot_therm, "m_pot_Hpsq",0.5,2);
+		rdr_therm->read_column(mHm_pot_therm, "m_pot_Hmsq",0.5,2);
+		// // because of messed up ordering:
+		// std::vector<double> tmpvector;
+		// if (std::abs(mH2_pot_therm[0] - mH3_pot_therm[0]) < 1)
+		// {
+		//     tmpvector = mHc_pot_therm;
+		// 	mHc_pot_therm = mH2_pot_therm;
+		// 	if (tmpvector[0] < mHm_pot_therm[0])
+		// 	{
+		// 	    mH2_pot_therm = tmpvector;
+		// 		mH3_pot_therm = mHm_pot_therm;
+		// 	}
+		// 	else
+		// 	{
+  //               mH3_pot_therm = tmpvector;
+  //               mH2_pot_therm = mHm_pot_therm;
+		// 	}
 
+		// }
+		// else if (std::abs(mH2_pot_therm[0] - mHc_pot_therm[0]) < 1)
+		// {
+		// 	if (mH3_pot_therm[0] < mHm_pot_therm[0])
+		// 	{
+		// 	    mH2_pot_therm = mH3_pot_therm;
+		// 		mH3_pot_therm = mHm_pot_therm;
+		// 	}
+		// 	else
+		// 	{
+  //               mH2_pot_therm = mHm_pot_therm;
+		// 	}
 
+		// }
+		// else if (std::abs(mH2_pot_therm[0] - mHm_pot_therm[0]) < 1)
+		// {
+		//     tmpvector = mHc_pot_therm;
+		// 	mHc_pot_therm = mHm_pot_therm;
+		// 	if (mH3_pot_therm[0] < tmpvector[0])
+		// 	{
+		// 	    mH2_pot_therm = mH3_pot_therm;
+		// 		mH3_pot_therm = tmpvector;
+		// 	}
+		// 	else
+		// 	{
+  //               mH2_pot_therm = tmpvector;
+		// 	}
+
+		// }
+		// else if (std::abs(mH3_pot_therm[0] - mHc_pot_therm[0]) < 1)
+		// {
+  //   		if (mHm_pot_therm[0] < mH2_pot_therm[0])
+  //   		{
+  //   			mH3_pot_therm = mH2_pot_therm;
+  //               mH2_pot_therm = mHm_pot_therm;
+  //   		}
+  //   		else
+  //   		{
+  //               mH3_pot_therm = mHm_pot_therm;
+  //   		}
+
+		// }
+		// else if (std::abs(mH3_pot_therm[0] - mHm_pot_therm[0]) < 1)
+		// {
+		//     tmpvector = mHc_pot_therm;
+		//     mHc_pot_therm = mHm_pot_therm;
+  //   		if (tmpvector[0] < mH2_pot_therm[0])
+  //   		{
+  //   			mH3_pot_therm = mH2_pot_therm;
+  //               mH2_pot_therm = tmpvector;
+  //   		}
+  //   		else
+  //   		{
+  //               mH3_pot_therm = tmpvector;
+  //   		}
+		// }
 		// // change state of the stream
 		// std::cout << std::fixed << std::setprecision(6) << std::setfill(' ');
 		// // output data
@@ -547,7 +640,7 @@ namespace DT{
 		// get all parameters from the parametermap
 		//for (auto &it : parmap){std::cout << it.first << " = " << *it.second << "\n";};
 
-		std::vector<std::string> header = {"Mnue", "Mnum", "Mnut", "Me","MM", "MTA","MU","MC","MT","MD","MS","MB","MZ","THMZ","MW","THMW","mHsm","sign_mHsmsq","THmHsm","mG0","sign_mG0sq","THmG0","mGch","sign_mGchsq","THmGch","mH1","THmH1","THmH2","mH3","THmH3","mHc","THmHc","RR1x1", "RR1x2","RR1x3","RR2x1","RR2x2","RR2x3","RR3x1","RR3x2","RR3x3","alph1","alph2","alph3","yu1","yu2","yu3","yd1","yd2","yd3","yl1","yl2","yl3"};
+		std::vector<std::string> header = {"Mnue", "Mnum", "Mnut", "Me","MM", "MTA","MU","MC","MT","MD","MS","MB","MZ","THMZ","MW","THMW","mHsm","sign_mHsmsq","THmHsm","mG0","sign_mG0sq","THmG0","mGch","sign_mGchsq","THmGch","mH1","THmH1","mH2","THmH2","mH3","THmH3","mHc","THmHc","mHm","RR1x1", "RR1x2","RR1x3","RR2x1","RR2x2","RR2x3","RR3x1","RR3x2","RR3x3","alph1","alph2","alph3","yu1","yu2","yu3","yd1","yd2","yd3","yl1","yl2","yl3"};
 
 		std::vector<std::string> header_T = {"Temp","x_i","v"};
 
@@ -559,13 +652,13 @@ namespace DT{
 		for (size_t j=0; j< header.size();j++) {output_file << header[j] << "\t";}
 		output_file << "\n";
 
-		for (double T_i; T_i<400; T_i++){
-			double x_i = MDM / T_i;
+		for (double x_i = 25; x_i>20; x_i-=0.02){
+			double T_i = MDM / x_i;
 			load_parameters(x_i);
 
 			// define; would be nicer with pointers
 			std::vector<double> values_T = {T_i,x_i,v};
-			std::vector<double> values = {Mnue, Mnum, Mnut, Me,MM, MTA,MU,MC,MT,MD,MS,MB,MZ,THMZ,MW,THMW,mHsm,sign_mHsmsq,THmHsm,mG0,sign_mG0sq,THmG0,mGch,sign_mGchsq,THmGch,mH1,THmH1,THmH2,mH3,THmH3,mHc,THmHc,RR1x1, RR1x2,RR1x3,RR2x1,RR2x2,RR2x3,RR3x1,RR3x2,RR3x3,alph1,alph2,alph3,yu1,yu2,yu3,yd1,yd2,yd3,yl1,yl2,yl3};
+			std::vector<double> values = {Mnue, Mnum, Mnut, Me,MM, MTA,MU,MC,MT,MD,MS,MB,MZ,THMZ,MW,THMW,mHsm,sign_mHsmsq,THmHsm,mG0,sign_mG0sq,THmG0,mGch,sign_mGchsq,THmGch,mH1,THmH1,mH2,THmH2,mH3,THmH3,mHc,THmHc,mHm,RR1x1, RR1x2,RR1x3,RR2x1,RR2x2,RR2x3,RR3x1,RR3x2,RR3x3,alph1,alph2,alph3,yu1,yu2,yu3,yd1,yd2,yd3,yl1,yl2,yl3};
 
 			// output every row
 			output_file << std::setprecision(16);

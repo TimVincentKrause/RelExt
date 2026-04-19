@@ -184,7 +184,7 @@ void Main::LoadParameters(const size_t i) {
                 break;
         }
     } while (!AA.load_everything());
-    //AA.save_parameters();
+    AA.save_parameters();
 }
 
 double Main::GetParameter(const std::string &par) {
@@ -421,7 +421,7 @@ void Main::RWalk(const double target, const double eps, const double gam,
 }
 
 void Main::SaveData(const VecString &save_pars) {
-    std::string filesave = "../dataOutput/" + output_file;
+    std::string filesave = /*"../dataOutput/" +*/ output_file;
 
     if (first_run) {
         std::ofstream reset;

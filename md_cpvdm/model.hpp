@@ -20,6 +20,7 @@ namespace PAR{
 	extern double mG0;
 	extern double mGch;
 	extern double mHc;
+	extern double mHm;
 	extern double alph1;
 	extern double alph2;
 	extern double alph3;
@@ -200,8 +201,11 @@ namespace PAR{
 	extern std::vector<double> mH2_pot_therm;
 	extern std::vector<double> mH3_pot_therm;
 	extern std::vector<double> mHc_pot_therm;
+	extern std::vector<double> mHm_pot_therm;
 
-
+	//other
+	extern bool do_goldstone_channels;
+	extern double Tcrit;
 
 
 	// tokens
