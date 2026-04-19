@@ -192,8 +192,8 @@ namespace PAR{
 	std::vector<double> THMZ_therm;
 	std::vector<double> THMW_therm;
 	std::vector<double> THmHsm_therm;
-	std::vector<double> THmG0_therm;
-	std::vector<double> THmGch_therm;
+	std::vector<double> THmG0sq_therm;
+	std::vector<double> THmGchsq_therm;
 	std::vector<double> THmH1_therm;
 	std::vector<double> THmH2_therm;
 	std::vector<double> THmH3_therm;

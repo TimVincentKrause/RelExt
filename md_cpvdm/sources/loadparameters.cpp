@@ -74,8 +74,8 @@ namespace DT{
 				if (scal_therm_prop == true)
 				{
     				THmHsm = THmHsm_therm[0];
-    				THmG0 =  THmG0_therm[0];
-    				THmGch = THmGch_therm[0];
+    				THmG0 =  THmG0sq_therm[0];
+    				THmGch = THmGchsq_therm[0];
     				THmH1 =  THmH1_therm[0];
     				THmH2 =  THmH2_therm[0];
     				THmH3 =  THmH3_therm[0];
@@ -149,8 +149,8 @@ namespace DT{
 				if (scal_therm_prop == true)
 				{
     				THmHsm = THmHsm_therm[v_therm.size()-1];
-    				THmG0 =  THmG0_therm[v_therm.size()-1];
-    				THmGch = THmGch_therm[v_therm.size()-1];
+    				THmG0 =  THmG0sq_therm[v_therm.size()-1];
+    				THmGch = THmGchsq_therm[v_therm.size()-1];
     				THmH1 =  THmH1_therm[v_therm.size()-1];
     				THmH2 =  THmH2_therm[v_therm.size()-1];
     				THmH3 =  THmH3_therm[v_therm.size()-1];
@@ -236,8 +236,8 @@ namespace DT{
 						if (scal_therm_prop == true)
 						{
     						THmHsm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHsm_therm[i-1], THmHsm_therm[i]);
-    						THmG0 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmG0_therm[i-1], THmG0_therm[i]);
-    						THmGch = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmGch_therm[i-1], THmGch_therm[i]);
+    						THmG0 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmG0sq_therm[i-1], THmG0sq_therm[i]);
+    						THmGch = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmGchsq_therm[i-1], THmGchsq_therm[i]);
     						THmH1 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH1_therm[i-1], THmH1_therm[i]);
     						THmH2 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH2_therm[i-1], THmH2_therm[i]);
     						THmH3 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH3_therm[i-1], THmH3_therm[i]);
@@ -418,7 +418,6 @@ namespace DT{
 
 	void ModelInfo::read_thermal_parameters(std::string tvev_input_file){
 		using namespace PAR;
-
 		std::unique_ptr<DataReader> rdr_therm = std::make_unique<DataReader>(tvev_input_file, 1);
 
 		rdr_therm->read_column(temp_therm, "Temp");
@@ -444,172 +443,62 @@ namespace DT{
 		rdr_therm->read_column(THMZ_therm, "mG_3sq_T",0.5,1e-3);
 
 		// next part assumes that dark matter particles don't change their place
-		// (they can do, so I should change this in BSMPT!)
+		// (But this is for tree level masses and these are unused.( currently))
 		//Goldstone-masses can be negative -> add eps
 		rdr_therm->read_column(mGchsq_therm, "mS_0sq", 0,0.5);
-		rdr_therm->read_column(THmGch_therm, "mS_0sq_T",0.5,0.5);
 		rdr_therm->read_column(mG0sq_therm, "mS_2sq",0,0.5);
-		rdr_therm->read_column(THmG0_therm, "mS_2sq_T",0.5,0.5);
 		rdr_therm->read_column(mHsmsq_therm, "mS_3sq",0.5);
-		rdr_therm->read_column(THmHsm_therm, "mS_3sq_T",0.5,0.5);
 
 		rdr_therm->read_column(mH1_therm, "mS_4sq",0.5,0.5);
-		rdr_therm->read_column(THmH1_therm, "mS_4sq_T",0.5,0.5);
 
 		size_t posmHc = rdr_therm->get_mHc_pos();
 
-		// 130 is position in file, this is modeldependent and could change.
 		if (posmHc == 1){
 			rdr_therm->read_column(mHc_therm, "mS_5sq",0.5);
-			rdr_therm->read_column(THmHc_therm, "mS_5sq_T",0.5);
 			rdr_therm->read_column(mH2_therm, "mS_7sq",0.5);
-			rdr_therm->read_column(THmH2_therm, "mS_7sq_T",0.5);
 			rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
-			rdr_therm->read_column(THmH3_therm, "mS_8sq_T",0.5);
 		} else if (posmHc == 2){
 			rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
-			rdr_therm->read_column(THmH2_therm, "mS_5sq_T",0.5);
 			rdr_therm->read_column(mHc_therm, "mS_6sq",0.5);
-			rdr_therm->read_column(THmHc_therm, "mS_6sq_T",0.5);
 			rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
-			rdr_therm->read_column(THmH3_therm, "mS_8sq_T",0.5);
 		} else if (posmHc == 3){
 			rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
-			rdr_therm->read_column(THmH2_therm, "mS_5sq_T",0.5);
 			rdr_therm->read_column(mH3_therm, "mS_6sq",0.5);
-			rdr_therm->read_column(THmH3_therm, "mS_6sq_T",0.5);
 			rdr_therm->read_column(mHc_therm, "mS_8sq",0.5);
-			rdr_therm->read_column(THmHc_therm, "mS_8sq_T",0.5);
 		}
 
-		//size_t posmHc = rdr_therm->get_mHc_pos();
+		// Thermal Masses
+		rdr_therm->read_column(THmGchsq_therm, "m_thm_Gpsq",0,0.5);
+		rdr_therm->read_column(THmG0sq_therm, "m_thm_G0sq",0,0.5);
+		rdr_therm->read_column(THmHsm_therm, "m_thm_Hsmsq",0.5,0.5);
+		rdr_therm->read_column(THmH1_therm, "m_thm_H1sq",0.5,0.5);
+		rdr_therm->read_column(THmH2_therm, "m_thm_H2sq",0.5,0.5);
+		rdr_therm->read_column(THmH3_therm, "m_thm_H3sq",0.5,0.5);
+		rdr_therm->read_column(THmHc_therm, "m_thm_Hpsq",0.5,0.5);
+		//rdr_therm->read_column(THmHm_therm, "m_thm_Hmsq",0.5,2);
 
-		// // 130 is position in file, this is modeldependent and could change.
-		// if (posmHc == 1){
-		// 	rdr_therm->read_column(mHc_therm, "mS_5sq",0.5);
-		// 	rdr_therm->read_column(THmHc_therm, "mS_5sq_T",0.5);
-		// 	rdr_therm->read_column(mH2_therm, "mS_7sq",0.5);
-		// 	rdr_therm->read_column(THmH2_therm, "mS_7sq_T",0.5);
-		// 	rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
-		// 	rdr_therm->read_column(THmH3_therm, "mS_8sq_T",0.5);
-		// } else if (posmHc == 2){
-		// 	rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
-		// 	rdr_therm->read_column(THmH2_therm, "mS_5sq_T",0.5);
-		// 	rdr_therm->read_column(mHc_therm, "mS_6sq",0.5);
-		// 	rdr_therm->read_column(THmHc_therm, "mS_6sq_T",0.5);
-		// 	rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
-		// 	rdr_therm->read_column(THmH3_therm, "mS_8sq_T",0.5);
-		// } else if (posmHc == 3){
-		// 	rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
-		// 	rdr_therm->read_column(THmH2_therm, "mS_5sq_T",0.5);
-		// 	rdr_therm->read_column(mH3_therm, "mS_6sq",0.5);
-		// 	rdr_therm->read_column(THmH3_therm, "mS_6sq_T",0.5);
-		// 	rdr_therm->read_column(mHc_therm, "mS_8sq",0.5);
-		// 	rdr_therm->read_column(THmHc_therm, "mS_8sq_T",0.5);
-		// }
 
-		rdr_therm->read_column(R00_therm, "R00_T",0,1e-5);
-		rdr_therm->read_column(R01_therm, "R01_T",0,1e-5);
-		rdr_therm->read_column(R02_therm, "R02_T",0,1e-5);
+		rdr_therm->read_column(R00_therm, "R_pot_00",0,1e-10);
+		rdr_therm->read_column(R01_therm, "R_pot_01",0,1e-10);
+		rdr_therm->read_column(R02_therm, "R_pot_02",0,1e-10);
 
-		rdr_therm->read_column(R10_therm, "R10_T",0,1e-5);
-		rdr_therm->read_column(R11_therm, "R11_T",0,1e-5);
-		rdr_therm->read_column(R12_therm, "R12_T",0,1e-5);
+		rdr_therm->read_column(R10_therm, "R_pot_10",0,1e-10);
+		rdr_therm->read_column(R11_therm, "R_pot_11",0,1e-10);
+		rdr_therm->read_column(R12_therm, "R_pot_12",0,1e-10);
 
-		rdr_therm->read_column(R20_therm, "R20_T",0,1e-5);
-		rdr_therm->read_column(R21_therm, "R21_T",0,1e-5);
-		rdr_therm->read_column(R22_therm, "R22_T",0,1e-5);
+		rdr_therm->read_column(R20_therm, "R_pot_20",0,1e-10);
+		rdr_therm->read_column(R21_therm, "R_pot_21",0,1e-10);
+		rdr_therm->read_column(R22_therm, "R_pot_22",0,1e-10);
 
 		// Potential Masses
-		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,2);
 		rdr_therm->read_column(mGchsq_pot_therm, "m_pot_Gmsq",0,2);
+		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,2);
 		rdr_therm->read_column(mHsmsq_pot_therm, "m_pot_Hsmsq",0,2);
-		// rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5);
-		// rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5);
-		// rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5);
-		// rdr_therm->read_column(mHc_pot_therm, "m_pot_Hpsq",0.5);
-		// rdr_therm->read_column(mHm_pot_therm, "m_pot_Hmsq",0.5);
 		rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5,2);
 		rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5,2);
 		rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5,2);
 		rdr_therm->read_column(mHc_pot_therm, "m_pot_Hpsq",0.5,2);
 		rdr_therm->read_column(mHm_pot_therm, "m_pot_Hmsq",0.5,2);
-		// // because of messed up ordering:
-		// std::vector<double> tmpvector;
-		// if (std::abs(mH2_pot_therm[0] - mH3_pot_therm[0]) < 1)
-		// {
-		//     tmpvector = mHc_pot_therm;
-		// 	mHc_pot_therm = mH2_pot_therm;
-		// 	if (tmpvector[0] < mHm_pot_therm[0])
-		// 	{
-		// 	    mH2_pot_therm = tmpvector;
-		// 		mH3_pot_therm = mHm_pot_therm;
-		// 	}
-		// 	else
-		// 	{
-  //               mH3_pot_therm = tmpvector;
-  //               mH2_pot_therm = mHm_pot_therm;
-		// 	}
-
-		// }
-		// else if (std::abs(mH2_pot_therm[0] - mHc_pot_therm[0]) < 1)
-		// {
-		// 	if (mH3_pot_therm[0] < mHm_pot_therm[0])
-		// 	{
-		// 	    mH2_pot_therm = mH3_pot_therm;
-		// 		mH3_pot_therm = mHm_pot_therm;
-		// 	}
-		// 	else
-		// 	{
-  //               mH2_pot_therm = mHm_pot_therm;
-		// 	}
-
-		// }
-		// else if (std::abs(mH2_pot_therm[0] - mHm_pot_therm[0]) < 1)
-		// {
-		//     tmpvector = mHc_pot_therm;
-		// 	mHc_pot_therm = mHm_pot_therm;
-		// 	if (mH3_pot_therm[0] < tmpvector[0])
-		// 	{
-		// 	    mH2_pot_therm = mH3_pot_therm;
-		// 		mH3_pot_therm = tmpvector;
-		// 	}
-		// 	else
-		// 	{
-  //               mH2_pot_therm = tmpvector;
-		// 	}
-
-		// }
-		// else if (std::abs(mH3_pot_therm[0] - mHc_pot_therm[0]) < 1)
-		// {
-  //   		if (mHm_pot_therm[0] < mH2_pot_therm[0])
-  //   		{
-  //   			mH3_pot_therm = mH2_pot_therm;
-  //               mH2_pot_therm = mHm_pot_therm;
-  //   		}
-  //   		else
-  //   		{
-  //               mH3_pot_therm = mHm_pot_therm;
-  //   		}
-
-		// }
-		// else if (std::abs(mH3_pot_therm[0] - mHm_pot_therm[0]) < 1)
-		// {
-		//     tmpvector = mHc_pot_therm;
-		//     mHc_pot_therm = mHm_pot_therm;
-  //   		if (tmpvector[0] < mH2_pot_therm[0])
-  //   		{
-  //   			mH3_pot_therm = mH2_pot_therm;
-  //               mH2_pot_therm = tmpvector;
-  //   		}
-  //   		else
-  //   		{
-  //               mH3_pot_therm = tmpvector;
-  //   		}
-		// }
-		// // change state of the stream
-		// std::cout << std::fixed << std::setprecision(6) << std::setfill(' ');
-		// // output data
 
 		// size_t idx = M00_therm.size()-1;
 		// std::cout << std::setw(9) << M00_therm[idx] << ",\t" << M01_therm[idx] << ",\t" << M02_therm[idx] <<",\n";
@@ -652,8 +541,8 @@ namespace DT{
 		for (size_t j=0; j< header.size();j++) {output_file << header[j] << "\t";}
 		output_file << "\n";
 
-		for (double x_i = 25; x_i>20; x_i-=0.02){
-			double T_i = MDM / x_i;
+		for (double T_i = 25; T_i<3000; T_i++){
+			double x_i = MDM / T_i;
 			load_parameters(x_i);
 
 			// define; would be nicer with pointers
