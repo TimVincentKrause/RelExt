@@ -47,6 +47,7 @@ struct ModelInfo {
     // use thermal parameters
     const bool therm_contr;
     const bool scal_therm_prop;
+    const bool take_daisy_phys;
 
     void init();
     void calc_widths_and_scale();
@@ -68,7 +69,7 @@ struct ModelInfo {
     void assign_bath_masses(const VecString &prtcls = {});
     void assigndm();
 
-    ModelInfo(const bool calcwidths,const bool thermcontr, const bool scalthermprop);
+    ModelInfo(const bool calcwidths,const bool thermcontr, const bool scalthermprop, const bool takedaisyphys);
 };
 
 class AnnihilationAmps : public ModelInfo {
@@ -79,7 +80,7 @@ class AnnihilationAmps : public ModelInfo {
     vamp2 cur_channel;
 
    public:
-    AnnihilationAmps(const bool calcwidths, const bool thermcontr, const bool scalthermprop);
+    AnnihilationAmps(const bool calcwidths, const bool thermcontr, const bool scalthermprop, const bool takedaisyphys);
 
     void init();
     void print_channels();

@@ -54,8 +54,8 @@ namespace DT{
 				mHsm = pow(std::abs(mHsmsq_pot_therm[0]),0.5);
 				//mG0 = pow(std::abs(mG0sq_therm[0] + g2*g2 * v*v /4),0.5);
 				//mGch = pow(std::abs(mGchsq_therm[0] + g2*g2 * v*v /4),0.5);
-				mG0 = pow(std::abs(mG0sq_pot_therm[0]),0.5) + MZ;
-				mGch = pow(std::abs(mGchsq_pot_therm[0]),0.5) + MW;
+				mG0 = pow(std::abs(mG0sq_pot_therm[0]+MZ*MZ),0.5);
+				mGch = pow(std::abs(mGchsq_pot_therm[0]+MW*MW),0.5);
 
 				if (mHsmsq_pot_therm[0] < 0){
 					sign_mHsmsq = -1.;
@@ -131,8 +131,8 @@ namespace DT{
 				mHsm = pow(std::abs(mHsmsq_pot_therm[v_therm.size()-1]),0.5);
 				// mG0 = pow(std::abs(mG0sq_therm[v_therm.size()-1] + g2*g2 * v*v /4),0.5);
 				// mGch = pow(std::abs(mGchsq_therm[v_therm.size()-1] + g2*g2 * v*v /4),0.5);
-				mG0 = pow(std::abs(mG0sq_pot_therm[v_therm.size()-1]),0.5) + MZ;
-				mGch = pow(std::abs(mGchsq_pot_therm[v_therm.size()-1]),0.5) + MW;
+				mG0 = pow(std::abs(mG0sq_pot_therm[v_therm.size()-1] + MZ*MZ),0.5);
+				mGch = pow(std::abs(mGchsq_pot_therm[v_therm.size()-1]+ MW*MW),0.5);
 				if (mHsmsq_pot_therm[v_therm.size()-1] < 0){
 					sign_mHsmsq = -1.;
 				} else {sign_mHsmsq = 1.;}
@@ -218,8 +218,8 @@ namespace DT{
 						double mGchsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mGchsq_pot_therm[i-1],mGchsq_pot_therm[i]);
 
 						mHsm = pow(std::abs(mHsmsq),0.5);
-						mG0 = pow(std::abs(mG0sq),0.5) + MZ;
-						mGch = pow(std::abs(mGchsq),0.5) + MW;
+						mG0 = pow(std::abs(mG0sq + MZ*MZ),0.5);
+						mGch = pow(std::abs(mGchsq + MW*MW),0.5);
 						if (mHsmsq < 0){
 							sign_mHsmsq = -1.;
 						} else {sign_mHsmsq = 1.;}
@@ -477,28 +477,55 @@ namespace DT{
 		rdr_therm->read_column(THmHc_therm, "m_thm_Hpsq",0.5,0.5);
 		//rdr_therm->read_column(THmHm_therm, "m_thm_Hmsq",0.5,2);
 
+		std::cout << "daisy" << take_daisy_phys << std::endl;
+		if (take_daisy_phys)
+		{
+		    // daisy Rotation angle
+    		rdr_therm->read_column(R00_therm, "R_thm_00",0,1e-10);
+    		rdr_therm->read_column(R01_therm, "R_thm_01",0,1e-10);
+    		rdr_therm->read_column(R02_therm, "R_thm_02",0,1e-10);
 
-		rdr_therm->read_column(R00_therm, "R_pot_00",0,1e-10);
-		rdr_therm->read_column(R01_therm, "R_pot_01",0,1e-10);
-		rdr_therm->read_column(R02_therm, "R_pot_02",0,1e-10);
+    		rdr_therm->read_column(R10_therm, "R_thm_10",0,1e-10);
+    		rdr_therm->read_column(R11_therm, "R_thm_11",0,1e-10);
+    		rdr_therm->read_column(R12_therm, "R_thm_12",0,1e-10);
 
-		rdr_therm->read_column(R10_therm, "R_pot_10",0,1e-10);
-		rdr_therm->read_column(R11_therm, "R_pot_11",0,1e-10);
-		rdr_therm->read_column(R12_therm, "R_pot_12",0,1e-10);
+    		rdr_therm->read_column(R20_therm, "R_thm_20",0,1e-10);
+    		rdr_therm->read_column(R21_therm, "R_thm_21",0,1e-10);
+    		rdr_therm->read_column(R22_therm, "R_thm_22",0,1e-10);
+    		// daisy Masses as physical masses
+    		rdr_therm->read_column(mGchsq_pot_therm, "m_thm_Gmsq",0,2);
+    		rdr_therm->read_column(mG0sq_pot_therm, "m_thm_G0sq",0,2);
+    		rdr_therm->read_column(mHsmsq_pot_therm, "m_thm_Hsmsq",0,2);
+    		rdr_therm->read_column(mH1_pot_therm, "m_thm_H1sq",0.5,2);
+    		rdr_therm->read_column(mH2_pot_therm, "m_thm_H2sq",0.5,2);
+    		rdr_therm->read_column(mH3_pot_therm, "m_thm_H3sq",0.5,2);
+    		rdr_therm->read_column(mHc_pot_therm, "m_thm_Hpsq",0.5,2);
+    		rdr_therm->read_column(mHm_pot_therm, "m_thm_Hmsq",0.5,2);
+		}
+		else
+		{
+    		// potential Rotation angle
+    		rdr_therm->read_column(R00_therm, "R_pot_00",0,1e-10);
+    		rdr_therm->read_column(R01_therm, "R_pot_01",0,1e-10);
+    		rdr_therm->read_column(R02_therm, "R_pot_02",0,1e-10);
 
-		rdr_therm->read_column(R20_therm, "R_pot_20",0,1e-10);
-		rdr_therm->read_column(R21_therm, "R_pot_21",0,1e-10);
-		rdr_therm->read_column(R22_therm, "R_pot_22",0,1e-10);
+    		rdr_therm->read_column(R10_therm, "R_pot_10",0,1e-10);
+    		rdr_therm->read_column(R11_therm, "R_pot_11",0,1e-10);
+    		rdr_therm->read_column(R12_therm, "R_pot_12",0,1e-10);
 
-		// Potential Masses
-		rdr_therm->read_column(mGchsq_pot_therm, "m_pot_Gmsq",0,2);
-		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,2);
-		rdr_therm->read_column(mHsmsq_pot_therm, "m_pot_Hsmsq",0,2);
-		rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5,2);
-		rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5,2);
-		rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5,2);
-		rdr_therm->read_column(mHc_pot_therm, "m_pot_Hpsq",0.5,2);
-		rdr_therm->read_column(mHm_pot_therm, "m_pot_Hmsq",0.5,2);
+    		rdr_therm->read_column(R20_therm, "R_pot_20",0,1e-10);
+    		rdr_therm->read_column(R21_therm, "R_pot_21",0,1e-10);
+    		rdr_therm->read_column(R22_therm, "R_pot_22",0,1e-10);
+    		// Potential Masses
+    		rdr_therm->read_column(mGchsq_pot_therm, "m_pot_Gmsq",0,2);
+    		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,2);
+    		rdr_therm->read_column(mHsmsq_pot_therm, "m_pot_Hsmsq",0,2);
+    		rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5,2);
+    		rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5,2);
+    		rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5,2);
+    		rdr_therm->read_column(mHc_pot_therm, "m_pot_Hpsq",0.5,2);
+    		rdr_therm->read_column(mHm_pot_therm, "m_pot_Hmsq",0.5,2);
+		}
 
 		// size_t idx = M00_therm.size()-1;
 		// std::cout << std::setw(9) << M00_therm[idx] << ",\t" << M01_therm[idx] << ",\t" << M02_therm[idx] <<",\n";

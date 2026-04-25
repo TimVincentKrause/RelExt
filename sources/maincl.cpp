@@ -2,14 +2,15 @@
 
 namespace DT {
 Main::Main(char *argv[], const int modee, double beps, const double xtoday,
-           const bool fast, const bool calcwidths, const bool thermcontr,const bool scalthermprop, const bool savecontribs)
-    : AA(*new AnnihilationAmps(calc_widths,thermcontr,scalthermprop)),
+           const bool fast, const bool calcwidths, const bool thermcontr, const bool scalthermprop, const bool takedaisyphys, const bool savecontribs)
+    : AA(*new AnnihilationAmps(calc_widths,thermcontr,scalthermprop,takedaisyphys)),
       mode(modee),
       output_file(std::string(argv[2])),
       tvev_input_file(std::string(argv[1])),
       calc_widths(calcwidths),
       therm_contr(thermcontr),
       scal_therm_prop(scalthermprop),
+      take_daisy_phys(takedaisyphys),
       save_contribs(savecontribs),
       FO(AA, fast) {
     srand((unsigned)time(NULL));
@@ -437,6 +438,7 @@ void Main::SaveData(const VecString &save_pars) {
     if (outfile.tellp() == 0) {
         outfile << "Omega";
         outfile << "\t" <<"xf";
+        outfile << "\t" <<"Tcrit";
 
         for (auto it : save_pars) {
             AA.check_par_existence(it);
@@ -451,6 +453,7 @@ void Main::SaveData(const VecString &save_pars) {
     }
     outfile << omega;
     outfile << "\t" << xf;
+    outfile << "\t" << *AA.parmap["Tcrit"];
     for (auto it : save_pars) {
         outfile << "\t" << *AA.parmap[it];
     }

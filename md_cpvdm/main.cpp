@@ -25,6 +25,7 @@ static constexpr bool CALCWIDTHS = false;
 static constexpr bool SAVECONTRIBS = false;
 //static constexpr bool THERMALCONTRIBS = false;
 //static constexpr bool SCALARTHERMALPROB = false;
+//static constexpr bool TAKEDAISYPHYS = false;
 /*
  ***********************************************
  Until here */
@@ -67,6 +68,7 @@ int main (int argc, char **argv) {
 
     std::stringstream s3(argv[3]);
     std::stringstream s4(argv[4]);
+    std::stringstream s5(argv[5]);
 
     bool SCALARTHERMALPROB;
     if (!(s3 >> std::boolalpha >> SCALARTHERMALPROB)){
@@ -76,8 +78,12 @@ int main (int argc, char **argv) {
     if (!(s4 >> std::boolalpha >> THERMALCONTRIBS)){
         std::cout << "Error: parsing mistake in arv[4] (should be true/false)"<<std::endl;
     }
+    bool TAKEDAISYPHYS;
+    if (!(s5 >> std::boolalpha >> TAKEDAISYPHYS)){
+        std::cout << "Error: parsing mistake in arv[5] (should be true/false)"<<std::endl;
+    }
 
-    Main M(argv, MODE, BEPS, XTODAY, FAST, CALCWIDTHS,THERMALCONTRIBS,SCALARTHERMALPROB, SAVECONTRIBS);
+    Main M(argv, MODE, BEPS, XTODAY, FAST, CALCWIDTHS,THERMALCONTRIBS,SCALARTHERMALPROB,TAKEDAISYPHYS, SAVECONTRIBS);
     M.set_channels(CONSIDERCHANNELS, NEGLECTCHANNELS, NEGLECTPARTICLES);
 
     //clock_t begin_time = clock();
