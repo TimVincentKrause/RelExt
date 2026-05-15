@@ -56,5 +56,6 @@ namespace DT{
 		parmap["E"] = &E;
 		parmap["Pi"] = &Pi;
 		parmap["Tcrit"] = &Tcrit;
+		parmap["v"] = &v;
 	}
 }

@@ -473,10 +473,14 @@ void Main::SaveData(const VecString &save_pars) {
 
     outfile.seekp(0, std::ios::end);
 
+    AA.load_parameters();
     if (outfile.tellp() == 0) {
         outfile << "Omega";
         outfile << "\t" <<"xf";
         outfile << "\t" <<"Tcrit";
+        outfile << "\t" << "vcrit";
+        outfile << "\t" << "vf";
+        outfile << "\t" << "mH1f";
 
         for (auto it : save_pars) {
             AA.check_par_existence(it);
@@ -491,7 +495,15 @@ void Main::SaveData(const VecString &save_pars) {
     }
     outfile << omega;
     outfile << "\t" << xf;
-    outfile << "\t" << *AA.parmap["Tcrit"];
+    double Tcrit = *AA.parmap["Tcrit"];
+    double MDM = *AA.parmap["mH1"];
+    AA.load_parameters(MDM/Tcrit);
+    outfile << "\t" << Tcrit;
+    outfile << "\t" << *AA.parmap["v"];
+    AA.load_parameters(xf);
+    outfile << "\t" << *AA.parmap["v"];
+    outfile << "\t" << *AA.parmap["mH1"];
+    AA.load_parameters();
     for (auto it : save_pars) {
         outfile << "\t" << *AA.parmap[it];
     }
