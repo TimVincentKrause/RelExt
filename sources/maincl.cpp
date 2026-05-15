@@ -185,7 +185,7 @@ void Main::LoadParameters(const size_t i) {
                 break;
         }
     } while (!AA.load_everything());
-    AA.save_parameters();
+    //AA.save_parameters();
 }
 
 double Main::GetParameter(const std::string &par) {
