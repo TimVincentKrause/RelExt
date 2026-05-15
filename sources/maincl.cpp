@@ -332,6 +332,44 @@ void Main::CalcTac(double xmin, double xmax, const size_t points,
     beps_eps = beps_save;
 }
 
+
+void Main::CalcYield(double xmin, double xmax, const size_t points,
+                   const std::string outfile) {
+    std::unique_ptr<DataReader> TAR = std::make_unique<DataReader>(outfile, 2);
+    ASSERT((xmin > 0) && (xmax > 0),
+           "Boundaries in " << __func__ << "can not have negative values.")
+    if (xmin > xmax) {
+        double temp = xmax;
+        xmax = xmin;
+        xmin = temp;
+    }
+    double logxmax = std::log10(xmax);
+    double logxmin = std::log10(xmin);
+
+    double step = (logxmax - logxmin) / ((double)points);
+    if(xmin == xmax) step = 1.;
+
+    double xf = FO.calc_only_xf(bath_procs);
+    std::cout << "xf = " << xf <<std::endl;
+
+    double res,x10;
+    bool below_xf = true;
+    for (double i = logxmin; i <= logxmax; i += step) {
+        x10 = std::pow(10,i);
+        if ((x10 >= xf) and below_xf) {
+            std::cout << "x = xf = " << xf << std::endl;
+            res = FO.calc_yield(xf);
+            TAR->save_data({"x", "tac","xf"}, {xf, res,xf});
+            below_xf = false;
+        }
+        std::cout << "x = " << x10 << std::endl;
+        res = FO.calc_yield(x10);
+        TAR->save_data({"x", "yield","xf"}, {x10, res,xf});
+    }
+}
+
+
+
 void Main::InitMonteCarlo(size_t Nbins, const size_t Nbest,
                           const double prandom, const double target) {
     ASSERT(mode == 1 || mode == 2, "Monte Carlo works only in mode 1 and 2")

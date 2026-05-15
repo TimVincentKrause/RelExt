@@ -10,12 +10,13 @@ namespace DT{
 		using namespace PAR;
 		double xinv = 1/x;
 
-		if ( MDM * xinv > Tcrit)
-		    do_goldstone_channels = true;
-		else
-		    do_goldstone_channels = false;
-
-		if (therm_contr == false){xinv = 0;}
+		if (therm_contr == false){xinv = 0; do_goldstone_channels = false;}
+		else {
+    		if ( MDM * xinv > Tcrit)
+    		    do_goldstone_channels = true;
+    		else
+    		    do_goldstone_channels = false;
+		}
 
 		if (v_therm.size() == 0){
 			std::cerr << "Error empty vev string!\n";
@@ -54,18 +55,18 @@ namespace DT{
 				mHsm = pow(std::abs(mHsmsq_pot_therm[0]),0.5);
 				//mG0 = pow(std::abs(mG0sq_therm[0] + g2*g2 * v*v /4),0.5);
 				//mGch = pow(std::abs(mGchsq_therm[0] + g2*g2 * v*v /4),0.5);
-				mG0 = pow(std::abs(mG0sq_pot_therm[0]+MZ*MZ),0.5);
-				mGch = pow(std::abs(mGchsq_pot_therm[0]+MW*MW),0.5);
-
-				if (mHsmsq_pot_therm[0] < 0){
-					sign_mHsmsq = -1.;
-				} else {sign_mHsmsq = 1.;}
-				if (mG0sq_pot_therm[0] < 0){
-					sign_mG0sq = -1.;
-				} else {sign_mG0sq = 1.;}
-				if (mGchsq_pot_therm[0] < 0){
-					sign_mGchsq = -1.;
-				} else {sign_mGchsq = 1.;}
+				mG0 = pow(std::abs(mG0sq_pot_therm[0]),0.5); //+MZ*MZ
+				mGch = pow(std::abs(mGchsq_pot_therm[0]),0.5); //+MW*MW
+				sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
+				// if (mHsmsq_pot_therm[0] < 0){
+				// 	sign_mHsmsq = -1.;
+				// } else {sign_mHsmsq = 1.;}
+				// if (mG0sq_pot_therm[0] < 0){
+				// 	sign_mG0sq = -1.;
+				// } else {sign_mG0sq = 1.;}
+				// if (mGchsq_pot_therm[0] < 0){
+				// 	sign_mGchsq = -1.;
+				// } else {sign_mGchsq = 1.;}
 
 
 				THMZ =   MZ;//THMZ_therm[0];
@@ -131,17 +132,18 @@ namespace DT{
 				mHsm = pow(std::abs(mHsmsq_pot_therm[v_therm.size()-1]),0.5);
 				// mG0 = pow(std::abs(mG0sq_therm[v_therm.size()-1] + g2*g2 * v*v /4),0.5);
 				// mGch = pow(std::abs(mGchsq_therm[v_therm.size()-1] + g2*g2 * v*v /4),0.5);
-				mG0 = pow(std::abs(mG0sq_pot_therm[v_therm.size()-1] + MZ*MZ),0.5);
-				mGch = pow(std::abs(mGchsq_pot_therm[v_therm.size()-1]+ MW*MW),0.5);
-				if (mHsmsq_pot_therm[v_therm.size()-1] < 0){
-					sign_mHsmsq = -1.;
-				} else {sign_mHsmsq = 1.;}
-				if (mG0sq_pot_therm[v_therm.size()-1] < 0){
-					sign_mG0sq = -1.;
-				} else {sign_mG0sq = 1.;}
-				if (mGchsq_pot_therm[v_therm.size()-1] < 0){
-					sign_mGchsq = -1.;
-				} else {sign_mGchsq = 1.;}
+				mG0 = pow(std::abs(mG0sq_pot_therm[v_therm.size()-1]),0.5); // + MZ*MZ
+				mGch = pow(std::abs(mGchsq_pot_therm[v_therm.size()-1]),0.5); //+ MW*MW
+				// if (mHsmsq_pot_therm[v_therm.size()-1] < 0){
+				// 	sign_mHsmsq = -1.;
+				// } else {sign_mHsmsq = 1.;}
+				// if (mG0sq_pot_therm[v_therm.size()-1] < 0){
+				// 	sign_mG0sq = -1.;
+				// } else {sign_mG0sq = 1.;}
+				// if (mGchsq_pot_therm[v_therm.size()-1] < 0){
+				// 	sign_mGchsq = -1.;
+				// } else {sign_mGchsq = 1.;}
+				sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
 
 				THMZ =   MZ;//THMZ_therm[v_therm.size()-1];
 				THMW =   MW;//THMW_therm[v_therm.size()-1];
@@ -220,15 +222,16 @@ namespace DT{
 						mHsm = pow(std::abs(mHsmsq),0.5);
 						mG0 = pow(std::abs(mG0sq + MZ*MZ),0.5);
 						mGch = pow(std::abs(mGchsq + MW*MW),0.5);
-						if (mHsmsq < 0){
-							sign_mHsmsq = -1.;
-						} else {sign_mHsmsq = 1.;}
-						if (mG0sq < 0){
-							sign_mG0sq = -1.;
-						} else {sign_mG0sq = 1.;}
-						if (mGchsq < 0){
-							sign_mGchsq = -1.;
-						} else {sign_mGchsq = 1.;}
+						sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
+						// if (mHsmsq < 0){
+						// 	sign_mHsmsq = -1.;
+						// } else {sign_mHsmsq = 1.;}
+						// if (mG0sq < 0){
+						// 	sign_mG0sq = -1.;
+						// } else {sign_mG0sq = 1.;}
+						// if (mGchsq < 0){
+						// 	sign_mGchsq = -1.;
+						// } else {sign_mGchsq = 1.;}
 
 						THMZ =   MZ;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
 						THMW =   MW;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
@@ -271,8 +274,8 @@ namespace DT{
 			}
 
 			// because of differnet Gauge
-			THmG0 =  std::sqrt(THmG0 + MZ*MZ);
-			THmGch = std::sqrt(THmGch + MW*MW);
+			//THmG0 =  std::sqrt(THmG0 + MZ*MZ);
+			//THmGch = std::sqrt(THmGch + MW*MW);
 
 			//to get the same Matrix as Scanner S we do some reordering
 			// if R11 <0: multyply row 1 with (-1)  (field redefinition h1 -> -h1)
@@ -493,9 +496,9 @@ namespace DT{
     		rdr_therm->read_column(R21_therm, "R_thm_21",0,1e-10);
     		rdr_therm->read_column(R22_therm, "R_thm_22",0,1e-10);
     		// daisy Masses as physical masses
-    		rdr_therm->read_column(mGchsq_pot_therm, "m_thm_Gmsq",0,2);
-    		rdr_therm->read_column(mG0sq_pot_therm, "m_thm_G0sq",0,2);
-    		rdr_therm->read_column(mHsmsq_pot_therm, "m_thm_Hsmsq",0,2);
+    		rdr_therm->read_column(mGchsq_pot_therm, "m_thm_Gmsq",0,20);
+    		rdr_therm->read_column(mG0sq_pot_therm, "m_thm_G0sq",0,20);
+    		rdr_therm->read_column(mHsmsq_pot_therm, "m_thm_Hsmsq",0,20);
     		rdr_therm->read_column(mH1_pot_therm, "m_thm_H1sq",0.5,2);
     		rdr_therm->read_column(mH2_pot_therm, "m_thm_H2sq",0.5,2);
     		rdr_therm->read_column(mH3_pot_therm, "m_thm_H3sq",0.5,2);
@@ -556,7 +559,7 @@ namespace DT{
 		// get all parameters from the parametermap
 		//for (auto &it : parmap){std::cout << it.first << " = " << *it.second << "\n";};
 
-		std::vector<std::string> header = {"Mnue", "Mnum", "Mnut", "Me","MM", "MTA","MU","MC","MT","MD","MS","MB","MZ","THMZ","MW","THMW","mHsm","sign_mHsmsq","THmHsm","mG0","sign_mG0sq","THmG0","mGch","sign_mGchsq","THmGch","mH1","THmH1","mH2","THmH2","mH3","THmH3","mHc","THmHc","mHm","RR1x1", "RR1x2","RR1x3","RR2x1","RR2x2","RR2x3","RR3x1","RR3x2","RR3x3","alph1","alph2","alph3","yu1","yu2","yu3","yd1","yd2","yd3","yl1","yl2","yl3"};
+		std::vector<std::string> header = {"m11sq","Mnue", "Mnum", "Mnut", "Me","MM", "MTA","MU","MC","MT","MD","MS","MB","MZ","THMZ","MW","THMW","mHsm","sign_mHsmsq","THmHsm","mG0","sign_mG0sq","THmG0","mGch","sign_mGchsq","THmGch","mH1","THmH1","mH2","THmH2","mH3","THmH3","mHc","THmHc","mHm","RR1x1", "RR1x2","RR1x3","RR2x1","RR2x2","RR2x3","RR3x1","RR3x2","RR3x3","alph1","alph2","alph3","yu1","yu2","yu3","yd1","yd2","yd3","yl1","yl2","yl3"};
 
 		std::vector<std::string> header_T = {"Temp","x_i","v"};
 
@@ -568,13 +571,13 @@ namespace DT{
 		for (size_t j=0; j< header.size();j++) {output_file << header[j] << "\t";}
 		output_file << "\n";
 
-		for (double T_i = 25; T_i<3000; T_i++){
+		for (double T_i = 0; T_i<400; T_i++){
 			double x_i = MDM / T_i;
 			load_parameters(x_i);
 
 			// define; would be nicer with pointers
 			std::vector<double> values_T = {T_i,x_i,v};
-			std::vector<double> values = {Mnue, Mnum, Mnut, Me,MM, MTA,MU,MC,MT,MD,MS,MB,MZ,THMZ,MW,THMW,mHsm,sign_mHsmsq,THmHsm,mG0,sign_mG0sq,THmG0,mGch,sign_mGchsq,THmGch,mH1,THmH1,mH2,THmH2,mH3,THmH3,mHc,THmHc,mHm,RR1x1, RR1x2,RR1x3,RR2x1,RR2x2,RR2x3,RR3x1,RR3x2,RR3x3,alph1,alph2,alph3,yu1,yu2,yu3,yd1,yd2,yd3,yl1,yl2,yl3};
+			std::vector<double> values = {m11sq,Mnue, Mnum, Mnut, Me,MM, MTA,MU,MC,MT,MD,MS,MB,MZ,THMZ,MW,THMW,mHsm,sign_mHsmsq,THmHsm,mG0,sign_mG0sq,THmG0,mGch,sign_mGchsq,THmGch,mH1,THmH1,mH2,THmH2,mH3,THmH3,mHc,THmHc,mHm,RR1x1, RR1x2,RR1x3,RR2x1,RR2x2,RR2x3,RR3x1,RR3x2,RR3x3,alph1,alph2,alph3,yu1,yu2,yu3,yd1,yd2,yd3,yl1,yl2,yl3};
 
 			// output every row
 			output_file << std::setprecision(16);

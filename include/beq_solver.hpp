@@ -31,6 +31,9 @@ class FO1DM {
     double omega(const double &yield);
     VecDoub calc_contributions(const VecString &channels);
     double operator()(const VecString &channels);
+    double calc_only_xf(const VecString &channels);
+    double calc_yield(const double &x);
+
     ~FO1DM() {};
 };
 }  // namespace DT

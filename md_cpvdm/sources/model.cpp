@@ -52,11 +52,11 @@ namespace PAR{
 	double WT = 2.;
 	double WZ = 2.4952;
 	double WW = 2.085;
-	double WHsm = 1.;
+	double WHsm = 0.;
 	double WH1 = 0.;
-	double WH2 = 1.;
-	double WH3 = 1.;
-	double WHc = 1.;
+	double WH2 = 0.;
+	double WH3 = 0.;
+	double WHc = 0.;
 	double E = 2.71828;
 	double Pi = 3.14159;
 	double EL = 0.312233;

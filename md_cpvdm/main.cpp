@@ -15,12 +15,14 @@ static constexpr int MODE = 3;
 static const VecString SAVEPARS = {"mH1",   "mH2",   "mHc",   "alph1",
                                    "alph2", "alph3", "m22sq", "mssq",
                                    "L2",    "L6",    "L8"};
-static const VecString CONSIDERCHANNELS = {};
+static const VecString CONSIDERCHANNELS = {"H1,H1,h,h","H1,H1,E,e","H1,H1,w,W","H1,H1,GCH,W","H1,H1,Gch,w","H1,H1,G0,G0","H1,H1,h,Z","H1,H1,Z,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H1,D,d","H1,H1,T,t","H1,H1,B,b","H1,H1,C,c","H1,H1,S,s","H1,H1,U,u","H1,H1,M,m","H1,H1,GCH,Gch","H1,H1,TA,ta"};
+//static const VecString CONSIDERCHANNELS = {"H1,H1,h,h","H1,H1,w,W","H1,H1,GCH,W","H1,H1,Gch,w","H1,H1,G0,G0","H1,H1,h,Z","H1,H1,Z,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H1,T,t","H1,H1,B,b","H1,H1,C,c","H1,H1,S,s","H1,H1,M,m","H1,H1,GCH,Gch","H1,H1,TA,ta"};
+//static const VecString CONSIDERCHANNELS = {"H1,H3,U,u","H1,H3,VE,ve","H1,Hc,u,S","H1,H3,GCH,Gch","H1,H2,Z,Z","H1,H3,B,b","H1,H2,S,s","H1,H2,D,d","H1,H2,h,Z","H1,H2,TA,ta","H1,Hc,Z,W","H1,H2,M,m","H1,H2,VT,vt","H1,H3,w,W","H1,H3,E,e","H1,H3,G0,Z","H1,H3,Z,Z","H1,H3,TA,ta","H1,H1,h,h","H1,H2,U,u","H1,H1,E,e","H1,Hc,c,B","H1,H1,w,W","H1,H1,GCH,W","H1,H2,w,W","H1,H1,Gch,w","H1,H2,VM,vm","H1,H1,G0,G0","H1,H2,B,b","H1,H3,G0,G0","H1,H2,h,G0","H1,H2,T,t","H1,H3,M,m","H1,H1,h,Z","H1,H3,Gch,w","H1,H2,GCH,Gch","H1,Hc,t,S","H1,H3,h,h","H1,H3,VM,vm","H1,H1,Z,Z","H1,Hc,Gch,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H3,S,s","H1,H2,C,c","H1,Hc,h,Gch","H1,H1,D,d","H1,H3,VT,vt","H1,H1,T,t","H1,H1,B,b","H1,H2,E,e","H1,H1,C,c","H1,H2,G0,G0","H1,Hc,vt,TA","H1,H2,h,h","H1,H3,GCH,W","H1,H2,G0,Z","H1,H1,S,s","H1,H2,GCH,W","H1,H2,Gch,w","H1,H3,C,c","H1,H1,U,u","H1,H3,T,t","H1,Hc,G0,Gch","H1,Hc,h,W","H1,H3,h,Z","H1,Hc,Gch,A","H1,Hc,A,W","H1,Hc,vm,M","H1,H2,VE,ve","H1,Hc,u,D","H1,Hc,u,B","H1,Hc,c,D","H1,Hc,t,D","H1,Hc,t,B","H1,H1,M,m","H1,Hc,G0,W","H1,Hc,ve,E","H1,H1,GCH,Gch","H1,H3,D,d","H1,Hc,c,S","H1,H3,h,G0","H1,H1,TA,ta"};
 VecString NEGLECTCHANNELS = {};
-static const VecString NEGLECTPARTICLES = {"u", "d", "e", "mu"};
+static const VecString NEGLECTPARTICLES ={}; //{"u", "d", "e", "mu"};//{"u", "d", "e", "mu"};
 static constexpr double BEPS = 1e-6;
 static constexpr double XTODAY = 1e6;
-static constexpr bool FAST = true;
+static constexpr bool FAST = false;
 static constexpr bool CALCWIDTHS = false;
 static constexpr bool SAVECONTRIBS = false;
 //static constexpr bool THERMALCONTRIBS = false;
@@ -90,12 +92,14 @@ int main (int argc, char **argv) {
 
     //load the parameter point
     M.LoadParameters(1);
+    //M.CalcYield(1e-1,500,200,"/run/media/kijetesantakalu/leftVolume/tkrause/look_atThmFiles/out/yield_out.tsv");
     //std::string thermcontrib = argv[4];
     //M.CalcXsec(8400,10000,200,"../dataOutput/xsec_all_23_" + thermcontrib + ".tsv",{},23.78);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
     //M.CalcTac(22,24,200, "../dataOutput/tac_all_23_"+ thermcontrib +".tsv");
     //CalcAllXsec(M,0,200,8400,10000,200,thermcontrib);
     //M.CalcTac(2,200,200,outpath + "tac/calcTac_wgoldstones_test_thermalmasses_H1H1wW.tsv",{"H1,H1,w,W"}); //"H1,H1,Z,Z"
 
+    //M.PrintChannels();
     M.CalcRelic();
 
     M.SaveData(SAVEPARS);

@@ -90,6 +90,10 @@ class Main {
     void CalcTac(double xmin, double xmax, const size_t points,
                  const std::string outfile, VecString channels = {});
 
+    // args are: min x, max x, number of points, channel names
+    void CalcYield(double xmin, double xmax, const size_t points,
+                 const std::string outfile);
+
     // args are: mechanism type
     double CalcRelic(const int mechanism = 0);
 
