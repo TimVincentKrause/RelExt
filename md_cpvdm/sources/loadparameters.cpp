@@ -12,11 +12,14 @@ namespace DT{
 
 		if (therm_contr == false){xinv = 0; do_goldstone_channels = false;}
 		else {
-    		if ( MDM * xinv > Tcrit)
+    		if ( (MDM * xinv > Tcrit) or (v < 1 ))
     		    do_goldstone_channels = true;
     		else
     		    do_goldstone_channels = false;
 		}
+		// std::cout << "dg? = " << do_goldstone_channels << std::endl;
+		// std::cout << "v = " << v << std::endl;
+		// std::cout << "MDM = " << MDM << std::endl;
 
 		if (v_therm.size() == 0){
 			std::cerr << "Error empty vev string!\n";
@@ -68,29 +71,38 @@ namespace DT{
 				// 	sign_mGchsq = -1.;
 				// } else {sign_mGchsq = 1.;}
 
+                THmHsm = mHsm;
+				THmG0 =  mG0;
+				THmGch = mGch;
+				THmH1 =  mH1;
+				THmH2 =  mH2;
+				THmH3 =  mH3;
+				THmHc =  mHc;
 
-				THMZ =   MZ;//THMZ_therm[0];
-				THMW =   MW;//THMW_therm[0];
 
 				if (scal_therm_prop == true)
 				{
-    				THmHsm = THmHsm_therm[0];
-    				THmG0 =  THmG0sq_therm[0];
-    				THmGch = THmGchsq_therm[0];
-    				THmH1 =  THmH1_therm[0];
-    				THmH2 =  THmH2_therm[0];
-    				THmH3 =  THmH3_therm[0];
-    				THmHc =  THmHc_therm[0];
+    				// THmHsm = THmHsm_therm[0];
+    				// THmG0 =  THmG0sq_therm[0];
+    				// THmGch = THmGchsq_therm[0];
+    				// THmH1 =  THmH1_therm[0];
+    				// THmH2 =  THmH2_therm[0];
+    				// THmH3 =  THmH3_therm[0];
+    				// THmHc =  THmHc_therm[0];
+        		    THMZ =   THMZ_therm[0];
+                    THMW =   THMW_therm[0];
 				}
 				else
 				{
-				    THmHsm = mHsm;
-    				THmG0 =  mG0;
-    				THmGch = mGch;
-    				THmH1 =  mH1;
-    				THmH2 =  mH2;
-    				THmH3 =  mH3;
-    				THmHc =  mHc;
+				    // THmHsm = mHsm;
+    				// THmG0 =  mG0;
+    				// THmGch = mGch;
+    				// THmH1 =  mH1;
+    				// THmH2 =  mH2;
+    				// THmH3 =  mH3;
+    				// THmHc =  mHc;
+         			THMZ =   MZ;//THMZ_therm[0];
+                    THMW =   MW;//THMW_therm[0];
 				}
 
 				// Rotation Matrix
@@ -144,29 +156,38 @@ namespace DT{
 				// 	sign_mGchsq = -1.;
 				// } else {sign_mGchsq = 1.;}
 				sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
+                THmHsm = mHsm;
+				THmG0 =  mG0;
+				THmGch = mGch;
+				THmH1 =  mH1;
+				THmH2 =  mH2;
+				THmH3 =  mH3;
+				THmHc =  mHc;
 
-				THMZ =   MZ;//THMZ_therm[v_therm.size()-1];
-				THMW =   MW;//THMW_therm[v_therm.size()-1];
 
 				if (scal_therm_prop == true)
 				{
-    				THmHsm = THmHsm_therm[v_therm.size()-1];
-    				THmG0 =  THmG0sq_therm[v_therm.size()-1];
-    				THmGch = THmGchsq_therm[v_therm.size()-1];
-    				THmH1 =  THmH1_therm[v_therm.size()-1];
-    				THmH2 =  THmH2_therm[v_therm.size()-1];
-    				THmH3 =  THmH3_therm[v_therm.size()-1];
-    				THmHc =  THmHc_therm[v_therm.size()-1];
+    				// THmHsm = THmHsm_therm[v_therm.size()-1];
+    				// THmG0 =  THmG0sq_therm[v_therm.size()-1];
+    				// THmGch = THmGchsq_therm[v_therm.size()-1];
+    				// THmH1 =  THmH1_therm[v_therm.size()-1];
+    				// THmH2 =  THmH2_therm[v_therm.size()-1];
+    				// THmH3 =  THmH3_therm[v_therm.size()-1];
+    				// THmHc =  THmHc_therm[v_therm.size()-1];
+                    THMZ =   THMZ_therm[v_therm.size()-1];
+                    THMW =   THMW_therm[v_therm.size()-1];
 				}
 				else
 				{
-				    THmHsm = mHsm;
-    				THmG0 =  mG0;
-    				THmGch = mGch;
-    				THmH1 =  mH1;
-    				THmH2 =  mH2;
-    				THmH3 =  mH3;
-    				THmHc =  mHc;
+				    // THmHsm = mHsm;
+    				// THmG0 =  mG0;
+    				// THmGch = mGch;
+    				// THmH1 =  mH1;
+    				// THmH2 =  mH2;
+    				// THmH3 =  mH3;
+    				// THmHc =  mHc;
+    				THMZ =   MZ;//THMZ_therm[v_therm.size()-1];
+                    THMW =   MW;//THMW_therm[v_therm.size()-1];
 				}
 
 
@@ -220,8 +241,8 @@ namespace DT{
 						double mGchsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mGchsq_pot_therm[i-1],mGchsq_pot_therm[i]);
 
 						mHsm = pow(std::abs(mHsmsq),0.5);
-						mG0 = pow(std::abs(mG0sq + MZ*MZ),0.5);
-						mGch = pow(std::abs(mGchsq + MW*MW),0.5);
+						mG0 = pow(std::abs(mG0sq),0.5);
+						mGch = pow(std::abs(mGchsq),0.5);
 						sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
 						// if (mHsmsq < 0){
 						// 	sign_mHsmsq = -1.;
@@ -232,29 +253,37 @@ namespace DT{
 						// if (mGchsq < 0){
 						// 	sign_mGchsq = -1.;
 						// } else {sign_mGchsq = 1.;}
-
-						THMZ =   MZ;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
-						THMW =   MW;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
+	                    THmHsm = mHsm;
+        				THmG0 =  mG0;
+        				THmGch = mGch;
+        				THmH1 =  mH1;
+        				THmH2 =  mH2;
+        				THmH3 =  mH3;
+        				THmHc =  mHc;
 
 						if (scal_therm_prop == true)
 						{
-    						THmHsm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHsm_therm[i-1], THmHsm_therm[i]);
-    						THmG0 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmG0sq_therm[i-1], THmG0sq_therm[i]);
-    						THmGch = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmGchsq_therm[i-1], THmGchsq_therm[i]);
-    						THmH1 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH1_therm[i-1], THmH1_therm[i]);
-    						THmH2 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH2_therm[i-1], THmH2_therm[i]);
-    						THmH3 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH3_therm[i-1], THmH3_therm[i]);
-    						THmHc =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHc_therm[i-1], THmHc_therm[i]);
+    						// THmHsm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHsm_therm[i-1], THmHsm_therm[i]);
+    						// THmG0 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmG0sq_therm[i-1], THmG0sq_therm[i]);
+    						// THmGch = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmGchsq_therm[i-1], THmGchsq_therm[i]);
+    						// THmH1 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH1_therm[i-1], THmH1_therm[i]);
+    						// THmH2 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH2_therm[i-1], THmH2_therm[i]);
+    						// THmH3 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH3_therm[i-1], THmH3_therm[i]);
+    						// THmHc =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHc_therm[i-1], THmHc_therm[i]);
+                            THMZ =   linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
+                            THMW =   linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
 						}
 						else
 						{
-						    THmHsm = mHsm;
-            				THmG0 =  mG0;
-            				THmGch = mGch;
-            				THmH1 =  mH1;
-            				THmH2 =  mH2;
-            				THmH3 =  mH3;
-            				THmHc =  mHc;
+						    //THmHsm = mHsm;
+            				//THmG0 =  mG0;
+            				//THmGch = mGch;
+            				//THmH1 =  mH1;
+            				//THmH2 =  mH2;
+            				//THmH3 =  mH3;
+            				//THmHc =  mHc;
+              		        THMZ =   MZ;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
+                            THMW =   MW;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
 						}
 
 
@@ -292,6 +321,19 @@ namespace DT{
 			if (DetR <0){
 				RR2x1 = -RR2x1; RR2x2 = -RR2x2; RR2x3 = -RR2x3;
 			}
+
+
+			if (std::abs(RR1x1) < 1e-10) { RR1x1 = 0;}
+			if (std::abs(RR1x2) < 1e-10) { RR1x2 = 0;}
+			if (std::abs(RR1x3) < 1e-10) { RR1x3 = 0;}
+
+			if (std::abs(RR2x1) < 1e-10) { RR2x1 = 0;}
+			if (std::abs(RR2x2) < 1e-10) { RR2x2 = 0;}
+			if (std::abs(RR2x3) < 1e-10) { RR2x3 = 0;}
+
+			if (std::abs(RR3x1) < 1e-10) { RR3x1 = 0;}
+			if (std::abs(RR3x2) < 1e-10) { RR3x2 = 0;}
+			if (std::abs(RR3x3) < 1e-10) { RR3x3 = 0;}
 
 			// Parametrisation of the rotation matrix in terms of angles
 			double c2 = std::sqrt(1-RR1x3*RR1x3);
@@ -407,7 +449,7 @@ namespace DT{
 			// 	MS = 0.;
 			// }
 
-
+			std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels <<  std::endl; //4.74586805555556
 			load_tokens();
 		}
 
@@ -571,7 +613,7 @@ namespace DT{
 		for (size_t j=0; j< header.size();j++) {output_file << header[j] << "\t";}
 		output_file << "\n";
 
-		for (double T_i = 0; T_i<400; T_i++){
+		for (double T_i = 165-2; T_i<165+2; T_i+=0.1){
 			double x_i = MDM / T_i;
 			load_parameters(x_i);
 

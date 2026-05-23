@@ -15,9 +15,10 @@ static constexpr int MODE = 3;
 static const VecString SAVEPARS = {"mH1",   "mH2",   "mHc",   "alph1",
                                    "alph2", "alph3", "m22sq", "mssq",
                                    "L2",    "L6",    "L8"};
-static const VecString CONSIDERCHANNELS = {"H1,H1,h,h","H1,H1,E,e","H1,H1,w,W","H1,H1,GCH,W","H1,H1,Gch,w","H1,H1,G0,G0","H1,H1,h,Z","H1,H1,Z,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H1,D,d","H1,H1,T,t","H1,H1,B,b","H1,H1,C,c","H1,H1,S,s","H1,H1,U,u","H1,H1,M,m","H1,H1,GCH,Gch","H1,H1,TA,ta"};
+//static const VecString CONSIDERCHANNELS = {"H1,H1,h,h","H1,H1,E,e","H1,H1,w,W","H1,H1,GCH,W","H1,H1,Gch,w","H1,H1,G0,G0","H1,H1,h,Z","H1,H1,Z,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H1,D,d","H1,H1,T,t","H1,H1,B,b","H1,H1,C,c","H1,H1,S,s","H1,H1,U,u","H1,H1,M,m","H1,H1,GCH,Gch","H1,H1,TA,ta"};
 //static const VecString CONSIDERCHANNELS = {"H1,H1,h,h","H1,H1,w,W","H1,H1,GCH,W","H1,H1,Gch,w","H1,H1,G0,G0","H1,H1,h,Z","H1,H1,Z,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H1,T,t","H1,H1,B,b","H1,H1,C,c","H1,H1,S,s","H1,H1,M,m","H1,H1,GCH,Gch","H1,H1,TA,ta"};
 //static const VecString CONSIDERCHANNELS = {"H1,H3,U,u","H1,H3,VE,ve","H1,Hc,u,S","H1,H3,GCH,Gch","H1,H2,Z,Z","H1,H3,B,b","H1,H2,S,s","H1,H2,D,d","H1,H2,h,Z","H1,H2,TA,ta","H1,Hc,Z,W","H1,H2,M,m","H1,H2,VT,vt","H1,H3,w,W","H1,H3,E,e","H1,H3,G0,Z","H1,H3,Z,Z","H1,H3,TA,ta","H1,H1,h,h","H1,H2,U,u","H1,H1,E,e","H1,Hc,c,B","H1,H1,w,W","H1,H1,GCH,W","H1,H2,w,W","H1,H1,Gch,w","H1,H2,VM,vm","H1,H1,G0,G0","H1,H2,B,b","H1,H3,G0,G0","H1,H2,h,G0","H1,H2,T,t","H1,H3,M,m","H1,H1,h,Z","H1,H3,Gch,w","H1,H2,GCH,Gch","H1,Hc,t,S","H1,H3,h,h","H1,H3,VM,vm","H1,H1,Z,Z","H1,Hc,Gch,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H3,S,s","H1,H2,C,c","H1,Hc,h,Gch","H1,H1,D,d","H1,H3,VT,vt","H1,H1,T,t","H1,H1,B,b","H1,H2,E,e","H1,H1,C,c","H1,H2,G0,G0","H1,Hc,vt,TA","H1,H2,h,h","H1,H3,GCH,W","H1,H2,G0,Z","H1,H1,S,s","H1,H2,GCH,W","H1,H2,Gch,w","H1,H3,C,c","H1,H1,U,u","H1,H3,T,t","H1,Hc,G0,Gch","H1,Hc,h,W","H1,H3,h,Z","H1,Hc,Gch,A","H1,Hc,A,W","H1,Hc,vm,M","H1,H2,VE,ve","H1,Hc,u,D","H1,Hc,u,B","H1,Hc,c,D","H1,Hc,t,D","H1,Hc,t,B","H1,H1,M,m","H1,Hc,G0,W","H1,Hc,ve,E","H1,H1,GCH,Gch","H1,H3,D,d","H1,Hc,c,S","H1,H3,h,G0","H1,H1,TA,ta"};
+static const VecString CONSIDERCHANNELS = {};
 VecString NEGLECTCHANNELS = {};
 static const VecString NEGLECTPARTICLES ={}; //{"u", "d", "e", "mu"};//{"u", "d", "e", "mu"};
 static constexpr double BEPS = 1e-6;
@@ -66,6 +67,35 @@ void CalcAllXsec(Main &M, int firstline, int lastline, double sqsmin, double sqs
 
 }
 
+void CalcAllTac(Main &M, int firstline, int lastline, double xmin, double xmax,  const size_t points){
+    std::ifstream f;
+    // path to textfile with all channels
+    f.open("/home/kijetesantakalu/Schreibtisch/channels_cpvdmb_bfewsb.txt");
+    if (!f) {
+        std::cerr << "Failed to open file.\n";
+    }
+    std::string line;
+
+    int row=0;
+    while (getline(f, line)){
+        // firstline starts at 1, lastline also starts at 1
+
+        row++;
+        if (row >= firstline){
+            std::cout << line << "\n";
+            //CalcTac
+            std::string outfile = "../dataOutput/batchtac/calcTac_Ry_thm_" + line + ".tsv";
+            M.CalcTac(xmin,xmax,points,outfile,{line});
+        }
+        if (row==lastline){break;}
+    }
+    f.close();
+
+}
+
+
+
+
 int main (int argc, char **argv) {
 
     std::stringstream s3(argv[3]);
@@ -94,19 +124,23 @@ int main (int argc, char **argv) {
     M.LoadParameters(1);
     //M.CalcYield(1e-1,500,200,"/run/media/kijetesantakalu/leftVolume/tkrause/look_atThmFiles/out/yield_out.tsv");
     //std::string thermcontrib = argv[4];
-    //M.CalcXsec(8400,10000,200,"../dataOutput/xsec_all_23_" + thermcontrib + ".tsv",{},23.78);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
-    //M.CalcTac(22,24,200, "../dataOutput/tac_all_23_"+ thermcontrib +".tsv");
+    // M.CalcXsec(1,1200,1200,"../dataOutput/xsec_all_1756_x1.tsv",{},1);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
+
+    //M.CalcXsec(11000,100000,1000,"../dataOutput/xsec_21249_x30.tsv",{},30);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
+    //M.CalcXsec(11000,100000,1000,"../dataOutput/xsec_21249_xt.tsv",{},100);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
+    //M.CalcXsec(11000,100000,1000,"../dataOutput/xsec_987_incl.tsv",{"Hc,Hc,W,W"},30);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
+    //CalcAllTac(M, 0, 300, 32, 34,  100);
+    //M.CalcTac(32.9,33,100, "../dataOutput/tac_987_H1H1_incl.tsv",{"H1,H1,h,h","H1,H1,w,W","H1,H1,G0,G0","H1,H1,h,Z","H1,H1,Z,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H1,GCH,Gch"});
     //CalcAllXsec(M,0,200,8400,10000,200,thermcontrib);
-    //M.CalcTac(2,200,200,outpath + "tac/calcTac_wgoldstones_test_thermalmasses_H1H1wW.tsv",{"H1,H1,w,W"}); //"H1,H1,Z,Z"
+    //M.CalcTac(32.9,33,100,outpath + "tac/calcTac_wgoldstones_test_thermalmasses_H1H1wW.tsv",{"H1,H1,w,W"}); //"H1,H1,Z,Z"
 
     //M.PrintChannels();
-    M.CalcRelic();
+    //M.CalcRelic();
 
-    M.SaveData(SAVEPARS);
+    //M.SaveData(SAVEPARS);
     // std::cout << "Computation time: \n"
     //           << float(clock() - begin_time ) / CLOCKS_PER_SEC << std::endl ;
 }
-
 
 
     /*
