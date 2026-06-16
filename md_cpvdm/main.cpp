@@ -130,17 +130,23 @@ int main (int argc, char **argv) {
     //M.CalcXsec(11000,100000,1000,"../dataOutput/xsec_21249_xt.tsv",{},100);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
     //M.CalcXsec(11000,100000,1000,"../dataOutput/xsec_987_incl.tsv",{"Hc,Hc,W,W"},30);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
     //CalcAllTac(M, 0, 300, 32, 34,  100);
-    //M.CalcTac(32.9,33,100, "../dataOutput/tac_987_H1H1_incl.tsv",{"H1,H1,h,h","H1,H1,w,W","H1,H1,G0,G0","H1,H1,h,Z","H1,H1,Z,Z","H1,H1,G0,Z","H1,H1,h,G0","H1,H1,GCH,Gch"});
+    //M.CalcTac(20,70,1250, "../dataOutput/tac_test_incl.tsv");
     //CalcAllXsec(M,0,200,8400,10000,200,thermcontrib);
-    //M.CalcTac(32.9,33,100,outpath + "tac/calcTac_wgoldstones_test_thermalmasses_H1H1wW.tsv",{"H1,H1,w,W"}); //"H1,H1,Z,Z"
-
     //M.PrintChannels();
-    //M.CalcRelic();
+    M.CalcRelic();
 
-    //M.SaveData(SAVEPARS);
+    M.SaveData(SAVEPARS);
     // std::cout << "Computation time: \n"
     //           << float(clock() - begin_time ) / CLOCKS_PER_SEC << std::endl ;
 }
+
+    /*
+     * ./cpvdm /home/kijetesantakalu/thesis/wierdpoints/cpvdm_ThermMass_L25_nm_m26to10_ms6to10_A5000_978_1.tsv ../dataOutput/out_978.dat
+     */
+
+    // cpvdm_ThermMass_L25_nm_m26to10_ms6to10_A5000_949_1.tsv
+    //
+    //
 
 
     /*

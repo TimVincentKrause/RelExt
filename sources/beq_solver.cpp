@@ -91,6 +91,7 @@ double FO1DM::operator()(const VecString &channels) {
         y2 = y1;
     }
     xf = x1;
+    std::cout << "xf = " << xf << std::endl;
     if (x1 < 5.) {
         if (!suppress)
             std::cout << "Freeze-out temperature could not be found.\n";
@@ -104,11 +105,20 @@ double FO1DM::operator()(const VecString &channels) {
         res = 1. / yfo - res;
         res = 1. / res;
     } else {
+        double del = 0.01;
+        double xcrit = BI.AA.MDM / *BI.AA.parmap["Tcrit"]; //xcrit-del
         FOFull fof(BI);
         Output out;
         Odeint<StepperDopr853<FOFull>> ode(yfo, x1, xtoday, 0., 1e-6, 0.1, 0.,
                                            out, fof);
         ode.integrate();
+        // //double inter_res = yfo;
+        // std::cout << "tmpres = " <<  res << std::endl;
+
+        // Odeint<StepperDopr853<FOFull>> ode2(yfo, xcrit, xtoday, 0., 1e-6, 0.1, 0.,
+        //                                    out, fof);
+        // ode2.integrate();
+
         res = yfo;
     }
     BI.tac.clear_state(true);

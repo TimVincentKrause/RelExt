@@ -12,7 +12,7 @@ namespace DT{
 
 		if (therm_contr == false){xinv = 0; do_goldstone_channels = false;}
 		else {
-    		if ( (MDM * xinv > Tcrit) or (v < 1 ))
+    		if ( (MDM * xinv - Tcrit > 1e-3))
     		    do_goldstone_channels = true;
     		else
     		    do_goldstone_channels = false;
@@ -60,24 +60,6 @@ namespace DT{
 				//mGch = pow(std::abs(mGchsq_therm[0] + g2*g2 * v*v /4),0.5);
 				mG0 = pow(std::abs(mG0sq_pot_therm[0]),0.5); //+MZ*MZ
 				mGch = pow(std::abs(mGchsq_pot_therm[0]),0.5); //+MW*MW
-				sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
-				// if (mHsmsq_pot_therm[0] < 0){
-				// 	sign_mHsmsq = -1.;
-				// } else {sign_mHsmsq = 1.;}
-				// if (mG0sq_pot_therm[0] < 0){
-				// 	sign_mG0sq = -1.;
-				// } else {sign_mG0sq = 1.;}
-				// if (mGchsq_pot_therm[0] < 0){
-				// 	sign_mGchsq = -1.;
-				// } else {sign_mGchsq = 1.;}
-
-                THmHsm = mHsm;
-				THmG0 =  mG0;
-				THmGch = mGch;
-				THmH1 =  mH1;
-				THmH2 =  mH2;
-				THmH3 =  mH3;
-				THmHc =  mHc;
 
 
 				if (scal_therm_prop == true)
@@ -155,14 +137,6 @@ namespace DT{
 				// if (mGchsq_pot_therm[v_therm.size()-1] < 0){
 				// 	sign_mGchsq = -1.;
 				// } else {sign_mGchsq = 1.;}
-				sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
-                THmHsm = mHsm;
-				THmG0 =  mG0;
-				THmGch = mGch;
-				THmH1 =  mH1;
-				THmH2 =  mH2;
-				THmH3 =  mH3;
-				THmHc =  mHc;
 
 
 				if (scal_therm_prop == true)
@@ -206,102 +180,127 @@ namespace DT{
 
 			} else {
 				//std::cout << "x_in = "<< x << "\n";
-				for (size_t i = 1; i < temp_therm.size(); i++){
+				for (size_t i = temp_therm.size()-1; i >=0; i--){
+				//for (size_t i = 0; i < temp_therm.size()-1; i++){
 					//std::cout << "MDM/T = "<< MDM / temp_therm[i] << "\n";
-					if (MDM / temp_therm[i] <= x){
-						v =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], v_therm[i-1] , v_therm[i]);
-						Mnue = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], Mnue_therm[i-1],Mnue_therm[i]);
-						Mnum = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], Mnum_therm[i-1],Mnum_therm[i]);
-						Mnut = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], Mnut_therm[i-1],Mnut_therm[i]);
-						Me = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], Me_therm[i-1],Me_therm[i]);
-						MM = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MM_therm[i-1],MM_therm[i]);
-						MTA = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MTA_therm[i-1],MTA_therm[i]);
-						MU = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MU_therm[i-1],MU_therm[i]);
-						MC = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MC_therm[i-1],MC_therm[i]);
-						MT = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MT_therm[i-1],MT_therm[i]);
-						MD = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MD_therm[i-1],MD_therm[i]);
-						MS = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MS_therm[i-1],MS_therm[i]);
-						MB = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MB_therm[i-1],MB_therm[i]);
-						MZ = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MZ_therm[i-1],MZ_therm[i]);
-						MW = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MW_therm[i-1],MW_therm[i]);
-						mH1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH1_pot_therm[i-1],mH1_pot_therm[i]);
-						mH2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH2_pot_therm[i-1],mH2_pot_therm[i]);
-						mH3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH3_pot_therm[i-1],mH3_pot_therm[i]);
-						mHc = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHc_pot_therm[i-1],mHc_pot_therm[i]);
-						mHm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHm_pot_therm[i-1],mHm_pot_therm[i]);
-
-
-						if (std::abs(MC) <1e-5) {MC = 0;}
-						if (std::abs(MZ) <1e-5) {MZ = 0;}
-						// can get negative
-						double mHsmsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHsmsq_pot_therm[i-1],mHsmsq_pot_therm[i]);
-						// double mG0sq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mG0sq_therm[i-1],mG0sq_therm[i]) + g2*g2 * v*v /4;
-						// double mGchsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mGchsq_therm[i-1],mGchsq_therm[i]) + g2*g2 * v*v /4;
-						double mG0sq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mG0sq_pot_therm[i-1],mG0sq_pot_therm[i]);
-						double mGchsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mGchsq_pot_therm[i-1],mGchsq_pot_therm[i]);
-
-						mHsm = pow(std::abs(mHsmsq),0.5);
-						mG0 = pow(std::abs(mG0sq),0.5);
-						mGch = pow(std::abs(mGchsq),0.5);
-						sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
-						// if (mHsmsq < 0){
-						// 	sign_mHsmsq = -1.;
-						// } else {sign_mHsmsq = 1.;}
-						// if (mG0sq < 0){
-						// 	sign_mG0sq = -1.;
-						// } else {sign_mG0sq = 1.;}
-						// if (mGchsq < 0){
-						// 	sign_mGchsq = -1.;
-						// } else {sign_mGchsq = 1.;}
-	                    THmHsm = mHsm;
-        				THmG0 =  mG0;
-        				THmGch = mGch;
-        				THmH1 =  mH1;
-        				THmH2 =  mH2;
-        				THmH3 =  mH3;
-        				THmHc =  mHc;
-
-						if (scal_therm_prop == true)
+					//std::cout << "asldk" << std::endl;
+					if (MDM / temp_therm[i] >= x){
+					    if (true)
 						{
-    						// THmHsm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHsm_therm[i-1], THmHsm_therm[i]);
-    						// THmG0 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmG0sq_therm[i-1], THmG0sq_therm[i]);
-    						// THmGch = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmGchsq_therm[i-1], THmGchsq_therm[i]);
-    						// THmH1 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH1_therm[i-1], THmH1_therm[i]);
-    						// THmH2 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH2_therm[i-1], THmH2_therm[i]);
-    						// THmH3 =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmH3_therm[i-1], THmH3_therm[i]);
-    						// THmHc =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THmHc_therm[i-1], THmHc_therm[i]);
-                            THMZ =   linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
-                            THMW =   linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
+						    //i +=1;
+							v =  v_therm[i];
+							Mnue = Mnue_therm[i];
+							Mnum = Mnum_therm[i];
+							Mnut = Mnut_therm[i];
+							Me = Me_therm[i];
+							MM = MM_therm[i];
+							MTA = MTA_therm[i];
+							MU = MU_therm[i];
+							MC = MC_therm[i];
+							MT = MT_therm[i];
+							MD = MD_therm[i];
+							MS = MS_therm[i];
+							MB = MB_therm[i];
+							MZ = MZ_therm[i];
+							MW = MW_therm[i];
+							mH1 = mH1_pot_therm[i];
+							mH2 = mH2_pot_therm[i];
+							mH3 = mH3_pot_therm[i];
+							mHc = mHc_pot_therm[i];
+							mHm = mHm_pot_therm[i];
+							mHsm = pow(std::abs(mHsmsq_pot_therm[i]),0.5);
+							mG0 = pow(std::abs(mG0sq_pot_therm[i]),0.5);
+							mGch = pow(std::abs(mGchsq_pot_therm[i]),0.5);
+
+							if (scal_therm_prop == true)
+							{
+                                THMZ = THMZ_therm[i];
+                                THMW = THMW_therm[i];
+							}
+							else
+							{THMZ =   MZ; THMW =   MW;}
+
+
+							RR1x1 = R00_therm[i];
+							RR1x2 = R01_therm[i];
+							RR1x3 = R02_therm[i];
+							RR2x1 = R10_therm[i];
+							RR2x2 = R11_therm[i];
+							RR2x3 = R12_therm[i];
+							RR3x1 = R20_therm[i];
+							RR3x2 = R21_therm[i];
+							RR3x3 = R22_therm[i];
+
+							break;
+
 						}
+
 						else
 						{
-						    //THmHsm = mHsm;
-            				//THmG0 =  mG0;
-            				//THmGch = mGch;
-            				//THmH1 =  mH1;
-            				//THmH2 =  mH2;
-            				//THmH3 =  mH3;
-            				//THmHc =  mHc;
-              		        THMZ =   MZ;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
-                            THMW =   MW;//linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
+    						v =  linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], v_therm[i-1] , v_therm[i]);
+    						Mnue = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], Mnue_therm[i-1],Mnue_therm[i]);
+    						Mnum = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], Mnum_therm[i-1],Mnum_therm[i]);
+    						Mnut = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], Mnut_therm[i-1],Mnut_therm[i]);
+    						Me = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], Me_therm[i-1],Me_therm[i]);
+    						MM = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MM_therm[i-1],MM_therm[i]);
+    						MTA = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MTA_therm[i-1],MTA_therm[i]);
+    						MU = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MU_therm[i-1],MU_therm[i]);
+    						MC = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MC_therm[i-1],MC_therm[i]);
+    						MT = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MT_therm[i-1],MT_therm[i]);
+    						MD = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MD_therm[i-1],MD_therm[i]);
+    						MS = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MS_therm[i-1],MS_therm[i]);
+    						MB = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MB_therm[i-1],MB_therm[i]);
+    						MZ = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MZ_therm[i-1],MZ_therm[i]);
+    						MW = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], MW_therm[i-1],MW_therm[i]);
+    						mH1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH1_pot_therm[i-1],mH1_pot_therm[i]);
+    						mH2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH2_pot_therm[i-1],mH2_pot_therm[i]);
+    						mH3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mH3_pot_therm[i-1],mH3_pot_therm[i]);
+    						mHc = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHc_pot_therm[i-1],mHc_pot_therm[i]);
+    						mHm = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHm_pot_therm[i-1],mHm_pot_therm[i]);
+    						double mHsmsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mHsmsq_pot_therm[i-1],mHsmsq_pot_therm[i]);
+    						double mG0sq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mG0sq_pot_therm[i-1],mG0sq_pot_therm[i]);
+    						double mGchsq = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], mGchsq_pot_therm[i-1],mGchsq_pot_therm[i]);
+    						mHsm = pow(std::abs(mHsmsq),0.5);
+    						mG0 = pow(std::abs(mG0sq),0.5);
+    						mGch = pow(std::abs(mGchsq),0.5);
+
+    						if (scal_therm_prop == true)
+    						{
+                                THMZ =   linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMZ_therm[i-1], THMZ_therm[i]);
+                                THMW =   linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], THMW_therm[i-1], THMW_therm[i]);
+    						}
+    						else
+    						{THMZ =   MZ; THMW =   MW;}
+
+
+    						RR1x1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R00_therm[i-1],R00_therm[i]);
+    						RR1x2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R01_therm[i-1],R01_therm[i]);
+    						RR1x3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R02_therm[i-1],R02_therm[i]);
+    						RR2x1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R10_therm[i-1],R10_therm[i]);
+    						RR2x2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R11_therm[i-1],R11_therm[i]);
+    						RR2x3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R12_therm[i-1],R12_therm[i]);
+    						RR3x1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R20_therm[i-1],R20_therm[i]);
+    						RR3x2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R21_therm[i-1],R21_therm[i]);
+    						RR3x3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R22_therm[i-1],R22_therm[i]);
+
+    						break;
 						}
-
-
-						RR1x1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R00_therm[i-1],R00_therm[i]);
-						RR1x2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R01_therm[i-1],R01_therm[i]);
-						RR1x3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R02_therm[i-1],R02_therm[i]);
-						RR2x1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R10_therm[i-1],R10_therm[i]);
-						RR2x2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R11_therm[i-1],R11_therm[i]);
-						RR2x3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R12_therm[i-1],R12_therm[i]);
-						RR3x1 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R20_therm[i-1],R20_therm[i]);
-						RR3x2 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R21_therm[i-1],R21_therm[i]);
-						RR3x3 = linint(x, MDM/ temp_therm[i-1], MDM / temp_therm[i], R22_therm[i-1],R22_therm[i]);
-
-						break;
 					}
 				}
 			}
 
+			sign_mGchsq = 1.; sign_mHsmsq = 1.; sign_mG0sq = 1.;
+            THmHsm = mHsm;
+			THmG0 =  mG0;
+			THmGch = mGch;
+			THmH1 =  mH1;
+			THmH2 =  mH2;
+			THmH3 =  mH3;
+			THmHc =  mHc;
+
+
+			// if (std::abs(MC) <1e-5) {MC = 0;}
+			// if (std::abs(MZ) <1e-5) {MZ = 0;}
 			// because of differnet Gauge
 			//THmG0 =  std::sqrt(THmG0 + MZ*MZ);
 			//THmGch = std::sqrt(THmGch + MW*MW);
@@ -449,7 +448,7 @@ namespace DT{
 			// 	MS = 0.;
 			// }
 
-			std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels <<  std::endl; //4.74586805555556
+			std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels << " | MDM*xinv = " << (MDM * xinv) << " | Tcrit = " << Tcrit << " | M-T = " << (MDM * xinv - Tcrit) << std::endl; //4.74586805555556
 			load_tokens();
 		}
 
@@ -613,7 +612,7 @@ namespace DT{
 		for (size_t j=0; j< header.size();j++) {output_file << header[j] << "\t";}
 		output_file << "\n";
 
-		for (double T_i = 165-2; T_i<165+2; T_i+=0.1){
+		for (double T_i = 0; T_i<300; T_i+=0.2){
 			double x_i = MDM / T_i;
 			load_parameters(x_i);
 
