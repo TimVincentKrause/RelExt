@@ -401,6 +401,8 @@ double Main::CalcRelic(const int mechanism) {
         case 0:
             omega = FO(bath_procs);
             xf = FO.get_xf();
+            yeq_atxf = FO.get_yeq_atxf();
+            yeq_at25 = FO.get_yeq_at25();
             break;
         default:
             std::cout << "This mechanism ID is not valid. Please set the "
@@ -481,6 +483,8 @@ void Main::SaveData(const VecString &save_pars) {
         outfile << "\t" << "vcrit";
         outfile << "\t" << "vf";
         outfile << "\t" << "mH1f";
+        outfile << "\t" << "yeq_atxf";
+        outfile << "\t" << "yeq_at25";
 
         for (auto it : save_pars) {
             AA.check_par_existence(it);
@@ -503,6 +507,8 @@ void Main::SaveData(const VecString &save_pars) {
     AA.load_parameters(xf);
     outfile << "\t" << *AA.parmap["v"];
     outfile << "\t" << *AA.parmap["mH1"];
+    outfile << "\t" << yeq_atxf;
+    outfile << "\t" << yeq_at25;
     AA.load_parameters();
     for (auto it : save_pars) {
         outfile << "\t" << *AA.parmap[it];

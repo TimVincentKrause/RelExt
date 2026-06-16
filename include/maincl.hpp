@@ -20,6 +20,8 @@ class Main {
     double omega;
     // freezeout inverse temerature: MDM/Tf
     double xf;
+    double yeq_atxf;
+    double yeq_at25;
     size_t mode;
     std::string output_file;
     std::string tvev_input_file;

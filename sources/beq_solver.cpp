@@ -91,7 +91,7 @@ double FO1DM::operator()(const VecString &channels) {
         y2 = y1;
     }
     xf = x1;
-    std::cout << "xf = " << xf << std::endl;
+    //std::cout << "xf = " << xf << std::endl;
     if (x1 < 5.) {
         if (!suppress)
             std::cout << "Freeze-out temperature could not be found.\n";
@@ -99,6 +99,8 @@ double FO1DM::operator()(const VecString &channels) {
         return 0.;
     }
     double yfo = (1. + foc.del) * BI.yeq(x1);
+    yeq_atxf = BI.yeq(x1);
+    yeq_at25 = BI.yeq(25);
     if (appr) {
         FOAppr foa(BI);
         res = adap_gauss_kronrod_15(foa, x1, xtoday, 1e-3);
@@ -150,4 +152,10 @@ double FO1DM::get_xf() {
     return xf;
 }
 
+double FO1DM::get_yeq_atxf() {
+    return yeq_atxf;
+}
+double FO1DM::get_yeq_at25() {
+    return yeq_at25;
+}
 }  // namespace DT

@@ -16,7 +16,7 @@ class FO1DM {
    private:
     BeqInfo BI;
     FOCondition foc;
-    double xtoday, xf;
+    double xtoday, xf, yeq_atxf,yeq_at25;
     bool appr, suppress = false;
 
    public:
@@ -28,6 +28,8 @@ class FO1DM {
     void print_xf();
     // returns calculated x_f
     double get_xf();
+    double get_yeq_atxf();
+    double get_yeq_at25();
     double omega(const double &yield);
     VecDoub calc_contributions(const VecString &channels);
     double operator()(const VecString &channels);
