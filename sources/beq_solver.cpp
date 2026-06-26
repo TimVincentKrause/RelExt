@@ -32,6 +32,7 @@ double FO1DM::calc_only_xf(const VecString &channels) {
         y2 = y1;
     }
     xf = x1;
+    std::cout << "xf = " << x1 << std::endl;
     if (x1 < 5.) {
         if (!suppress)
             std::cout << "Freeze-out temperature could not be found.\n";
@@ -43,6 +44,7 @@ double FO1DM::calc_only_xf(const VecString &channels) {
 double FO1DM::calc_yield(const double &x) {
     BI.AA.load_parameters(x);
     double res;
+    return BI.yeq(x);
     if (x < xf) {
         res = BI.yeq(x);
     }
@@ -135,9 +137,11 @@ VecDoub FO1DM::calc_contributions(const VecString &channels) {
     double sum = 0.;
     suppress = true;
     for (i = 0; i < channels.size(); i++) {
+        std::cout << "channel = " << channels[i] << std::endl;
         res[i] = operator()({channels[i]});
         res[i] = res[i] == 0. ? 0. : 1. / res[i];
         sum += res[i];
+        std::cout << "res[" << channels[i] << "] = " << res[i] << std::endl;
     }
     for (i = 0; i < res.size(); i++) res[i] /= sum;
     suppress = false;

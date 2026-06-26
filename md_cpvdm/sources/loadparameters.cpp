@@ -448,7 +448,7 @@ namespace DT{
 			// 	MS = 0.;
 			// }
 
-			std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels << " | MDM*xinv = " << (MDM * xinv) << " | Tcrit = " << Tcrit << " | M-T = " << (MDM * xinv - Tcrit) << std::endl; //4.74586805555556
+			//std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels << " | MDM*xinv = " << (MDM * xinv) << " | Tcrit = " << Tcrit << " | M-T = " << (MDM * xinv - Tcrit) << std::endl; //4.74586805555556
 			load_tokens();
 		}
 
@@ -489,9 +489,9 @@ namespace DT{
 		// next part assumes that dark matter particles don't change their place
 		// (But this is for tree level masses and these are unused.( currently))
 		//Goldstone-masses can be negative -> add eps
-		rdr_therm->read_column(mGchsq_therm, "mS_0sq", 0,0.5);
-		rdr_therm->read_column(mG0sq_therm, "mS_2sq",0,0.5);
-		rdr_therm->read_column(mHsmsq_therm, "mS_3sq",0.5);
+		rdr_therm->read_column(mGchsq_therm, "mS_0sq", 0,20);
+		rdr_therm->read_column(mG0sq_therm, "mS_2sq",0,20);
+		rdr_therm->read_column(mHsmsq_therm, "mS_3sq",0.5,0.5);
 
 		rdr_therm->read_column(mH1_therm, "mS_4sq",0.5,0.5);
 
@@ -512,8 +512,8 @@ namespace DT{
 		}
 
 		// Thermal Masses
-		rdr_therm->read_column(THmGchsq_therm, "m_thm_Gpsq",0,0.5);
-		rdr_therm->read_column(THmG0sq_therm, "m_thm_G0sq",0,0.5);
+		rdr_therm->read_column(THmGchsq_therm, "m_thm_Gpsq",0,20);
+		rdr_therm->read_column(THmG0sq_therm, "m_thm_G0sq",0,20);
 		rdr_therm->read_column(THmHsm_therm, "m_thm_Hsmsq",0.5,0.5);
 		rdr_therm->read_column(THmH1_therm, "m_thm_H1sq",0.5,0.5);
 		rdr_therm->read_column(THmH2_therm, "m_thm_H2sq",0.5,0.5);
@@ -537,9 +537,12 @@ namespace DT{
     		rdr_therm->read_column(R21_therm, "R_thm_21",0,1e-10);
     		rdr_therm->read_column(R22_therm, "R_thm_22",0,1e-10);
     		// daisy Masses as physical masses
-    		rdr_therm->read_column(mGchsq_pot_therm, "m_thm_Gmsq",0,20);
-    		rdr_therm->read_column(mG0sq_pot_therm, "m_thm_G0sq",0,20);
-    		rdr_therm->read_column(mHsmsq_pot_therm, "m_thm_Hsmsq",0,20);
+    		// rdr_therm->read_column(mGchsq_pot_therm, "m_thm_Gmsq",0,20);
+    		// rdr_therm->read_column(mG0sq_pot_therm, "m_thm_G0sq",0,20);
+    		// rdr_therm->read_column(mHsmsq_pot_therm, "m_thm_Hsmsq",0,0.5);
+    		rdr_therm->read_column(mGchsq_pot_therm, "m_pot_Gmsq",0,20);
+    		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,20);
+    		rdr_therm->read_column(mHsmsq_pot_therm, "m_pot_Hsmsq",0,0.5);
     		rdr_therm->read_column(mH1_pot_therm, "m_thm_H1sq",0.5,2);
     		rdr_therm->read_column(mH2_pot_therm, "m_thm_H2sq",0.5,2);
     		rdr_therm->read_column(mH3_pot_therm, "m_thm_H3sq",0.5,2);
@@ -561,9 +564,9 @@ namespace DT{
     		rdr_therm->read_column(R21_therm, "R_pot_21",0,1e-10);
     		rdr_therm->read_column(R22_therm, "R_pot_22",0,1e-10);
     		// Potential Masses
-    		rdr_therm->read_column(mGchsq_pot_therm, "m_pot_Gmsq",0,2);
-    		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,2);
-    		rdr_therm->read_column(mHsmsq_pot_therm, "m_pot_Hsmsq",0,2);
+    		rdr_therm->read_column(mGchsq_pot_therm, "m_pot_Gmsq",0,20);
+    		rdr_therm->read_column(mG0sq_pot_therm, "m_pot_G0sq",0,20);
+    		rdr_therm->read_column(mHsmsq_pot_therm, "m_pot_Hsmsq",0,0.5);
     		rdr_therm->read_column(mH1_pot_therm, "m_pot_H1sq",0.5,2);
     		rdr_therm->read_column(mH2_pot_therm, "m_pot_H2sq",0.5,2);
     		rdr_therm->read_column(mH3_pot_therm, "m_pot_H3sq",0.5,2);
@@ -600,9 +603,10 @@ namespace DT{
 		// get all parameters from the parametermap
 		//for (auto &it : parmap){std::cout << it.first << " = " << *it.second << "\n";};
 
-		std::vector<std::string> header = {"m11sq","Mnue", "Mnum", "Mnut", "Me","MM", "MTA","MU","MC","MT","MD","MS","MB","MZ","THMZ","MW","THMW","mHsm","sign_mHsmsq","THmHsm","mG0","sign_mG0sq","THmG0","mGch","sign_mGchsq","THmGch","mH1","THmH1","mH2","THmH2","mH3","THmH3","mHc","THmHc","mHm","RR1x1", "RR1x2","RR1x3","RR2x1","RR2x2","RR2x3","RR3x1","RR3x2","RR3x3","alph1","alph2","alph3","yu1","yu2","yu3","yd1","yd2","yd3","yl1","yl2","yl3"};
+		std::vector<std::string> header = {"m11sq","Mnue", "Mnum", "Mnut", "Me","MM", "MTA","MU","MC","MT","MD","MS","MB","MZ","THMZ","MW","THMW","mHsm","sign_mHsmsq","THmHsm","mG0","sign_mG0sq","THmG0","mGch","sign_mGchsq","THmGch","mH1","THmH1","mH2","THmH2","mH3","THmH3","mHc","THmHc","mHm","RR1x1", "RR1x2","RR1x3","RR2x1","RR2x2","RR2x3","RR3x1","RR3x2","RR3x3","alph1","alph2","alph3","yu1","yu2","yu3","yd1","yd2","yd3","yl1","yl2","yl3","MDM"};
 
 		std::vector<std::string> header_T = {"Temp","x_i","v"};
+
 
 		// T x and v
 		for (size_t j=0; j< header_T.size();j++) {output_file << header_T[j] << "\t";}
@@ -610,21 +614,41 @@ namespace DT{
 		for (auto &it : parmap) {output_file << it.first << "\t";}
 		// loadpar-values
 		for (size_t j=0; j< header.size();j++) {output_file << header[j] << "\t";}
+
+
+
+		size_t kj = 0;
+		for (auto it : bath_masses) {
+		output_file << "DSm" << kj << "\t";
+		kj +=1;
+        }
+        kj = 0;
+        for (auto it : bath_masses) {
+		output_file << "DSdof" << kj << "\t";
+		kj +=1;
+        }
+
 		output_file << "\n";
 
-		for (double T_i = 0; T_i<300; T_i+=0.2){
+		for (double T_i = 0; T_i<700; T_i+=0.2){
 			double x_i = MDM / T_i;
 			load_parameters(x_i);
 
 			// define; would be nicer with pointers
 			std::vector<double> values_T = {T_i,x_i,v};
-			std::vector<double> values = {m11sq,Mnue, Mnum, Mnut, Me,MM, MTA,MU,MC,MT,MD,MS,MB,MZ,THMZ,MW,THMW,mHsm,sign_mHsmsq,THmHsm,mG0,sign_mG0sq,THmG0,mGch,sign_mGchsq,THmGch,mH1,THmH1,mH2,THmH2,mH3,THmH3,mHc,THmHc,mHm,RR1x1, RR1x2,RR1x3,RR2x1,RR2x2,RR2x3,RR3x1,RR3x2,RR3x3,alph1,alph2,alph3,yu1,yu2,yu3,yd1,yd2,yd3,yl1,yl2,yl3};
+			std::vector<double> values = {m11sq,Mnue, Mnum, Mnut, Me,MM, MTA,MU,MC,MT,MD,MS,MB,MZ,THMZ,MW,THMW,mHsm,sign_mHsmsq,THmHsm,mG0,sign_mG0sq,THmG0,mGch,sign_mGchsq,THmGch,mH1,THmH1,mH2,THmH2,mH3,THmH3,mHc,THmHc,mHm,RR1x1, RR1x2,RR1x3,RR2x1,RR2x2,RR2x3,RR3x1,RR3x2,RR3x3,alph1,alph2,alph3,yu1,yu2,yu3,yd1,yd2,yd3,yl1,yl2,yl3,MDM};
 
 			// output every row
 			output_file << std::setprecision(16);
 			for (size_t j=0; j< values_T.size();j++){output_file << values_T[j] << "\t";}
 			for (auto &it : parmap) {output_file << *it.second << "\t";}
 			for (size_t j=0; j< values.size();j++){output_file << values[j] << "\t";}
+			for (auto it : bath_masses) {
+			output_file << *DSmasses[it] << "\t";
+            }
+            for (auto it : bath_masses) {
+			output_file << DSdof[it] << "\t";
+                     }
 			output_file << "\n";
 		}
 		output_file.close();

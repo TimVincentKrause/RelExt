@@ -316,18 +316,26 @@ void Main::CalcTac(double xmin, double xmax, const size_t points,
         xmin = temp;
     }
     if (channels.size() == 0) channels = AA.get_all_channels();
-    double step = (xmax - xmin) / ((double)points);
+
+    double logxmax = std::log10(xmax);
+    double logxmin = std::log10(xmin);
+
+    double step = (logxmax - logxmin) / ((double)points);
+    //double step = (xmax - xmin) / ((double)points);
     if(xmin == xmax) step = 1.;
     double res;
     double beps_save = beps_eps;
     AA.load_parameters(1e7);
     beps_eps = log(1e-100);
     tac.sort_inimasses(channels);
-    for (double i = xmin; i <= xmax; i += step) {
-        std::cout << "x = " << i << std::endl;
-        AA.load_parameters(i);
-        res = tac(i);
-        TAR->save_data({"x", "tac"}, {i, res});
+    //for (double i = xmin; i <= xmax; i += step) {
+    double j;
+    for (double i = logxmin; i <= logxmax; i += step) {
+        j = std::pow(10,i);
+        std::cout << "x = " << j << std::endl;
+        AA.load_parameters(j);
+        res = tac(j);
+        TAR->save_data({"x", "tac"}, {j, res});
     }
     beps_eps = beps_save;
 }
@@ -356,6 +364,8 @@ void Main::CalcYield(double xmin, double xmax, const size_t points,
     bool below_xf = true;
     for (double i = logxmin; i <= logxmax; i += step) {
         x10 = std::pow(10,i);
+        x10 = 25.609375;
+
         if ((x10 >= xf) and below_xf) {
             std::cout << "x = xf = " << xf << std::endl;
             res = FO.calc_yield(xf);

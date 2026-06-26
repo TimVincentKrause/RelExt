@@ -6,15 +6,11 @@
 
 double DT::H1HchGchfl(const double &cos_t, const double &s){
 	using namespace PAR;
-	return 2*2*signedflux(s, mH1,mHc,mHsm,mGch,sign_mHsmsq,sign_mGchsq)*H1HchGch
- 
-     (cos_t, s);
+	return 2*2*signedflux(s, mH1,mHc,mHsm,mGch,sign_mHsmsq,sign_mGchsq)*H1HchGch(cos_t, s);
 }
 double DT::H1HcG0Gchfl(const double &cos_t, const double &s){
 	using namespace PAR;
-	return 2*2*signedflux(s, mH1,mHc,mG0,mGch,sign_mG0sq,sign_mGchsq)*H1HcG0Gch
- 
-     (cos_t, s);
+	return 2*2*signedflux(s, mH1,mHc,mG0,mGch,sign_mG0sq,sign_mGchsq)*H1HcG0Gch(cos_t, s);
 }
 double DT::H1HchWfl(const double &cos_t, const double &s){
 	using namespace PAR;

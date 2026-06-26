@@ -259,7 +259,7 @@ Block[{numerator,denominator,coefficient={},mandels={},temp1,temp2},
 
 
 \[Xi] = 0;
-unifyxi = {\!\(TraditionalForm\`\(\(GaugeXi[S[2]]\)\(\ \)\)\)->\[Xi],\!\(TraditionalForm\`\(\(GaugeXi[S[3]]\)\(\ \)\)\)->\[Xi],\!\(TraditionalForm\`\(\(GaugeXi[V[2]]\)\(\ \)\)\)->\[Xi],\!\(TraditionalForm\`\(\(GaugeXi[V[3]]\)\(\ \)\)\)->\[Xi]};
+unifyxi = {\!\(TraditionalForm\`\(\(GaugeXi[S[2]]\)\(\ \)\)\)->1,\!\(TraditionalForm\`\(\(GaugeXi[S[3]]\)\(\ \)\)\)->1,\!\(TraditionalForm\`\(\(GaugeXi[V[2]]\)\(\ \)\)\)->\[Xi],\!\(TraditionalForm\`\(\(GaugeXi[V[3]]\)\(\ \)\)\)->\[Xi]};
 unifyxi = Union[unifyxi,{\!\(TraditionalForm\`\(\(GaugeXi[S[1]]\)\(\ \)\)\)->1,\!\(TraditionalForm\`\(\(GaugeXi[S[4]]\)\(\ \)\)\)->1,\!\(TraditionalForm\`\(\(GaugeXi[S[5]]\)\(\ \)\)\)->1,\!\(TraditionalForm\`\(\(GaugeXi[S[6]]\)\(\ \)\)\)->1,\!\(TraditionalForm\`\(\(GaugeXi[S[7]]\)\(\ \)\)\)->1,\!\(TraditionalForm\`\(\(GaugeXi[V[1]]\)\(\ \)\)\)->1}]
 
 
@@ -357,6 +357,34 @@ tokensubs = {};
 tokenreverse = {};
 
 
+ClearScalarProducts[];
+
+i=5;
+listofprocs[[i]]
+k = listofprocs[[i,3]];
+l = listofprocs[[i,4]];
+Feynmangraph = InsertFields[topologie, {listofprocs[[i,1]], listofprocs[[i,2]]} -> {k, l}, 
+Model -> {modelname}, InsertionLevel -> {Particles}, GenericModel -> modelname, ExcludeParticles -> {}];
+Paint[Feynmangraph];
+FCClearScalarProducts[];
+SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];
+abc = FCFAConvert[CreateFeynAmp[Feynmangraph,GaugeRules -> {} ], IncomingMomenta -> {p1, p2}, OutgoingMomenta -> {p3, p4}, UndoChiralSplittings -> True, ChangeDimension -> 4, List -> True,
+SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule//Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
+
+abc[[5]]//InputForm(*/.{v->0}*)
+
+
+((I/2)*EL*(RR1x2*RR3x1 - RR1x1*RR3x2)*(CW^2 + SW^2)*(-(RR1x2*RR3x3*Timag) + RR1x1*RR3x3*Treal + (L3 + L4 + L5)*RR1x1*RR3x1*v + (L3 + L4 - L5)*RR1x2*RR3x2*v + RR1x3*(-(RR3x2*Timag) + RR3x1*Treal + L7*RR3x3*v))*
+  (-Pair[Momentum[p1], Momentum[Polarization[p4, -I]]] + Pair[Momentum[p2], Momentum[Polarization[p4, -I]]] - Pair[Momentum[p3], Momentum[Polarization[p4, -I]]]))/(CW*SW*(-mH3^2 + u))
+
+
+FCClearScalarProducts[];
+((I/2)EL(RR1x2RR3x1 - RR1x1RR3x2)(CW^2 + SW^2)(-(RR1x2RR3x3Timag) + RR1x1RR3x3Treal + (L3 + L4 + L5)RR1x1RR3x1v +
+(L3 + L4 - L5)RR1x2RR3x2v + RR1x3*(-(RR3x2Timag) + RR3x1Treal + L7RR3x3v))(Pair[Momentum[p1], Momentum[Polarization[p4, -I]]] -
+Pair[Momentum[p2], Momentum[Polarization[p4, -I]]] + Pair[Momentum[p3], Momentum[Polarization[p4, -I]]]))/
+(CWSW*(mH3^2 - Pair[Momentum[p2], Momentum[p2]] + 2*Pair[Momentum[p2], Momentum[p3]] - Pair[Momentum[p3], Momentum[p3]]))
+
+
 (*function to tokenize coefficients appearing several times in the amplitudes*)
 tokenize[]:=
 Block[{tokenID},
@@ -381,7 +409,7 @@ Do[Print[tokenreverse[[i]]];If[MatchQ[tokenreverse[[i]],Alternatives@@{s,t,u,I,-
 
 
 widthlist=widths;
-widthsub={pat : HoldPattern[Spinor[___,___]]:> pat,t-m_^2:>t-m^2-I*m^2/1000,u-m_^2:>u-m^2-I*m^2/1000};
+widthsub={pat : HoldPattern[Spinor[___,___]]:> pat};(*,t-m_^2:>t-m^2-I*m^2/1000,u-m_^2:>u-m^2-I*m^2/1000};*)
 
 
 	(*functions to check for s-channels, change denominator by including the width and save it*)
@@ -540,9 +568,9 @@ fastamp2[coeff_,mand_]:=
 Block[{full={}, part},
 	Do[
 		If[it==jt,
-			part=coeff[[it]]*coeff[[it]]*mand[[it]]*ComplexConjugate[mand[[jt]]];
+			part=coeff[[it]]*mand[[it]]*ComplexConjugate[coeff[[it]]*mand[[jt]]];
 			,
-			part=2*coeff[[it]]*coeff[[jt]]*(mand[[it]]*ComplexConjugate[mand[[jt]]]);
+			part=2*coeff[[it]]*(mand[[it]]*ComplexConjugate[coeff[[jt]]*mand[[jt]]]);
 		];
 		AppendTo[full,part];
 	,{it,Length[mand]},{jt,it,Length[mand]}];
@@ -572,6 +600,15 @@ Select[particlelist, #[[1]]== templist2[[i, 4]]&][[1,3]],
 
 
 massexchange
+
+
+coefficientlist[[5]] /.tokenreverse
+
+
+mandellist[[5]]/.widthsub/. massexchange
+
+
+fastamp2[coefficientlist[[5]],mandellist[[5]]/.widthsub/. massexchange] /.tokenreverse
 
 
 (*
@@ -628,12 +665,21 @@ AppendTo[finalbEWSB, Plus @@ subdiagrams ];(*/.tokenreverse /. ewrlimit*)
 calcAmp2sbEWSB[];
 
 
-finalbEWSB[[5]] /. tokenreverse /.{RR1x1->0,RR1x2->0,RR1x3->-1}
+finalbEWSB[[5]] /. tokenreverse //InputForm
 
 
 i = 5;
 Print[ToString[processname[[i]]] ToString[i]];
 finalbEWSB[[i]] /. tokenreverse /.{v:>0,RR1x3->0,RR2x3->0,MZ->0}
+
+
+massexchange
+
+
+mandellist[[5]]
+
+
+mandellist[[5]]/.widthsub/. massexchange
 
 
 (*computation of the amplitudes^2 for all the 2to2 processes in foutlist*)
@@ -690,6 +736,9 @@ AppendTo[final, Plus @@ subdiagrams];
 
 
 calcAmp2s[];
+
+
+final[[5]] /. tokenreverse //InputForm
 
 
 (*****************)
@@ -1431,7 +1480,7 @@ Block[{},
 
 
 (* If mHsm^2 is negative -> keep info of sign bc/ it only appears in squares *)
-masssqsign ={"mHsm*mHsm"->"sign_mHsmsq*mHsm*mHsm", "mG0*mG0"->"sign_mG0sq*mG0*mG0", "mGch*mGch"->"sign_mGchsq*mGch*mGch"};
+masssqsign ={};(*{"mHsm*mHsm"->"sign_mHsmsq*mHsm*mHsm", "mG0*mG0"->"sign_mG0sq*mG0*mG0", "mGch*mGch"->"sign_mGchsq*mGch*mGch"};*)
 
 
 (*Amplitudes and fluxes files*)
