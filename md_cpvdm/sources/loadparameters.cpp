@@ -448,7 +448,7 @@ namespace DT{
 			// 	MS = 0.;
 			// }
 
-			//std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels << " | MDM*xinv = " << (MDM * xinv) << " | Tcrit = " << Tcrit << " | M-T = " << (MDM * xinv - Tcrit) << std::endl; //4.74586805555556
+			std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels << " | MDM*xinv = " << (MDM * xinv) << " | Tcrit = " << Tcrit << " | M-T = " << (MDM * xinv - Tcrit) << std::endl; //4.74586805555556
 			load_tokens();
 		}
 
@@ -630,7 +630,7 @@ namespace DT{
 
 		output_file << "\n";
 
-		for (double T_i = 0; T_i<700; T_i+=0.2){
+		for (double T_i = 0; T_i<500; T_i+=0.2){
 			double x_i = MDM / T_i;
 			load_parameters(x_i);
 

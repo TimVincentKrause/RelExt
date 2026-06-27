@@ -214,15 +214,12 @@ Block[{numerator,denominator,coefficient={},mandels={},temp1,temp2},
 		temp2 = 1;
 		Do[
 			If[And[Length[placeholder*numerator[[it]]]===2,Length[numerator[[it]]]>=2],
-				If[FreeQ[numerator[[it]],Alternatives@@{s,t,u,-I,I}],
-					AppendTo[tokens,numerator[[it]]];
-					temp1*=(numerator[[it]]/.tokensubs);
-					Break[];
-				],
+				AppendTo[tokens,numerator[[it]]];
+				temp1*=(numerator[[it]]/.tokensubs);
+				Break[],
 				
-				(*if we include golstones, have to exclude I and -I*)
 				If[FreeQ[numerator[[it,jt]],Alternatives@@{Spinor[__],Pair[__],Momentum[__],Complex[__,__],SUNFDelta[__,__],SUNDelta[__,__]
-				   , SUNTF[__,__,__], SUNFIndex[__], SUNIndex[__], List[__], SUNF[__,__,__],s,t,u,-I,I}], 
+				   , SUNTF[__,__,__], SUNFIndex[__], SUNIndex[__], List[__], SUNF[__,__,__]}], 
 					AppendTo[tokens,numerator[[it,jt]]];
 					temp1*=(numerator[[it,jt]]/.tokensubs),
 					temp2*=numerator[[it,jt]];
@@ -278,6 +275,22 @@ Do[
 {i,Length[listofprocs]}];
 
 
+ThermalMassS := PropagatorDenominator[p_, m_] :> PropagatorDenominator[p, ToThermalMassS[m]];
+ToThermalMassS[mHsm] := THmHsm
+ToThermalMassS[mH1] := THmH1
+ToThermalMassS[mH2] := THmH2
+ToThermalMassS[mH3] := THmH3
+ToThermalMassS[mHc] := THmHc
+ToThermalMassS[mGch] := THmGch
+ToThermalMassS[mG0] := THmG0
+ToThermalMassS[MW] := THMW
+ToThermalMassS[MZ] := THMZ
+ToThermalMassS[x_] := x (For the remaining particles)
+
+
+massexchange
+
+
 (*computation of the amplitudes for all the 2to2 processes in listofprocs*)
 calcAmps[]:=
 Block[{},
@@ -300,8 +313,8 @@ Model -> {modelname}, InsertionLevel -> {Particles}, GenericModel -> modelname, 
 FCClearScalarProducts[];
 SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];
 amp = FCFAConvert[CreateFeynAmp[Feynmangraph,GaugeRules -> {} ], IncomingMomenta -> {p1, p2}, OutgoingMomenta -> {p3, p4}, UndoChiralSplittings -> True, ChangeDimension -> 4, List -> True,
-SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule//Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
-
+SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule /.ThermalMassS;
+amp = amp //Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
 (*if there are processes violating some internal quantum number (charge, lepton number, etc), change listofprocs*)
 If[
 Length[amp] == 0,
@@ -313,7 +326,8 @@ Model -> {modelname}, InsertionLevel -> {Particles}, GenericModel -> modelname, 
 FCClearScalarProducts[];
 SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];
 amp = FCFAConvert[CreateFeynAmp[Feynmangraph,GaugeRules -> {} ], IncomingMomenta -> {p1, p2}, OutgoingMomenta -> {p3, p4}, UndoChiralSplittings -> True, ChangeDimension -> 4, List -> True,
-SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule//Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
+SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule/.ThermalMassS;
+amp = amp //Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
 ];
 
 If[
@@ -326,8 +340,8 @@ Model -> {modelname}, InsertionLevel -> {Particles}, GenericModel -> modelname, 
 FCClearScalarProducts[];
 SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];
 amp = FCFAConvert[CreateFeynAmp[Feynmangraph,GaugeRules -> {} ], IncomingMomenta -> {p1, p2}, OutgoingMomenta -> {p3, p4}, UndoChiralSplittings -> True, ChangeDimension -> 4, List -> True,
-SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule//Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
-];
+SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule/.ThermalMassS;
+amp = amp //Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;];
 
 If[
 Length[amp] == 0 && !SelfConjugate[listofprocs[[i,3]]] && !SelfConjugate[listofprocs[[i,4]]],
@@ -339,8 +353,8 @@ Model -> {modelname}, InsertionLevel -> {Particles}, GenericModel -> modelname, 
 FCClearScalarProducts[];
 SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];
 amp = FCFAConvert[CreateFeynAmp[Feynmangraph,GaugeRules -> {} ], IncomingMomenta -> {p1, p2}, OutgoingMomenta -> {p3, p4}, UndoChiralSplittings -> True, ChangeDimension -> 4, List -> True,
-SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule//Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
-];
+SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule/.ThermalMassS;
+amp = amp //Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;];
 
 breakdownAmp[listofprocs[[i]],amp];		
 AppendTo[ampslist, amp];
@@ -359,39 +373,34 @@ tokenreverse = {};
 
 ClearScalarProducts[];
 
-i=5;
+i=64;
 listofprocs[[i]]
 k = listofprocs[[i,3]];
-l = listofprocs[[i,4]];
+l = -listofprocs[[i,4]];
 Feynmangraph = InsertFields[topologie, {listofprocs[[i,1]], listofprocs[[i,2]]} -> {k, l}, 
 Model -> {modelname}, InsertionLevel -> {Particles}, GenericModel -> modelname, ExcludeParticles -> {}];
 Paint[Feynmangraph];
 FCClearScalarProducts[];
-SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];
+(*SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];*)
 abc = FCFAConvert[CreateFeynAmp[Feynmangraph,GaugeRules -> {} ], IncomingMomenta -> {p1, p2}, OutgoingMomenta -> {p3, p4}, UndoChiralSplittings -> True, ChangeDimension -> 4, List -> True,
 SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule//Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
 
-abc[[5]]//InputForm(*/.{v->0}*)
+(*abc[[5]]//InputForm(*/.{v->0}*)*)
 
 
-((I/2)*EL*(RR1x2*RR3x1 - RR1x1*RR3x2)*(CW^2 + SW^2)*(-(RR1x2*RR3x3*Timag) + RR1x1*RR3x3*Treal + (L3 + L4 + L5)*RR1x1*RR3x1*v + (L3 + L4 - L5)*RR1x2*RR3x2*v + RR1x3*(-(RR3x2*Timag) + RR3x1*Treal + L7*RR3x3*v))*
-  (-Pair[Momentum[p1], Momentum[Polarization[p4, -I]]] + Pair[Momentum[p2], Momentum[Polarization[p4, -I]]] - Pair[Momentum[p3], Momentum[Polarization[p4, -I]]]))/(CW*SW*(-mH3^2 + u))
-
-
-FCClearScalarProducts[];
-((I/2)EL(RR1x2RR3x1 - RR1x1RR3x2)(CW^2 + SW^2)(-(RR1x2RR3x3Timag) + RR1x1RR3x3Treal + (L3 + L4 + L5)RR1x1RR3x1v +
-(L3 + L4 - L5)RR1x2RR3x2v + RR1x3*(-(RR3x2Timag) + RR3x1Treal + L7RR3x3v))(Pair[Momentum[p1], Momentum[Polarization[p4, -I]]] -
-Pair[Momentum[p2], Momentum[Polarization[p4, -I]]] + Pair[Momentum[p3], Momentum[Polarization[p4, -I]]]))/
-(CWSW*(mH3^2 - Pair[Momentum[p2], Momentum[p2]] + 2*Pair[Momentum[p2], Momentum[p3]] - Pair[Momentum[p3], Momentum[p3]]))
+abc[[3]] //FullSimplify
 
 
 (*function to tokenize coefficients appearing several times in the amplitudes*)
 tokenize[]:=
 Block[{tokenID},
 	Do[
-		tokenID=StringJoin["token",ToString[it]];
-		AppendTo[tokensubs,tokens[[it]]->ToExpression[tokenID]];
-		AppendTo[tokenreverse,ToExpression[tokenID]->tokens[[it]]];
+		If[
+			FreeQ[ tokens[[it]], Alternatives @@ {s, t, u, I, -I}],
+			tokenID=StringJoin["token",ToString[it]];
+			AppendTo[tokensubs,tokens[[it]]->ToExpression[tokenID]];
+			AppendTo[tokenreverse,ToExpression[tokenID]->tokens[[it]]];
+		];
 	,{it,Length[tokens]}]
 ]
 
@@ -563,14 +572,17 @@ Block[{fac=1,q1},
 ]
 
 
+$Assumptions = s \[Element] Reals && t \[Element] Reals && u \[Element] Reals;
+
+
 (*function to compute amplitude squared*)
 fastamp2[coeff_,mand_]:=
 Block[{full={}, part},
-	Do[
+	Do[ 
 		If[it==jt,
-			part=coeff[[it]]*mand[[it]]*ComplexConjugate[coeff[[it]]*mand[[jt]]];
+			part=coeff[[it]]*ComplexConjugate[coeff[[jt]]]*mand[[it]]*ComplexConjugate[mand[[jt]]];
 			,
-			part=2*coeff[[it]]*(mand[[it]]*ComplexConjugate[coeff[[jt]]*mand[[jt]]]);
+			part=2*coeff[[it]]*ComplexConjugate[coeff[[jt]]]*(mand[[it]]*ComplexConjugate[mand[[jt]]]);
 		];
 		AppendTo[full,part];
 	,{it,Length[mand]},{jt,it,Length[mand]}];
@@ -602,13 +614,39 @@ Select[particlelist, #[[1]]== templist2[[i, 4]]&][[1,3]],
 massexchange
 
 
-coefficientlist[[5]] /.tokenreverse
+abc[[1]]
 
 
-mandellist[[5]]/.widthsub/. massexchange
+coefficientlist[[64]] /.tokenreverse // InputForm
 
 
-fastamp2[coefficientlist[[5]],mandellist[[5]]/.widthsub/. massexchange] /.tokenreverse
+mandellist[[64]] //InputForm
+
+
+tokenreverse[[6]]
+
+
+i = 26
+Print[ToString[processname[[i]]] ToString[i]];
+FCClearScalarProducts[];
+
+(*Checks if there are outgoing scalars and sets Mandelstam accordingly*)
+SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[foutlist[[i,1]]], TheMass[foutlist[[i,2]]], TheMass[foutlist[[i,3]]], TheMass[foutlist[[i,4]]]];
+
+tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub];
+prefac= determinefac[foutlist[[i]], 2];
+tamp2 // Length
+
+a = tamp2[[11]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] &// FermionSpinSum[#] &// DiracSimplify
+(*Do[ 
+	Print[i1];
+	Print[tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
+					// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify[#,s\[Element]Reals && t \[Element] Reals && u \[Element] Reals] &];
+	,{i1,Length[tamp2]}]*)
+a /. {token6->-1} // Re[#]&// ComplexExpand[#]& //Simplify
+
+
+tokenreverse[[{6,33}]]
 
 
 (*
@@ -630,27 +668,31 @@ Do[
 	(*Checks if there are outgoing scalars and sets Mandelstam accordingly*)
 	SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[foutlist[[i,1]]], TheMass[foutlist[[i,2]]], TheMass[foutlist[[i,3]]], TheMass[foutlist[[i,4]]]];
 
-	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub/. massexchange];
+	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub];
 	prefac= determinefac[foutlist[[i]], 2];
 	Do[
 		(* check if there are gauge bosons in final states and use massless polarisation then*)
 		Which[
 				MatchQ[(foutlist[[i,3]]/.{-x_:>x})[[0]],V] && !MatchQ[(foutlist[[i,4]]/.{-x_:>x})[[0]],V],
 					sub=tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
-					// DoPolarizationSums[#, p3, 0] &// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify;,
+					// DoPolarizationSums[#, p3, 0] &// DiracSimplify;
+					sub = sub /. tokenreverse[[{6,33}]]// Re[#]&// ComplexExpand[#]& //Simplify;,
 				!MatchQ[(foutlist[[i,3]]/.{-x_:>x})[[0]],V] && MatchQ[(foutlist[[i,4]]/.{-x_:>x})[[0]],V],
 					sub=tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
-					// DoPolarizationSums[#, p4, 0] &// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify;,
+					// DoPolarizationSums[#, p4, 0] &// DiracSimplify;
+					sub = sub /. tokenreverse[[{6,33}]] // Re[#]&// ComplexExpand[#]& //Simplify;,
 				MatchQ[(foutlist[[i,3]]/.{-x_:>x})[[0]],V] && MatchQ[(foutlist[[i,4]]/.{-x_:>x})[[0]],V],
 					sub=tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
-					// DoPolarizationSums[#, p3, 0] & // DoPolarizationSums[#, p4, 0] &// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify;,
+					// DoPolarizationSums[#, p3, 0] & // DoPolarizationSums[#, p4, 0] &// DiracSimplify;
+					sub = sub /. tokenreverse[[{6,33}]] // Re[#]&// ComplexExpand[#]& //Simplify;,
 				!MatchQ[(foutlist[[i,3]]/.{-x_:>x})[[0]],V] && !MatchQ[(foutlist[[i,4]]/.{-x_:>x})[[0]],V],
 					sub=tamp2[[i1]]// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
-					// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify;
+					// DiracSimplify;
+					sub = sub /. tokenreverse[[{6,33}]] // Re[#]&// ComplexExpand[#]& //Simplify;
 			];
 			
 		If[FreeQ[sub,I],
-			AppendTo[subdiagrams,sub/.SUNN->3/.subrule/.Eps[___]->0//Simplify],
+			AppendTo[subdiagrams,sub/.SUNN->3/.subrule/.Eps[___]->0//Simplify[#,s\[Element]Reals && t \[Element] Reals && u \[Element] Reals] &],
 			Print["imaginary"];
 			sub=sub/.SUNN->3/.subrule//Expand//FullSimplify;
 			AppendTo[subdiagrams,sub]
@@ -665,12 +707,12 @@ AppendTo[finalbEWSB, Plus @@ subdiagrams ];(*/.tokenreverse /. ewrlimit*)
 calcAmp2sbEWSB[];
 
 
-finalbEWSB[[5]] /. tokenreverse //InputForm
+finalbEWSB[[30]] //InputForm
 
 
-i = 5;
+i = 1;
 Print[ToString[processname[[i]]] ToString[i]];
-finalbEWSB[[i]] /. tokenreverse /.{v:>0,RR1x3->0,RR2x3->0,MZ->0}
+finalbEWSB[[i]] /. tokenreverse //InputForm
 
 
 massexchange
@@ -693,7 +735,7 @@ Do[
 	Print[ToString[processname[[i]]] ToString[i]];
 	FCClearScalarProducts[];
 	SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[foutlist[[i,1]]], TheMass[foutlist[[i,2]]], TheMass[foutlist[[i,3]]], TheMass[foutlist[[i,4]]]];
-	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub/. massexchange];
+	tamp2 = fastamp2[coefficientlist[[i]],mandellist[[i]]/.widthsub];
 	prefac= determinefac[foutlist[[i]], 2];
 	Do[
 		Which[
@@ -704,22 +746,26 @@ Do[
 			TheMass[foutlist[[i,3]]] === 0 && !PossibleZeroQ[TheMass[foutlist[[i,4]]]],
 			sub=tamp2[[i1]]/prefac// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
 			// DoPolarizationSums[#, p1]& // DoPolarizationSums[#, p2] &// DoPolarizationSums[#, p3, 0] & // DoPolarizationSums[#, p4] & 
-			// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify,
+			// DiracSimplify;
+			sub = sub /. tokenreverse[[{6,33}]] // Re[#]&// ComplexExpand[#]& //Simplify;,
 			
 			!PossibleZeroQ[TheMass[foutlist[[i,3]]]] && TheMass[foutlist[[i,4]]] === 0, 
 			sub=tamp2[[i1]]/prefac// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
 			// DoPolarizationSums[#, p1]& // DoPolarizationSums[#, p2] &// DoPolarizationSums[#, p3] & // DoPolarizationSums[#, p4,0] & 
-			// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify,
+			// DiracSimplify;
+			sub = sub /. tokenreverse[[{6,33}]] // Re[#]&// ComplexExpand[#]& //Simplify;,
 			
 			TheMass[foutlist[[i,3]]] === 0 && TheMass[foutlist[[i,4]]] === 0,
 			sub=tamp2[[i1]]/prefac// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
 			// DoPolarizationSums[#, p1]& // DoPolarizationSums[#, p2] &// DoPolarizationSums[#, p3, p4] & // DoPolarizationSums[#, p4, p3] & 
-			// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify,
+			// DiracSimplify;
+			sub = sub /. tokenreverse[[{6,33}]] // Re[#]&// ComplexExpand[#]& //Simplify;,
 			
 			True,
 			sub=tamp2[[i1]]/prefac// FeynAmpDenominatorExplicit // SUNSimplify[#, Explicit -> True, SUNNToCACF -> False] & // FermionSpinSum[#] & 
 			// DoPolarizationSums[#, p1]& // DoPolarizationSums[#, p2] &// DoPolarizationSums[#, p3] & // DoPolarizationSums[#, p4] & 
-			// DiracSimplify// Re[#]&// ComplexExpand[#]&// Simplify
+			// DiracSimplify;
+			sub = sub /. tokenreverse[[{6,33}]] // Re[#]&// ComplexExpand[#]& //Simplify;
 			];
 			
 		If[FreeQ[sub,I],
@@ -738,7 +784,9 @@ AppendTo[final, Plus @@ subdiagrams];
 calcAmp2s[];
 
 
-final[[5]] /. tokenreverse //InputForm
+i = 64 (*132*)
+Print[ToString[processname[[i]]] ToString[i]];
+finalbEWSB[[i]] /. tokenreverse //InputForm
 
 
 (*****************)
@@ -1532,7 +1580,7 @@ Do[
 		If[inifunc[i][[j,8]]===inifunc[i][[j,9]],symfac="0.5*"];
 		(*here it prints the amplitude for v == 0*)
 
-		Write[sfile, "\tif (v==0) {"];
+		Write[sfile, "\tif (do_goldstone_channels) {"];
 		Write[sfile, "\t\treturn ", symfac , "(" , subamp2at0 , ");"];
 		Write[sfile,"\t}"];
 

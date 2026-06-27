@@ -23,7 +23,7 @@ static const VecString CONSIDERCHANNELS = {};
 VecString NEGLECTCHANNELS = {};
 static const VecString NEGLECTPARTICLES ={}; //{"u", "d", "e", "mu"};//{"u", "d", "e", "mu"};
 static constexpr double BEPS = 1e-6;
-static constexpr double XTODAY = 1e5;
+static constexpr double XTODAY = 1e6;
 static constexpr bool FAST = false;
 static constexpr bool CALCWIDTHS = false;
 static constexpr bool SAVECONTRIBS = false;
@@ -131,23 +131,42 @@ int main (int argc, char **argv) {
     //M.CalcXsec(11000,100000,1000,"../dataOutput/xsec_21249_xt.tsv",{},100);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
     //M.CalcXsec(11000,100000,1000,"../dataOutput/xsec_987_incl.tsv",{"Hc,Hc,W,W"},30);//"H1,H2,h,G0" : "H3,H3,h,G0" (NEGATIVE)
     //CalcAllTac(M, 0, 300, 32, 34,  100);
-    //M.CalcTac(15,1000,400, "../dataOutput/tac_949_std_full.tsv");
-    //M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_H1H1WW.tsv",{"H1,H1,w,W"});
-    //M.CalcTac(10,1000,400, "../dataOutput/tac_949_imp_H1H1.tsv",{"H1,H1,h,h","H1,H1,h,G0", "H1,H1,G0,G0", "H1,H1,GCH,Gch", "H1,H1,h,Z", "H1,H1,G0,Z", "H1,H1,GCH,W", "H1,H1,Gch,w", "H1,H1,Z,Z", "H1,H1,w,W", "H1,H1,E,e", "H1,H1,M,m", "H1,H1,TA,ta", "H1,H1,U,u", "H1,H1,C,c", "H1,H1,T,t", "H1,H1,D,d", "H1,H1,S,s", "H1,H1,B,b"});
-    // M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_H1H2.tsv",{"H1,H2,h,h", "H1,H2,h,G0", "H1,H2,G0,G0", "H1,H2,GCH,Gch", "H1,H2,h,Z", "H1,H2,G0,Z", "H1,H2,GCH,W", "H1,H2,Gch,w", "H1,H2,Z,Z", "H1,H2,w,W", "H1,H2,VE,ve", "H1,H2,VM,vm", "H1,H2,VT,vt", "H1,H2,E,e", "H1,H2,M,m", "H1,H2,TA,ta", "H1,H2,U,u", "H1,H2,C,c", "H1,H2,T,t", "H1,H2,D,d", "H1,H2,S,s", "H1,H2,B,b"});
-    // M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_H1H3.tsv",{"H1,H3,h,h", "H1,H3,h,G0", "H1,H3,G0,G0", "H1,H3,GCH,Gch", "H1,H3,h,Z", "H1,H3,G0,Z", "H1,H3,GCH,W", "H1,H3,Gch,w", "H1,H3,Z,Z", "H1,H3,w,W", "H1,H3,VE,ve", "H1,H3,VM,vm", "H1,H3,VT,vt", "H1,H3,E,e", "H1,H3,M,m", "H1,H3,TA,ta", "H1,H3,U,u", "H1,H3,C,c", "H1,H3,T,t", "H1,H3,D,d", "H1,H3,S,s", "H1,H3,B,b"});
-    // M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_H1Hc.tsv",{"H1,Hc,h,Gch", "H1,Hc,G0,Gch", "H1,Hc,h,W", "H1,Hc,G0,W", "H1,Hc,Gch,A", "H1,Hc,Gch,Z", "H1,Hc,A,W", "H1,Hc,Z,W", "H1,Hc,ve,E", "H1,Hc,vm,M", "H1,Hc,vt,TA", "H1,Hc,u,D", "H1,Hc,u,S", "H1,Hc,u,B", "H1,Hc,c,D", "H1,Hc,c,S", "H1,Hc,c,B", "H1,Hc,t,D", "H1,Hc,t,S", "H1,Hc,t,B"});
-    M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_dai_H2H2.tsv",{"H2,H2,h,h", "H2,H2,h,G0", "H2,H2,G0,G0", "H2,H2,GCH,Gch", "H2,H2,h,Z", "H2,H2,G0,Z", "H2,H2,GCH,W", "H2,H2,Gch,w", "H2,H2,Z,Z", "H2,H2,w,W", "H2,H2,E,e", "H2,H2,M,m", "H2,H2,TA,ta", "H2,H2,U,u", "H2,H2,C,c", "H2,H2,T,t", "H2,H2,D,d", "H2,H2,S,s", "H2,H2,B,b"});
-    // M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_H2H3.tsv",{"H2,H3,h,h", "H2,H3,h,G0", "H2,H3,G0,G0", "H2,H3,GCH,Gch", "H2,H3,h,Z", "H2,H3,G0,Z", "H2,H3,GCH,W", "H2,H3,Gch,w", "H2,H3,Z,Z", "H2,H3,w,W", "H2,H3,VE,ve", "H2,H3,VM,vm", "H2,H3,VT,vt", "H2,H3,E,e", "H2,H3,M,m", "H2,H3,TA,ta", "H2,H3,U,u", "H2,H3,C,c", "H2,H3,T,t", "H2,H3,D,d", "H2,H3,S,s", "H2,H3,B,b"});
-    // M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_H2Hc.tsv",{"H2,Hc,h,Gch", "H2,Hc,G0,Gch", "H2,Hc,h,W", "H2,Hc,G0,W", "H2,Hc,Gch,A", "H2,Hc,Gch,Z", "H2,Hc,A,W", "H2,Hc,Z,W", "H2,Hc,ve,E", "H2,Hc,vm,M", "H2,Hc,vt,TA", "H2,Hc,u,D", "H2,Hc,u,S", "H2,Hc,u,B", "H2,Hc,c,D", "H2,Hc,c,S", "H2,Hc,c,B", "H2,Hc,t,D", "H2,Hc,t,S", "H2,Hc,t,B"});
-    // M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_H3H3.tsv",{"H3,H3,h,h", "H3,H3,h,G0", "H3,H3,G0,G0", "H3,H3,GCH,Gch", "H3,H3,h,Z", "H3,H3,G0,Z", "H3,H3,GCH,W", "H3,H3,Gch,w", "H3,H3,Z,Z", "H3,H3,w,W", "H3,H3,E,e", "H3,H3,M,m", "H3,H3,TA,ta", "H3,H3,U,u", "H3,H3,C,c", "H3,H3,T,t", "H3,H3,D,d", "H3,H3,S,s", "H3,H3,B,b"});
-    // M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_H3Hc.tsv",{"H3,Hc,h,Gch", "H3,Hc,G0,Gch", "H3,Hc,h,W", "H3,Hc,G0,W", "H3,Hc,Gch,A", "H3,Hc,Gch,Z", "H3,Hc,A,W", "H3,Hc,Z,W", "H3,Hc,ve,E", "H3,Hc,vm,M", "H3,Hc,vt,TA", "H3,Hc,u,D", "H3,Hc,u,S", "H3,Hc,u,B", "H3,Hc,c,D", "H3,Hc,c,S", "H3,Hc,c,B", "H3,Hc,t,D", "H3,Hc,t,S", "H3,Hc,t,B"});
-    // M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_HcHc.tsv",{"Hc,Hc,Gch,Gch", "Hc,Hc,Gch,W", "Hc,Hc,W,W"});
-    //M.CalcTac(10,1000,400, "../dataOutput/tac_949_std_HcHC.tsv",{"Hc,HC,h,h", "Hc,HC,h,G0", "Hc,HC,G0,G0", "Hc,HC,GCH,Gch", "Hc,HC,h,A", "Hc,HC,h,Z", "Hc,HC,G0,Z", "Hc,HC,GCH,W", "Hc,HC,Gch,w", "Hc,HC,A,A", "Hc,HC,A,Z", "Hc,HC,Z,Z", "Hc,HC,w,W", "Hc,HC,VE,ve", "Hc,HC,VM,vm", "Hc,HC,VT,vt", "Hc,HC,E,e", "Hc,HC,M,m", "Hc,HC,TA,ta", "Hc,HC,U,u", "Hc,HC,C,c", "Hc,HC,T,t", "Hc,HC,D,d", "Hc,HC,S,s", "Hc,HC,B,b"});
+    M.CalcTac(15,1000,400, "../dataOutput/tac_949_std_full.tsv");
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HchW.tsv",{"H1,Hc,h,W"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HchGch.tsv",{"H1,Hc,h,Gch"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcG0Gch.tsv",{"H1,Hc,G0,Gch"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcGchA.tsv",{"H1,Hc,Gch,A"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcGchZ.tsv",{"H1,Hc,Gch,Z"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcAW.tsv",{"H1,Hc,A,W"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcZW.tsv",{"H1,Hc,Z,W"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HctB.tsv",{"H1,Hc,t,B"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HctD.tsv",{"H1,Hc,t,D"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HctS.tsv",{"H1,Hc,t,S"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcuB.tsv",{"H1,Hc,u,B"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcuD.tsv",{"H1,Hc,u,D"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcuS.tsv",{"H1,Hc,u,S"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HccB.tsv",{"H1,Hc,c,B"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HccD.tsv",{"H1,Hc,c,D"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HccS.tsv",{"H1,Hc,c,S"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcveE.tsv",{"H1,Hc,ve,E"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcvmM.tsv",{"H1,Hc,vm,M"});
+    // M.CalcTac(15,1000,50, "../dataOutput/tac_949_imp_H1HcvtTA.tsv",{"H1,Hc,vt,TA"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H1H1.tsv",{"H1,H1,h,h","H1,H1,h,G0", "H1,H1,G0,G0", "H1,H1,GCH,Gch", "H1,H1,h,Z", "H1,H1,G0,Z", "H1,H1,GCH,W", "H1,H1,Gch,w", "H1,H1,Z,Z", "H1,H1,w,W", "H1,H1,E,e", "H1,H1,M,m", "H1,H1,TA,ta", "H1,H1,U,u", "H1,H1,C,c", "H1,H1,T,t", "H1,H1,D,d", "H1,H1,S,s", "H1,H1,B,b"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H1H2.tsv",{"H1,H2,h,h", "H1,H2,h,G0", "H1,H2,G0,G0", "H1,H2,GCH,Gch", "H1,H2,h,Z", "H1,H2,G0,Z", "H1,H2,GCH,W", "H1,H2,Gch,w", "H1,H2,Z,Z", "H1,H2,w,W", "H1,H2,VE,ve", "H1,H2,VM,vm", "H1,H2,VT,vt", "H1,H2,E,e", "H1,H2,M,m", "H1,H2,TA,ta", "H1,H2,U,u", "H1,H2,C,c", "H1,H2,T,t", "H1,H2,D,d", "H1,H2,S,s", "H1,H2,B,b"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H1H3.tsv",{"H1,H3,h,h", "H1,H3,h,G0", "H1,H3,G0,G0", "H1,H3,GCH,Gch", "H1,H3,h,Z", "H1,H3,G0,Z", "H1,H3,GCH,W", "H1,H3,Gch,w", "H1,H3,Z,Z", "H1,H3,w,W", "H1,H3,VE,ve", "H1,H3,VM,vm", "H1,H3,VT,vt", "H1,H3,E,e", "H1,H3,M,m", "H1,H3,TA,ta", "H1,H3,U,u", "H1,H3,C,c", "H1,H3,T,t", "H1,H3,D,d", "H1,H3,S,s", "H1,H3,B,b"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H1Hc.tsv",{"H1,Hc,h,Gch", "H1,Hc,G0,Gch", "H1,Hc,h,W", "H1,Hc,G0,W", "H1,Hc,Gch,A", "H1,Hc,Gch,Z", "H1,Hc,A,W", "H1,Hc,Z,W", "H1,Hc,ve,E", "H1,Hc,vm,M", "H1,Hc,vt,TA", "H1,Hc,u,D", "H1,Hc,u,S", "H1,Hc,u,B", "H1,Hc,c,D", "H1,Hc,c,S", "H1,Hc,c,B", "H1,Hc,t,D", "H1,Hc,t,S", "H1,Hc,t,B"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H2H2.tsv",{"H2,H2,h,h", "H2,H2,h,G0", "H2,H2,G0,G0", "H2,H2,GCH,Gch", "H2,H2,h,Z", "H2,H2,G0,Z", "H2,H2,GCH,W", "H2,H2,Gch,w", "H2,H2,Z,Z", "H2,H2,w,W", "H2,H2,E,e", "H2,H2,M,m", "H2,H2,TA,ta", "H2,H2,U,u", "H2,H2,C,c", "H2,H2,T,t", "H2,H2,D,d", "H2,H2,S,s", "H2,H2,B,b"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H2H3.tsv",{"H2,H3,h,h", "H2,H3,h,G0", "H2,H3,G0,G0", "H2,H3,GCH,Gch", "H2,H3,h,Z", "H2,H3,G0,Z", "H2,H3,GCH,W", "H2,H3,Gch,w", "H2,H3,Z,Z", "H2,H3,w,W", "H2,H3,VE,ve", "H2,H3,VM,vm", "H2,H3,VT,vt", "H2,H3,E,e", "H2,H3,M,m", "H2,H3,TA,ta", "H2,H3,U,u", "H2,H3,C,c", "H2,H3,T,t", "H2,H3,D,d", "H2,H3,S,s", "H2,H3,B,b"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H2Hc.tsv",{"H2,Hc,h,Gch", "H2,Hc,G0,Gch", "H2,Hc,h,W", "H2,Hc,G0,W", "H2,Hc,Gch,A", "H2,Hc,Gch,Z", "H2,Hc,A,W", "H2,Hc,Z,W", "H2,Hc,ve,E", "H2,Hc,vm,M", "H2,Hc,vt,TA", "H2,Hc,u,D", "H2,Hc,u,S", "H2,Hc,u,B", "H2,Hc,c,D", "H2,Hc,c,S", "H2,Hc,c,B", "H2,Hc,t,D", "H2,Hc,t,S", "H2,Hc,t,B"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H3H3.tsv",{"H3,H3,h,h", "H3,H3,h,G0", "H3,H3,G0,G0", "H3,H3,GCH,Gch", "H3,H3,h,Z", "H3,H3,G0,Z", "H3,H3,GCH,W", "H3,H3,Gch,w", "H3,H3,Z,Z", "H3,H3,w,W", "H3,H3,E,e", "H3,H3,M,m", "H3,H3,TA,ta", "H3,H3,U,u", "H3,H3,C,c", "H3,H3,T,t", "H3,H3,D,d", "H3,H3,S,s", "H3,H3,B,b"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_H3Hc.tsv",{"H3,Hc,h,Gch", "H3,Hc,G0,Gch", "H3,Hc,h,W", "H3,Hc,G0,W", "H3,Hc,Gch,A", "H3,Hc,Gch,Z", "H3,Hc,A,W", "H3,Hc,Z,W", "H3,Hc,ve,E", "H3,Hc,vm,M", "H3,Hc,vt,TA", "H3,Hc,u,D", "H3,Hc,u,S", "H3,Hc,u,B", "H3,Hc,c,D", "H3,Hc,c,S", "H3,Hc,c,B", "H3,Hc,t,D", "H3,Hc,t,S", "H3,Hc,t,B"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_HcHc.tsv",{"Hc,Hc,Gch,Gch", "Hc,Hc,Gch,W", "Hc,Hc,W,W"});
+    // M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_HcHC.tsv",{"Hc,HC,h,h", "Hc,HC,h,G0", "Hc,HC,G0,G0", "Hc,HC,GCH,Gch", "Hc,HC,h,A", "Hc,HC,h,Z", "Hc,HC,G0,Z", "Hc,HC,GCH,W", "Hc,HC,Gch,w", "Hc,HC,A,A", "Hc,HC,A,Z", "Hc,HC,Z,Z", "Hc,HC,w,W", "Hc,HC,VE,ve", "Hc,HC,VM,vm", "Hc,HC,VT,vt", "Hc,HC,E,e", "Hc,HC,M,m", "Hc,HC,TA,ta", "Hc,HC,U,u", "Hc,HC,C,c", "Hc,HC,T,t", "Hc,HC,D,d", "Hc,HC,S,s", "Hc,HC,B,b"});
+    // //M.CalcTac(15,1000,200, "../dataOutput/tac_949_imp_HcHCZZ.tsv",{"Hc,HC,Z,Z"});
 
     // //CalcAllXsec(M,0,200,8400,10000,200,thermcontrib);
     //M.PrintChannels();
-    //M.CalcRelic();
+    M.CalcRelic();
 
 
 

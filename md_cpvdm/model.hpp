@@ -338,6 +338,25 @@ namespace PAR{
 	extern double token127;
 	extern double token128;
 	extern double token129;
+	extern double token130;
+	extern double token131;
+	extern double token132;
+	extern double token133;
+	extern double token134;
+	extern double token135;
+	extern double token136;
+	extern double token137;
+	extern double token138;
+	extern double token139;
+	extern double token140;
+	extern double token141;
+	extern double token142;
+	extern double token143;
+	extern double token144;
+	extern double token145;
+	extern double token146;
+	extern double token147;
+	extern double token148;
 	// default variables
 	extern double EL;
 	extern double ee;
