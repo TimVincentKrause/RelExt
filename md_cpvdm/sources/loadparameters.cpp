@@ -448,7 +448,7 @@ namespace DT{
 			// 	MS = 0.;
 			// }
 
-			std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels << " | MDM*xinv = " << (MDM * xinv) << " | Tcrit = " << Tcrit << " | M-T = " << (MDM * xinv - Tcrit) << std::endl; //4.74586805555556
+			//std::cout << "x= " << x << " | v= " << v << " | g?= " << do_goldstone_channels << " | MDM*xinv = " << (MDM * xinv) << " | Tcrit = " << Tcrit << " | M-T = " << (MDM * xinv - Tcrit) << std::endl; //4.74586805555556
 			load_tokens();
 		}
 
@@ -495,21 +495,21 @@ namespace DT{
 
 		rdr_therm->read_column(mH1_therm, "mS_4sq",0.5,0.5);
 
-		size_t posmHc = rdr_therm->get_mHc_pos();
+		// size_t posmHc = rdr_therm->get_mHc_pos();
 
-		if (posmHc == 1){
-			rdr_therm->read_column(mHc_therm, "mS_5sq",0.5);
-			rdr_therm->read_column(mH2_therm, "mS_7sq",0.5);
-			rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
-		} else if (posmHc == 2){
-			rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
-			rdr_therm->read_column(mHc_therm, "mS_6sq",0.5);
-			rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
-		} else if (posmHc == 3){
-			rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
-			rdr_therm->read_column(mH3_therm, "mS_6sq",0.5);
-			rdr_therm->read_column(mHc_therm, "mS_8sq",0.5);
-		}
+		// if (posmHc == 1){
+		// 	rdr_therm->read_column(mHc_therm, "mS_5sq",0.5);
+		// 	rdr_therm->read_column(mH2_therm, "mS_7sq",0.5);
+		// 	rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
+		// } else if (posmHc == 2){
+		// 	rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
+		// 	rdr_therm->read_column(mHc_therm, "mS_6sq",0.5);
+		// 	rdr_therm->read_column(mH3_therm, "mS_8sq",0.5);
+		// } else if (posmHc == 3){
+		// 	rdr_therm->read_column(mH2_therm, "mS_5sq",0.5);
+		// 	rdr_therm->read_column(mH3_therm, "mS_6sq",0.5);
+		// 	rdr_therm->read_column(mHc_therm, "mS_8sq",0.5);
+		// }
 
 		// Thermal Masses
 		rdr_therm->read_column(THmGchsq_therm, "m_thm_Gpsq",0,20);
@@ -521,7 +521,7 @@ namespace DT{
 		rdr_therm->read_column(THmHc_therm, "m_thm_Hpsq",0.5,0.5);
 		//rdr_therm->read_column(THmHm_therm, "m_thm_Hmsq",0.5,2);
 
-		std::cout << "daisy" << take_daisy_phys << std::endl;
+		std::cout << "daisy - " << take_daisy_phys << std::endl;
 		if (take_daisy_phys)
 		{
 		    // daisy Rotation angle
