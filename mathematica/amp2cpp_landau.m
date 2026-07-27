@@ -373,22 +373,23 @@ tokenreverse = {};
 
 ClearScalarProducts[];
 
-i=64;
+i=46;
 listofprocs[[i]]
 k = listofprocs[[i,3]];
-l = -listofprocs[[i,4]];
+l = listofprocs[[i,4]];
 Feynmangraph = InsertFields[topologie, {listofprocs[[i,1]], listofprocs[[i,2]]} -> {k, l}, 
 Model -> {modelname}, InsertionLevel -> {Particles}, GenericModel -> modelname, ExcludeParticles -> {}];
 Paint[Feynmangraph];
 FCClearScalarProducts[];
-(*SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];*)
+SetMandelstam[s, t, u, p1, p2, -p3, -p4, TheMass[listofprocs[[i,1]]], TheMass[listofprocs[[i,2]]], TheMass[listofprocs[[i,3]]], TheMass[listofprocs[[i,4]]] ];
 abc = FCFAConvert[CreateFeynAmp[Feynmangraph,GaugeRules -> {} ], IncomingMomenta -> {p1, p2}, OutgoingMomenta -> {p3, p4}, UndoChiralSplittings -> True, ChangeDimension -> 4, List -> True,
-SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule//Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
+SMP -> False, Contract -> True, DropSumOver -> True]/.unifyxi/.gcsub/.subrule /.ThermalMassS;
+abc = abc //Collect[#,FeynAmpDenominator[_]]&//FeynAmpDenominatorExplicit//DiracSubstitute67[#]&//DotSimplify[#]&;
 
 (*abc[[5]]//InputForm(*/.{v->0}*)*)
 
 
-abc[[3]] //FullSimplify
+abc[[1]] /.{v->0} //FullSimplify // FullSimplify
 
 
 (*function to tokenize coefficients appearing several times in the amplitudes*)
@@ -784,9 +785,9 @@ AppendTo[final, Plus @@ subdiagrams];
 calcAmp2s[];
 
 
-i = 64 (*132*)
+i = 10 (*132*)
 Print[ToString[processname[[i]]] ToString[i]];
-finalbEWSB[[i]] /. tokenreverse //InputForm
+final[[i]] /. tokenreverse //InputForm
 
 
 (*****************)

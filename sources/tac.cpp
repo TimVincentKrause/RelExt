@@ -275,7 +275,7 @@ void Tac::integrate_s(const double &x, double &res, double &estimate) {
 double Tac::operator()(const double &x) {
     double res = 0.;
     double estimate = 0.;
-    AA.load_parameters(x);
+    //AA.load_parameters(x);
     clear_state(true);
     sort_inimasses(bathprocesses);
 
@@ -286,6 +286,7 @@ double Tac::operator()(const double &x) {
         AA.assign_masses(m1, m2, it.second[0]);
         sigv.set_lower_bound(m1 + m2);
         if (beps(x)) {
+            //std::cout << "ADSLAJF" << beps(x) << std::endl;
             set_boundaries(x);
             // for(auto &jt : it.second)
             //     std::cout << jt << "\t";
@@ -293,6 +294,8 @@ double Tac::operator()(const double &x) {
             estimate_integrate_s(x, res, estimate);
         }
     }
+
+
     for (auto &it : inimap) {
         AA.set_channel(it.second);
         AA.assign_masses(m1, m2, it.second[0]);

@@ -1,6 +1,6 @@
 ///////////////////CODE GENERATED VIA MATHEMATICA///////////////////
 
-
+#include <iostream>
 #include "../../model.hpp"
 
 double DT::H1H3hh(const double &cos_t, const double &s){
